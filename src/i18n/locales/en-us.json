@@ -1,6 +1,10 @@
 {
   "translation": {
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "dashboard": "Dashboard",
+    "transactions": "Transactions",
+    "goals": "Goals",
+    "settings": "Settings"
   }
 }

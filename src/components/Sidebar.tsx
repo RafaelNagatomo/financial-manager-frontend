@@ -1,56 +1,83 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useTranslation } from 'react-i18next'
-import { Box, Flex, VStack, Text, useColorModeValue } from '@chakra-ui/react';
+import { useTranslation } from 'react-i18next';
+import { Box, Flex, VStack, Text, Image, Icon } from '@chakra-ui/react';
+import { RiDashboardHorizontalLine } from "react-icons/ri"
+import { BiTransferAlt } from "react-icons/bi"
+import { PiCrown } from "react-icons/pi"
+import { IoSettingsOutline } from "react-icons/io5"
 
 const Sidebar: React.FC = () => {
-  const bg = useColorModeValue('gray.100', 'gray.900');
-  const hoverBg = useColorModeValue('gray.200', 'gray.700');
-  const {t} = useTranslation()
+  const { t } = useTranslation();
+  const [activeItem, setActiveItem] = useState<string | null>(null);
+
+  const menuItems = [
+    {
+      route: "/dashboard",
+      label: t('dashboard'),
+      icon: RiDashboardHorizontalLine,
+    },
+    {
+      route: "/transactions",
+      label: t('transactions'),
+      icon: BiTransferAlt,
+    },
+    {
+      route: "/goals",
+      label: t('goals'),
+      icon: PiCrown,
+    },
+    {
+      route: "/settings",
+      label: t('settings'),
+      icon: IoSettingsOutline,
+    },
+  ];
+
+  const handleClick = (label: string) => {
+    setActiveItem(label);
+  };
 
   return (
-    <Box bg={bg} w="250px" p={4} borderRightWidth={1} borderRightColor="gray.200" h="100vh">
+    <Box bg="gray.100" w="200px" h="100vh" p={4}>
+      <Image mt={4} mb={12} src='/logos/logo.png' alt='FiManager-logo' />
       <VStack spacing={4} align="stretch">
-        <Link to="/dashboard">
-          <Flex
-            align="center"
-            p={2}
-            borderRadius="md"
-            _hover={{ bg: hoverBg }}
-          >
-            <Text fontSize="lg">{t('yes')}</Text>
-          </Flex>
-        </Link>
-        <Link to="/transactions">
-          <Flex
-            align="center"
-            p={2}
-            borderRadius="md"
-            _hover={{ bg: hoverBg }}
-          >
-            <Text fontSize="lg">Transactions</Text>
-          </Flex>
-        </Link>
-        <Link to="/goals">
-          <Flex
-            align="center"
-            p={2}
-            borderRadius="md"
-            _hover={{ bg: hoverBg }}
-          >
-            <Text fontSize="lg">Goals</Text>
-          </Flex>
-        </Link>
-        <Link to="/settings">
-          <Flex
-            align="center"
-            p={2}
-            borderRadius="md"
-            _hover={{ bg: hoverBg }}
-          >
-            <Text fontSize="lg">Settings</Text>
-          </Flex>
-        </Link>
+        {menuItems.map((item, index) => (
+          <Link to={item.route} key={index} onClick={() => handleClick(item.label)}>
+            <Flex
+              position="relative"
+              align="center"
+              p={1}
+              borderRadius="md"
+              _hover={{ color: "purple.500" }}
+            >
+              {item.icon &&
+                <Icon
+                as={item.icon}
+                boxSize={5}
+                mr={3}
+                color={activeItem === item.label ? 'purple.500' : ''}
+              />}
+              <Text
+                fontSize="lg"
+                color={activeItem === item.label ? 'purple.500' : ''}
+              >
+                {item.label}
+              </Text>
+              {activeItem === item.label && (
+                <Box
+                  position="absolute"
+                  right={-4}
+                  w={1.5}
+                  h={10}
+                  bg="purple.400"
+                  borderBottomLeftRadius={10}
+                  borderTopLeftRadius={10}
+                />
+              )}
+            </Flex>
+          </Link>
+        ))}
       </VStack>
     </Box>
   );
