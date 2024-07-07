@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Box, Flex, VStack, Text, Image, Icon } from '@chakra-ui/react';
+import { Box, Flex, VStack, Text, Image, Icon, Button } from '@chakra-ui/react';
 import { RiDashboardHorizontalLine } from "react-icons/ri"
 import { BiTransferAlt } from "react-icons/bi"
 import { PiCrown } from "react-icons/pi"
 import { IoSettingsOutline } from "react-icons/io5"
+import { BiLogOut } from "react-icons/bi"
 
 const Sidebar: React.FC = () => {
   const { t } = useTranslation();
@@ -59,7 +60,7 @@ const Sidebar: React.FC = () => {
                 color={activeItem === item.label ? 'purple.500' : ''}
               />}
               <Text
-                fontSize="lg"
+                fontSize="md"
                 color={activeItem === item.label ? 'purple.500' : ''}
               >
                 {item.label}
@@ -79,6 +80,21 @@ const Sidebar: React.FC = () => {
           </Link>
         ))}
       </VStack>
+      <Flex justifyContent="center" mt={500} width='100%' >
+        <Link to="/login" style={{ width: 200 }}>
+          <Button
+            justifyContent="start"
+            size="sm"
+            width='100%'
+            colorScheme="purple"
+            variant="outline"
+            _hover={{ bg: 'purple.500', color: 'white' }}
+            leftIcon={<BiLogOut size={18} style={{ marginRight: 25 }} />}
+          >
+            Log out
+          </Button>
+        </Link>
+      </Flex>
     </Box>
   );
 };
