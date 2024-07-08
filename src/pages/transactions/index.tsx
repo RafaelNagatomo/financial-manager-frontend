@@ -6,7 +6,6 @@ import {
   CardBody,
   Flex,
   Spacer,
-  Button,
   Heading,
   Tabs,
   TabList,
@@ -15,7 +14,7 @@ import {
   TabPanel,
   HStack,
 } from '@chakra-ui/react';
-import { TransactionTable, SpendingByCategoryTable, UpcomingPaymentsTable } from './Tables'
+import { TransactionTable, SpendingByCategoryTable, UpcomingPaymentsTable } from './TransactionsTables'
 import FilterButton from '../../components/FilterButton'
 import AddButton from '../../components/AddButton'
 
