@@ -5,6 +5,18 @@
     "dashboard": "Dashboard",
     "transactions": "Transações",
     "goals": "Metas",
-    "settings": "Configurações"
+    "settings": "Configurações",
+    "newTransaction": "Nova transação",
+    "spendingByCategory": "Gastos por Categoria",
+    "description": "Descrição",
+    "category": "Categoria",
+    "tag": "Tag",
+    "paid": "Pago",
+    "amount": "Valor",
+    "progress": "Progresso",
+    "maxAmount": "Valor Max",
+    "upcomingPayments": "Próximos Pagamentos",
+    "expireDate": "Data de Validade"
+
   }
 }

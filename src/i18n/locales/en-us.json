@@ -5,6 +5,17 @@
     "dashboard": "Dashboard",
     "transactions": "Transactions",
     "goals": "Goals",
-    "settings": "Settings"
+    "settings": "Settings",
+    "newTransaction": "New transaction",
+    "spendingByCategory": "Spending by category",
+    "description": "Description",
+    "category": "Category",
+    "tag": "Tag",
+    "paid": "Paid",
+    "amount": "Amount",
+    "progress": "Progress",
+    "maxAmount": "Max Amount",
+    "upcomingPayments": "Upcoming Payments",
+    "expireDate": "Expirate Date"
   }
 }

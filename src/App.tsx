@@ -1,14 +1,21 @@
-import { BrowserRouter as Router } from 'react-router-dom'
-import { ChakraProvider } from '@chakra-ui/react'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { ChakraProvider, HStack } from '@chakra-ui/react'
+
 import Sidebar from './components/Sidebar'
 import theme from './styles/themes'
+import Transactions from './pages/transactions/index';
 
 function App() {
   return (
     <ChakraProvider theme={theme}>
-      <Router>
-        <Sidebar />
-      </Router>
+      <HStack align='stretch'>
+        <Router>
+          <Sidebar />
+          <Routes>
+            <Route path="/transactions" element={<Transactions />} />
+          </Routes>
+        </Router>
+      </HStack>
     </ChakraProvider>
   );
 }
