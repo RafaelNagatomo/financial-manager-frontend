@@ -17,7 +17,7 @@ export const TransactionTable: React.FC<{
   transactions,
   t
 }) => (
-  <Table variant="striped" w={700}>
+  <Table variant="striped" w={700} minW={350}>
     <Thead>
       <Tr>
         <Th>{t('description')}</Th>
@@ -54,7 +54,7 @@ export const SpendingByCategoryTable: React.FC<{
   spendingByCategory,
   t
 }) => (
-  <Table variant="striped" w={700}>
+  <Table variant="striped" w={700} minW={350} >
     <Thead>
       <Tr>
         <Th>{t('description')}</Th>
@@ -90,7 +90,7 @@ export const UpcomingPaymentsTable: React.FC<{
   upcomingPayments,
   t
 }) => (
-  <Table variant="striped" w={400}>
+  <Table variant="striped" minW={350}>
     <Thead>
       <Tr>
         <Th>{t('description')}</Th>

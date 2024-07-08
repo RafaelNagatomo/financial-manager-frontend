@@ -70,7 +70,7 @@ const Transactions: React.FC = () => {
   const [upcomingPayments] = useState(initialupcomingPayments);
 
   return (
-    <HStack p={5} gap={5} align='stretch'>
+    <HStack gap={5} align='stretch'>
       <Card bg="gray.100">
         <CardHeader>
           <Flex gap='2'>
