@@ -4,6 +4,7 @@
     "no": "Não",
     "dashboard": "Dashboard",
     "transactions": "Transações",
+    "goal": "Meta",
     "goals": "Metas",
     "settings": "Configurações",
     "newTransaction": "Nova transação",
@@ -16,7 +17,11 @@
     "progress": "Progresso",
     "maxAmount": "Valor Max",
     "upcomingPayments": "Próximos Pagamentos",
-    "expireDate": "Data de Validade"
-
+    "expireDate": "Data de Validade",
+    "newGoal": "Nova Meta",
+    "overview": "Visão Geral",
+    "remaining": "Restante",
+    "raised": "Levantado",
+    "goalAmount": "Valor da Meta"
   }
 }

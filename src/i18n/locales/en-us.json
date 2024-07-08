@@ -4,6 +4,7 @@
     "no": "No",
     "dashboard": "Dashboard",
     "transactions": "Transactions",
+    "goal": "Goal",
     "goals": "Goals",
     "settings": "Settings",
     "newTransaction": "New transaction",
@@ -16,6 +17,12 @@
     "progress": "Progress",
     "maxAmount": "Max Amount",
     "upcomingPayments": "Upcoming Payments",
-    "expireDate": "Expirate Date"
+    "expireDate": "Expirate Date",
+    "newGoal": "New Goal",
+    "overview": "Overview",
+    "remaining": "Remaining",
+    "raised": "Raised",
+    "goalAmount": "Goal Amount"
+
   }
 }
