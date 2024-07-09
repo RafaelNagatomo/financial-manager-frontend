@@ -16,15 +16,17 @@ import {
 } from '@chakra-ui/react';
 import CustomInput from '../../components/CustomInput';
 import CustomSelect from '../../components/CustomSelect';
+import { useLanguage } from '../../hooks/useLanguage'
 
 const Settings: React.FC = () =>  {
   const { t } = useTranslation()
+  const { currentLanguage, changeLanguage } = useLanguage()
 
   const currencyOptions = [
     { value: 'USD', label: '($) USD' },
     { value: 'BRL', label: '(R$) BRL'},
   ];
-  
+
   const languageOptions = [
     { value: 'en-US', label: 'English' },
     { value: 'pt-BR', label: 'Português' },
@@ -96,6 +98,8 @@ const Settings: React.FC = () =>  {
               label={t('language')}
               placeholder={t('selectLanguage')}
               options={languageOptions}
+              onChange={(e) => changeLanguage(e.target.value)}
+              value={currentLanguage}
             />
             <CustomSelect
               w={200}
