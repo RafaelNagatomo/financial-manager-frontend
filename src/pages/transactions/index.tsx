@@ -90,9 +90,15 @@ const Transactions: React.FC = () => {
         <CardBody>
           <Tabs variant="enclosed">
 
-            <TabList>
-              <Tab _selected={{ color: 'purple.500', bg: 'white' }}>{t('transactions')}</Tab>
-              <Tab _selected={{ color: 'purple.500', bg: 'white' }}>{t('spendingByCategory')}</Tab>
+            <TabList fontWeight='bold'>
+              <Tab
+                _selected={{ color: 'purple.500', bg: 'white' }}>
+                  {t('transactions')}
+              </Tab>
+              <Tab
+                _selected={{ color: 'purple.500', bg: 'white' }}>
+                  {t('spendingByCategory')}
+              </Tab>
             </TabList>
 
             <TabPanels bg="white">

@@ -22,7 +22,15 @@
     "overview": "Overview",
     "remaining": "Remaining",
     "raised": "Raised",
-    "goalAmount": "Goal Amount"
-
+    "goalAmount": "Goal Amount",
+    "account": "Account",
+    "preferences": "Preferences",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "E-mail",
+    "language": "Language",
+    "selectLanguage": "Select Language",
+    "currency": "Currency",
+    "selectCurrency": "Select Currency"
   }
 }

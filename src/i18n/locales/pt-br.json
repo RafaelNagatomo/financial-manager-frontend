@@ -22,6 +22,15 @@
     "overview": "Visão Geral",
     "remaining": "Restante",
     "raised": "Levantado",
-    "goalAmount": "Valor da Meta"
+    "goalAmount": "Valor da Meta",
+    "account": "Conta",
+    "preferences": "Preferências",
+    "firstName": "Nome",
+    "lastName": "Sobrenome",
+    "email": "E-mail",
+    "language": "Idioma",
+    "selectLanguage": "Selecione o idioma",
+    "currency": "Moeda",
+    "selectCurrency": "Selecione a moeda"
   }
 }
