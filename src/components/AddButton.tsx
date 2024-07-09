@@ -2,7 +2,7 @@ import { Button } from '@chakra-ui/react'
 import { FaPlus } from 'react-icons/fa6';
 
 interface AddButtonProps {
-  title: string;
+  title?: string;
 }
 
 const AddButton: React.FC<AddButtonProps> = ({ title }) => {
