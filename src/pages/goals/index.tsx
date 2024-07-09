@@ -12,8 +12,6 @@ import {
   TabPanels,
   TabPanel,
   Wrap,
-  Box,
-  Stack
 } from '@chakra-ui/react';
 import FilterButton from '../../components/FilterButton'
 import AddButton from '../../components/AddButton'

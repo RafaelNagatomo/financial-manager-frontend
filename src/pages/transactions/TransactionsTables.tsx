@@ -8,6 +8,8 @@ import {
   Td,
   Progress,
   Switch,
+  Stack,
+  Text
 } from '@chakra-ui/react';
 import { formatAmount } from '../../utils/formatAmount'
 import { useCurrency } from '../../hooks/useCurrency';
@@ -77,14 +79,19 @@ export const SpendingByCategoryTable: React.FC<{
             <Td>{item.description}</Td>
             <Td>{formatAmount(item.maxAmount, currency)}</Td>
             <Td>
-              <Progress
-                bg="purple.100"
-                colorScheme="purple"
-                borderRadius={3}
-                hasStripe
-                size="sm"
-                value={item.progress}
-              />
+              <Stack my={4}>
+                <Progress
+                  bg="purple.100"
+                  colorScheme="purple"
+                  borderRadius={3}
+                  hasStripe
+                  size="sm"
+                  value={item.progress}
+                />
+                <Text fontSize={12} style={{alignSelf: 'flex-end'}}>
+                  ({(item.progress).toFixed(1)}/100%)
+                </Text>
+              </Stack>
             </Td>
           </Tr>
         ))}
