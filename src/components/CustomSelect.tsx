@@ -70,7 +70,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
   };
 
   const StackComponent = isVerticalLabel(labelPosition) ? VStack : HStack;
-  const labelText = <Text>{label}</Text>;
+  const labelText = <Text fontSize={18}>{label}</Text>;
 
   return (
     <Box marginBottom={marginBottom} marginTop={marginTop}>
@@ -82,7 +82,6 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
           onChange={handleChange}
           placeholder={placeholder}
           size="md"
-          bg="white"
           {...props}
         >
           {options.map((option) => (

@@ -62,22 +62,22 @@ const CustomInput: React.FC<CustomInputProps> = ({
   };
 
   const StackComponent = isVerticalLabel(labelPosition) ? VStack : HStack;
+  const labelText = <Text fontSize={18}>{label}</Text>;
 
   return (
     <Box marginBottom={marginBottom}>
       <StackComponent spacing={spacing} alignItems={getAlignment(labelPosition)}>
-        {isVerticalLabel(labelPosition) && labelPosition.startsWith('top') && <Text>{label}</Text>}
-        {labelPosition === 'left' && <Text>{label}</Text>}
+        {isVerticalLabel(labelPosition) && labelPosition.startsWith('top') && labelText}
+        {labelPosition === 'left' && labelText}
         <Input
           value={value}
           onChange={handleChange}
           placeholder={placeholder}
           size="md"
-          bg="white"
           {...props}
         />
-        {isVerticalLabel(labelPosition) && labelPosition.startsWith('bottom') && <Text>{label}</Text>}
-        {labelPosition === 'right' && <Text>{label}</Text>}
+        {isVerticalLabel(labelPosition) && labelPosition.startsWith('bottom') && labelText}
+        {labelPosition === 'right' && labelText}
       </StackComponent>
     </Box>
   );
