@@ -7,7 +7,9 @@ import {
   Spacer,
   Progress,
   WrapItem,
-  Stack
+  Stack,
+  useColorMode,
+  LightMode
 } from '@chakra-ui/react';
 import { useCurrency } from '../../hooks/useCurrency'
 import { formatAmount } from '../../utils/formatAmount'
@@ -20,26 +22,31 @@ const GoalsCards: React.FC<{
   t
 }) => {
   const { currency } = useCurrency()
+  const { colorMode } = useColorMode()
 
   return (
     <>
       {goals.map((goal, index) => (
         <WrapItem>
-          <Card key={index} bg="white" gap={5} w={350} p={5}>
+          <Card
+            layerStyle={colorMode === 'dark' ? 'darkCard' : 'lightCard'}
+            key={index}
+            gap={5}
+            w={350}
+            p={5}
+          >
             <Image src={goal.url} />
             <Badge size='sm' w={100} variant='solid' colorScheme='purple'>{2} Month left</Badge>
             <Text fontWeight='bold' fontSize='lg'>{goal.goal}</Text>
             <Text fontSize='md'>{goal.description}</Text>
             <Stack my={4}>
-              <Progress
-                bg="purple.100"
-                colorScheme="purple"
-                borderRadius={3}
-                hasStripe
-                size="sm"
-                value={goal.raised * 100 / goal.goalAmount}
-                m={0}
-              />
+              <LightMode>
+                <Progress
+                  borderRadius={5}
+                  hasStripe
+                  value={goal.raised * 100 / goal.goalAmount}
+                />
+              </LightMode>
               <Text fontSize={12} style={{alignSelf: 'flex-end'}}>
                 ({(goal.raised * 100 / goal.goalAmount).toFixed(1)}/100%)
               </Text>

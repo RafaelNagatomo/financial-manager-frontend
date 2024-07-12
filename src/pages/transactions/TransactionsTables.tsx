@@ -9,7 +9,9 @@ import {
   Progress,
   Switch,
   Stack,
-  Text
+  Text,
+  useColorMode,
+  LightMode
 } from '@chakra-ui/react';
 import { formatAmount } from '../../utils/formatAmount'
 import { useCurrency } from '../../hooks/useCurrency';
@@ -22,9 +24,16 @@ export const TransactionTable: React.FC<{
   t
 }) => {
   const { currency } = useCurrency()
+  const { colorMode }  = useColorMode();
   
   return (
-    <Table variant="striped" w={700} minW={350}>
+    <Table
+      layerStyle={colorMode === 'dark' ? 'darkTable' : 'lightTable'}
+      variant="unstyled"
+      w={700}
+      minW={350}
+      borderRadius={8}
+    >
       <Thead>
         <Tr>
           <Th>{t('description')}</Th>
@@ -41,11 +50,12 @@ export const TransactionTable: React.FC<{
             <Td>{transaction.category}</Td>
             <Td>{transaction.tag}</Td>
             <Td>
-              <Switch
-                size="sm"
-                colorScheme="purple"
-                isChecked={transaction.paid}
-              />
+              <LightMode>
+                <Switch
+                  size="sm"
+                  isChecked={transaction.paid}
+                />
+              </LightMode>
             </Td>
             <Td>{formatAmount(transaction.amount, currency)}</Td>
           </Tr>
@@ -63,9 +73,16 @@ export const SpendingByCategoryTable: React.FC<{
   t
 }) => {
   const { currency } = useCurrency()
+  const { colorMode }  = useColorMode();
 
   return (
-    <Table variant="striped" w={700} minW={350} >
+    <Table
+      layerStyle={colorMode === 'dark' ? 'darkTable' : 'lightTable'}
+      variant="unstyled"
+      w={700}
+      minW={350}
+      borderRadius={8}
+    >
       <Thead>
         <Tr>
           <Th>{t('description')}</Th>
@@ -80,14 +97,13 @@ export const SpendingByCategoryTable: React.FC<{
             <Td>{formatAmount(item.maxAmount, currency)}</Td>
             <Td>
               <Stack my={4}>
-                <Progress
-                  bg="purple.100"
-                  colorScheme="purple"
-                  borderRadius={3}
-                  hasStripe
-                  size="sm"
-                  value={item.progress}
-                />
+                <LightMode>
+                  <Progress
+                    borderRadius={5}
+                    hasStripe
+                    value={item.progress}
+                  />
+                </LightMode>
                 <Text fontSize={12} style={{alignSelf: 'flex-end'}}>
                   ({(item.progress).toFixed(1)}/100%)
                 </Text>
@@ -108,9 +124,15 @@ export const UpcomingPaymentsTable: React.FC<{
   t
 }) => {
   const { currency } = useCurrency()
+  const { colorMode }  = useColorMode();
 
   return (
-    <Table variant="striped" minW={350}>
+    <Table
+      layerStyle={colorMode === 'dark' ? 'darkTable' : 'lightTable'}
+      variant="unstyled"
+      minW={350}
+      borderRadius={8}
+    >
       <Thead>
         <Tr>
           <Th>{t('description')}</Th>

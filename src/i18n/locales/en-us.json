@@ -31,6 +31,9 @@
     "language": "Language",
     "selectLanguage": "Select Language",
     "currency": "Currency",
-    "selectCurrency": "Select Currency"
+    "selectCurrency": "Select Currency",
+    "theme": "Theme",
+    "light": "Light",
+    "dark": "Dark"
   }
 }

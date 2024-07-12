@@ -13,6 +13,7 @@ import {
   Tab,
   TabPanel,
   HStack,
+  useColorMode
 } from '@chakra-ui/react';
 import { TransactionTable, SpendingByCategoryTable, UpcomingPaymentsTable } from './TransactionsTables'
 import FilterButton from '../../components/FilterButton'
@@ -67,10 +68,11 @@ const Transactions: React.FC = () => {
   const [transactions] = useState(initialTransactions);
   const [spendingByCategory] = useState(initialSpendingByCategory);
   const [upcomingPayments] = useState(initialupcomingPayments);
+  const { colorMode }  = useColorMode()
 
   return (
     <HStack gap={5} align='stretch'>
-      <Card bg="gray.100">
+      <Card layerStyle={colorMode}>
         <CardHeader>
           <Flex gap='2'>
             <Heading
@@ -91,17 +93,15 @@ const Transactions: React.FC = () => {
           <Tabs variant="enclosed">
 
             <TabList fontWeight='bold'>
-              <Tab
-                _selected={{ color: 'purple.500', bg: 'white' }}>
+              <Tab  _selected={{ color: 'purple.500' }}>
                   {t('transactions')}
               </Tab>
-              <Tab
-                _selected={{ color: 'purple.500', bg: 'white' }}>
+              <Tab _selected={{ color: 'purple.500' }}>
                   {t('spendingByCategory')}
               </Tab>
             </TabList>
 
-            <TabPanels bg="white">
+            <TabPanels>
               <TabPanel>
                 <TransactionTable transactions={transactions} t={t} />
               </TabPanel>
@@ -114,7 +114,7 @@ const Transactions: React.FC = () => {
         </CardBody>
       </Card>
 
-      <Card bg="gray.100">
+      <Card layerStyle={colorMode}>
         <CardHeader>
           <Flex>
             <Heading
@@ -131,7 +131,7 @@ const Transactions: React.FC = () => {
         <CardBody>
           <Tabs variant="enclosed">
 
-            <TabPanels bg="white">
+            <TabPanels>
               <TabPanel>
                 <UpcomingPaymentsTable upcomingPayments={upcomingPayments} t={t} />
               </TabPanel>

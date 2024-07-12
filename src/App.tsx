@@ -1,6 +1,5 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { ChakraProvider, HStack, Stack } from '@chakra-ui/react'
-import theme from './styles/themes'
+import { HStack, Stack } from '@chakra-ui/react'
 
 import { CurrencyProvider } from './hooks/useCurrency'
 
@@ -11,7 +10,6 @@ import Settings from './pages/settings/index';
 
 function App() {
   return (
-    <ChakraProvider theme={theme}>
       <CurrencyProvider>
         <HStack align='stretch' gap={5}>
           <Router>
@@ -26,7 +24,6 @@ function App() {
           </Router>
         </HStack>
       </CurrencyProvider>
-    </ChakraProvider>
   );
 }
 

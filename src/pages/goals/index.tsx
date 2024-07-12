@@ -12,17 +12,15 @@ import {
   TabPanels,
   TabPanel,
   Wrap,
+  useColorMode,
 } from '@chakra-ui/react';
 import FilterButton from '../../components/FilterButton'
 import AddButton from '../../components/AddButton'
 import { GoalsTable } from './GoalsTables'
 import GoalsCards from './GoalsCards';
 
-
-
 const Goals: React.FC = () =>  {
   const { t } = useTranslation()
-
   const initialGoals = [
     {
       url: 'https://i0.wp.com/remoteandafloat.com/wp-content/uploads/2019/08/travel-scuba-gear-essentials.jpg?w=900&ssl=1',
@@ -46,12 +44,12 @@ const Goals: React.FC = () =>  {
       goalAmount: 340
     },
   ];
-
   const [goals] = useState(initialGoals);
-  
+  const { colorMode }  = useColorMode();
+
   return (
     <HStack gap={5} align='stretch'>
-      <Card bg="gray.100">
+      <Card layerStyle={colorMode}>
         <CardHeader>
           <Flex gap='2'>
             <Heading
@@ -75,7 +73,7 @@ const Goals: React.FC = () =>  {
         </CardBody>
       </Card>
 
-      <Card bg="gray.100">
+      <Card layerStyle={colorMode}>
         <CardHeader>
           <Flex>
             <Heading
@@ -92,7 +90,7 @@ const Goals: React.FC = () =>  {
         <CardBody>
           <Tabs variant="enclosed">
 
-            <TabPanels bg="white">
+            <TabPanels >
               <TabPanel>
                 <GoalsTable goals={goals} t={t} />
               </TabPanel>

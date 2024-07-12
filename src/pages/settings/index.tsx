@@ -12,7 +12,13 @@ import {
   Text,
   Grid,
   GridItem,
-  VStack
+  Stack,
+  VStack,
+  RadioGroup,
+  Radio,
+  Image,
+  useColorMode,
+  LightMode,
 } from '@chakra-ui/react';
 import CustomInput from '../../components/CustomInput';
 import CustomSelect from '../../components/CustomSelect';
@@ -21,6 +27,7 @@ import { useLanguage } from '../../hooks/useLanguage'
 const Settings: React.FC = () =>  {
   const { t } = useTranslation()
   const { currentLanguage, changeLanguage } = useLanguage()
+  const { colorMode, setColorMode } = useColorMode()
 
   const currencyOptions = [
     { value: 'USD', label: '($) USD' },
@@ -32,13 +39,17 @@ const Settings: React.FC = () =>  {
     { value: 'pt-BR', label: 'Português' },
   ];
 
+  const handleThemeChange = (value: string) => {
+    setColorMode(value);
+  };
+
   return (
     <Box>
       <Heading as="h1" size="lg" mb={5}>
         {t('settings')}
       </Heading>
       <HStack gap={5} align='stretch'>
-        <Card bg="gray.100">
+        <Card layerStyle={colorMode}>
           <CardHeader>
             <Heading
               as="h2"
@@ -59,25 +70,52 @@ const Settings: React.FC = () =>  {
                 mb={20}
               >
                 <GridItem rowSpan={2} colSpan={1}>
-                  <Avatar size='xl' name='Segun Adebayo' src='https://bit.ly/sage-adebayo' />
+                  <Avatar
+                    size='xl'
+                    name='Segun Adebayo'
+                    src='https://bit.ly/sage-adebayo'
+                  />
                 </GridItem>
                 <GridItem colSpan={2}>
-                  <Text fontWeight='bold' fontSize={18} pt={5}>{t('firstName')} {t('lastName')}</Text>
+                  <Text
+                    fontWeight='bold'
+                    fontSize={18}
+                    pt={5}
+                  >
+                    {t('firstName')} {t('lastName')}
+                  </Text>
                 </GridItem>
                 <GridItem colSpan={2}>
-                  <Text fontStyle='italic' fontSize={14}>{t('email')}</Text>
+                  <Text
+                    fontStyle='italic'
+                    fontSize={14}
+                  >
+                    {t('email')}
+                  </Text>
                 </GridItem>
               </Grid>
 
-              <CustomInput placeholder={t('firstName')} label={t('firstName')} labelPosition='topStart'/>
-              <CustomInput placeholder={t('lastName')} label={t('lastName')} labelPosition='topStart' />
-              <CustomInput placeholder={t('email')} label={t('email')} labelPosition='topStart' />
+              <CustomInput
+                placeholder={t('firstName')}
+                label={t('firstName')}
+                labelPosition='topStart'
+              />
+              <CustomInput
+                placeholder={t('lastName')}
+                label={t('lastName')}
+                labelPosition='topStart'
+              />
+              <CustomInput
+                placeholder={t('email')}
+                label={t('email')}
+                labelPosition='topStart'
+              />
         
             </VStack>
           </CardBody>
         </Card>
 
-        <Card bg="gray.100">
+        <Card layerStyle={colorMode}>
           <CardHeader>
             <Flex>
               <Heading
@@ -108,10 +146,45 @@ const Settings: React.FC = () =>  {
               placeholder={t('selectCurrency')}
               options={currencyOptions}
             />
+            <HStack mb={5}>
+              <Text fontSize={18}>{t('theme')}</Text>
+              <LightMode>
+                <RadioGroup
+                  size='lg'
+                  colorScheme= 'purple'
+                  ml={110}
+                  onChange={handleThemeChange}
+                >
+                  <Stack spacing={20} direction='row'>
+                    <Radio value='light' style={{ border: '2px solid gray' }}>
+                      {t('light')}
+                    </Radio>
+                    <Radio ml={59} value='dark' style={{ border: '2px solid gray' }}>
+                      {t('dark')}
+                    </Radio>
+                  </Stack>
+                </RadioGroup>
+              </LightMode>
+            </HStack>
+
+            <HStack ml={160} gap={5}>
+            <Image
+              w='190px'
+              src='/media/lightmode.png'
+              alt='light-mode'
+              borderRadius={6}
+            />
+            <Image
+              w='190px'
+              src='/media/darkmode.png'
+              alt='dark-mode'
+              borderRadius={6}
+            />
+            </HStack>
           </CardBody>
         </Card>
-    </HStack>
-  </Box>
+      </HStack>
+    </Box>
   )
 }
 

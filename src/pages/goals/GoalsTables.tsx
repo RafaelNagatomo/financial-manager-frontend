@@ -5,6 +5,7 @@ import {
     Tr,
     Th,
     Td,
+    useColorMode
   } from '@chakra-ui/react';
 import { useCurrency } from '../../hooks/useCurrency'
 import { formatAmount } from '../../utils/formatAmount'
@@ -17,9 +18,15 @@ export const GoalsTable: React.FC<{
     t
   }) => {
     const { currency } = useCurrency()
+    const { colorMode } = useColorMode()
 
     return (
-      <Table variant="striped" w={400} minW={350}>
+      <Table
+        layerStyle={colorMode === 'dark' ? 'darkTable' : 'lightTable'}
+        minW={350}
+        variant='unstyled'
+        borderRadius={8}
+      >
         <Thead>
           <Tr>
             <Th>{t('goal')}</Th>

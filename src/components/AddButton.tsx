@@ -1,4 +1,4 @@
-import { Button } from '@chakra-ui/react'
+import { Button, LightMode } from '@chakra-ui/react'
 import { FaPlus } from 'react-icons/fa6';
 
 interface AddButtonProps {
@@ -7,14 +7,13 @@ interface AddButtonProps {
 
 const AddButton: React.FC<AddButtonProps> = ({ title }) => {
   return (
-    <Button
-      colorScheme="purple"
-      size="sm"
-      _hover={{ bg: 'purple.400' }}
-      leftIcon={<FaPlus size={18} />}
-    >
-      {title}
-    </Button>
+    <LightMode>
+      <Button
+        leftIcon={<FaPlus size={18} />}
+      >
+        {title}
+      </Button>
+    </LightMode>
   )
 }
 
