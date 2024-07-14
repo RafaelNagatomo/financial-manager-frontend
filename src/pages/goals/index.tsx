@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { FaPlus } from 'react-icons/fa6';
 import {
   Card,
   CardHeader,
@@ -15,7 +16,7 @@ import {
   useColorMode,
 } from '@chakra-ui/react';
 import FilterButton from '../../components/FilterButton'
-import AddButton from '../../components/AddButton'
+import CustomButton from '../../components/CustomButton'
 import { GoalsTable } from './GoalsTables'
 import GoalsCards from './GoalsCards';
 
@@ -62,7 +63,7 @@ const Goals: React.FC = () =>  {
             </Heading>
             <Spacer />
             <FilterButton />
-            <AddButton title={t('newGoal')} />
+            <CustomButton title={t('newGoal')} leftIcon={<FaPlus/>}/>
           </Flex>
         </CardHeader>
 

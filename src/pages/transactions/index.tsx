@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { FaPlus } from 'react-icons/fa6'
 import {
   Card,
   CardHeader,
@@ -17,7 +18,7 @@ import {
 } from '@chakra-ui/react';
 import { TransactionTable, SpendingByCategoryTable, UpcomingPaymentsTable } from './TransactionsTables'
 import FilterButton from '../../components/FilterButton'
-import AddButton from '../../components/AddButton'
+import CustomButton from '../../components/CustomButton';
 
 const Transactions: React.FC = () => {
   const { t } = useTranslation();
@@ -85,7 +86,7 @@ const Transactions: React.FC = () => {
             </Heading>
             <Spacer />
             <FilterButton />
-            <AddButton title={t('newTransaction')} />
+            <CustomButton title={t('newTransaction')} leftIcon={<FaPlus/>}/>
           </Flex>
         </CardHeader>
 
