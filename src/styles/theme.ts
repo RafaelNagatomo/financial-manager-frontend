@@ -56,6 +56,7 @@ const Select = {
       field: {
         bg: mode('gray.200', 'gray.700')(props),
         borderColor: mode('purple.300', 'purple.600')(props),
+        color: mode('black', 'white')(props),
         _hover: {
           borderColor: mode('purple.400', 'purple.500')(props),
         },

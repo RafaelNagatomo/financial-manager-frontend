@@ -35,6 +35,10 @@
     "theme": "Tema",
     "light": "Claro",
     "dark": "Escuro",
-    "goodMorning": "Bom dia"
+    "goodMorning": "Bom dia",
+    "or": "Ou",
+    "letsGo": "Vamos lá",
+    "welcomeTo": "Bem-vindo(a) à"
+
   }
 }

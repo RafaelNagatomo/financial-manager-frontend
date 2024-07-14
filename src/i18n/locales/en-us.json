@@ -25,7 +25,7 @@
     "goalAmount": "Goal Amount",
     "account": "Account",
     "preferences": "Preferences",
-    "firstName": "First Name",
+    "firstName": "Name",
     "lastName": "Last Name",
     "email": "E-mail",
     "language": "Language",
@@ -35,6 +35,9 @@
     "theme": "Theme",
     "light": "Light",
     "dark": "Dark",
-    "goodMorning": "Good Morning"
+    "goodMorning": "Good Morning",
+    "or": "Or",
+    "letsGo": "Let`s go",
+    "welcomeTo": "Welcome to"
   }
 }
