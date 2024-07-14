@@ -92,11 +92,21 @@ const Transactions: React.FC = () => {
         <CardBody>
           <Tabs variant="enclosed">
 
-            <TabList fontWeight='bold'>
-              <Tab  _selected={{ color: 'purple.500' }}>
+            <TabList fontWeight='bold' w='95%' ml={5}>
+              <Tab
+                 _selected={{
+                  color: 'purple.500',
+                  bg: colorMode === 'dark' ? 'gray.700' : 'gray.100'
+                }}
+              >
                   {t('transactions')}
               </Tab>
-              <Tab _selected={{ color: 'purple.500' }}>
+              <Tab
+                _selected={{
+                  color: 'purple.500',
+                  bg: colorMode === 'dark' ? 'gray.700' : 'gray.100'
+                }}
+              >
                   {t('spendingByCategory')}
               </Tab>
             </TabList>

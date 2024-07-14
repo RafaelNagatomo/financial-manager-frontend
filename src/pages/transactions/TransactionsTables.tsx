@@ -96,7 +96,7 @@ export const SpendingByCategoryTable: React.FC<{
             <Td>{item.description}</Td>
             <Td>{formatAmount(item.maxAmount, currency)}</Td>
             <Td>
-              <Stack my={4}>
+              <Stack>
                 <LightMode>
                   <Progress
                     borderRadius={5}
@@ -104,7 +104,7 @@ export const SpendingByCategoryTable: React.FC<{
                     value={item.progress}
                   />
                 </LightMode>
-                <Text fontSize={12} style={{alignSelf: 'flex-end'}}>
+                <Text fontSize={11} style={{alignSelf: 'flex-end'}}>
                   ({(item.progress).toFixed(1)}/100%)
                 </Text>
               </Stack>

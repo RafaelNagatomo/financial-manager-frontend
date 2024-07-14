@@ -98,7 +98,7 @@ const MenuItem: React.FC<{
     _hover={{ color: "purple.500" }}
   >
     {item.icon && <Icon as={item.icon} boxSize={6} mr={2} color={isActive ? 'purple.500' : ''} />}
-    <Text fontSize="lg" color={isActive ? 'purple.500' : ''}>{item.label}</Text>
+    <Text fontSize="md" color={isActive ? 'purple.500' : ''}>{item.label}</Text>
     {isActive &&
       <Box
         position="absolute"
