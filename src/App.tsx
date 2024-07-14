@@ -4,6 +4,7 @@ import { HStack, Stack } from '@chakra-ui/react'
 import { CurrencyProvider } from './hooks/useCurrency'
 
 import Sidebar from './components/Sidebar'
+import Header from './components/Header';
 import Transactions from './pages/transactions/index';
 import Goals from './pages/goals/index';
 import Settings from './pages/settings/index';
@@ -15,6 +16,7 @@ function App() {
           <Router>
             <Sidebar />
             <Stack display="flex" alignItems="center" w="100%" >
+              <Header />
               <Routes>
                 <Route path="/transactions" element={<Transactions />} />
                 <Route path="/goals" element={<Goals />} />
