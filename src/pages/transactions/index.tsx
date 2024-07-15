@@ -14,11 +14,14 @@ import {
   Tab,
   TabPanel,
   HStack,
-  useColorMode
+  useColorMode,
+  useDisclosure
 } from '@chakra-ui/react';
 import { TransactionTable, SpendingByCategoryTable, UpcomingPaymentsTable } from './TransactionsTables'
 import FilterButton from '../../components/FilterButton'
 import CustomButton from '../../components/CustomButton';
+import AddCategoryModal from '../../components/AddCategoryModal';
+import AddTransactionModal from '../../components/AddTransactionModal';
 
 const Transactions: React.FC = () => {
   const { t } = useTranslation();
@@ -70,6 +73,11 @@ const Transactions: React.FC = () => {
   const [spendingByCategory] = useState(initialSpendingByCategory);
   const [upcomingPayments] = useState(initialupcomingPayments);
   const { colorMode }  = useColorMode()
+  const [changeTabCategory, setChangeTabCategory] = useState<boolean>(false);
+  
+  const { isOpen: isOpenCategory, onOpen: onOpenCategory, onClose: onCloseCategory } = useDisclosure()
+  const { isOpen: isOpenTransaction, onOpen: onOpenTransaction, onClose: onCloseTransaction } = useDisclosure()
+
 
   return (
     <HStack gap={5} align='stretch'>
@@ -86,7 +94,11 @@ const Transactions: React.FC = () => {
             </Heading>
             <Spacer />
             <FilterButton />
-            <CustomButton title={t('newTransaction')} leftIcon={<FaPlus/>}/>
+            <CustomButton
+              leftIcon={<FaPlus/>}
+              title={changeTabCategory ? t('newCategory') : t('newTransaction')}
+              onClick={changeTabCategory ? onOpenCategory : onOpenTransaction}
+            />
           </Flex>
         </CardHeader>
 
@@ -99,6 +111,7 @@ const Transactions: React.FC = () => {
                   color: 'purple.500',
                   bg: colorMode === 'dark' ? 'gray.700' : 'gray.100'
                 }}
+                onClick={() => setChangeTabCategory(false)}
               >
                   {t('transactions')}
               </Tab>
@@ -107,6 +120,7 @@ const Transactions: React.FC = () => {
                   color: 'purple.500',
                   bg: colorMode === 'dark' ? 'gray.700' : 'gray.100'
                 }}
+                onClick={() => setChangeTabCategory(true)}
               >
                   {t('spendingByCategory')}
               </Tab>
@@ -151,6 +165,8 @@ const Transactions: React.FC = () => {
           </Tabs>
         </CardBody>
       </Card>
+      <AddCategoryModal isOpen={isOpenCategory} onClose={onCloseCategory}/>
+      <AddTransactionModal isOpen={isOpenTransaction} onClose={onCloseTransaction}/>
     </HStack>
   );
 };

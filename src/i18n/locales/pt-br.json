@@ -38,7 +38,17 @@
     "goodMorning": "Bom dia",
     "or": "Ou",
     "letsGo": "Vamos lá",
-    "welcomeTo": "Bem-vindo(a) à"
-
+    "welcomeTo": "Bem-vindo(a) à",
+    "newCategory": "Nova categoria",
+    "createNewCategory": "Crie uma nova categoria",
+    "createNewTransaction": "Crie uma nova transação",
+    "thisFieldIsRequired": "Este campo é obrigatório",
+    "title": "Título",
+    "type": "Tipo",
+    "income": "Receita",
+    "expense": "Despesa",
+    "date": "Data",
+    "save": "Salvar",
+    "cancel": "Cancelar"
   }
 }

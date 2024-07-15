@@ -38,6 +38,17 @@
     "goodMorning": "Good Morning",
     "or": "Or",
     "letsGo": "Let`s go",
-    "welcomeTo": "Welcome to"
+    "welcomeTo": "Welcome to",
+    "newCategory": "New category",
+    "createNewCategory": "Create a new category",
+    "createNewTransaction": "Create a new transaction",
+    "thisFieldIsRequired": "This field is required",
+    "title": "Title",
+    "type": "Type",
+    "income": "Income",
+    "expense": "Expense",
+    "date": "Date",
+    "save": "Save",
+    "cancel": "Cancel"
   }
 }
