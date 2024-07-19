@@ -17,7 +17,9 @@ import {
   useColorMode,
   useDisclosure
 } from '@chakra-ui/react';
-import { TransactionTable, SpendingByCategoryTable, UpcomingPaymentsTable } from './TransactionsTables';
+import { TransactionTable } from './TransactionTable';
+import { SpendingByCategoryTable } from './SpendingByCategoryTable';
+import { UpcomingPaymentsTable } from './UpcomingPaymentsTable';
 import FilterButton from '../../components/FilterButton';
 import CustomButton from '../../components/CustomButton';
 import AddCategoryModal from '../../components/AddCategoryModal';
