@@ -7,7 +7,6 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
-  Button,
   FormControl,
   FormLabel,
   Input,
@@ -15,6 +14,8 @@ import {
   Stack,
   Radio,
   Select,
+  Switch,
+  LightMode,
 } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import CustomButton from './CustomButton';
@@ -30,11 +31,33 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClo
   const initialRef = useRef(null);
   const finalRef = useRef(null);
 
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, setValue, formState: { errors } } = useForm();
 
-  const onSubmit = (data: any) => {
-    console.log(data);
-    onClose();
+  const onSubmit = async (formData: any) => {
+    const data = {
+      ...formData,
+      user_id: "3695f015-9880-4d70-98dc-3610c328357f",
+      expiration_date: formData.expiration_date ? new Date(formData.expiration_date).toISOString() : null,
+    }
+    try {
+      const response = await fetch('http://localhost:3001/transactions/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        console.log('Transaction added successfully');
+        onClose();
+        window.location.reload()
+      } else {
+        console.error('Failed to add transaction');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   return (
@@ -53,9 +76,9 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClo
         <ModalHeader>{t('createNewTransaction')}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form id="add-transaction-form" onSubmit={handleSubmit(onSubmit)}>
             
-            <FormControl as="fieldset" isRequired my={5}>
+            <FormControl as="fieldset" my={5}>
               <FormLabel as="legend">
                 {t('type')}
               </FormLabel>
@@ -63,47 +86,61 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClo
                 <Stack spacing={4} direction="row">
                   <Radio
                     value="expense"
-                    {...register("type", { required: true })}
+                    {...register("transaction_type", { required: true })}
                   >
                     {t('expense')}
                   </Radio>
                   <Radio
                     value="income"
-                    {...register("type", { required: true })}
+                    {...register("transaction_type", { required: true })}
                   >
                     {t('income')}
                   </Radio>
                 </Stack>
               </RadioGroup>
-              {errors.type && <span>{t('thisFieldIsRequired')}</span>}
             </FormControl>
 
             <FormControl isRequired my={5}>
               <FormLabel>{t('title')}</FormLabel>
-              <Input placeholder={t('title')} {...register("name", { required: true })} />
+              <Input placeholder={t('title')} {...register("transaction_name", { required: true })} />
               {errors.name && <span>{t('thisFieldIsRequired')}</span>}
             </FormControl>
 
-            <FormControl isRequired my={5}>
+            <FormControl my={5}>
               <FormLabel>{t('category')}</FormLabel>
-              <Select placeholder="Select category" {...register("category", { required: true })}>
+              <Select placeholder="Select category" {...register("category_name", { required: true })}>
                 <option value="food">Food</option>
               </Select>
-              {errors.category && <span>{t('thisFieldIsRequired')}</span>}
             </FormControl>
 
             <FormControl isRequired my={5}>
+              <FormLabel>{t('amount')}</FormLabel>
+              <Input placeholder={t('amount')} {...register("transaction_amount", { required: true })} />
+              {errors.name && <span>{t('thisFieldIsRequired')}</span>}
+            </FormControl>
+
+            <FormControl my={5}>
               <FormLabel>{t('date')}</FormLabel>
-              <Input type="date" {...register("date", { required: true })} />
-              {errors.date && <span>{t('thisFieldIsRequired')}</span>}
+              <Input type="date" {...register("expiration_date")} />
+            </FormControl>
+
+            <FormControl my={5}>
+              <FormLabel>{t('paid')}</FormLabel>
+              <LightMode>
+                <Switch 
+                  size="md" 
+                  {...register("paid")}
+                  onChange={(e) => setValue("paid", e.target.checked)}
+                />
+              </LightMode>
             </FormControl>
 
           </form>
         </ModalBody>
 
         <ModalFooter gap={6}>
-          <CustomButton title={t('save')} type='submit' form='add-category-form' />
           <CustomButton title={t('cancel')} variant='outline' onClick={onClose} />
+          <CustomButton title={t('save')} type='submit' form='add-transaction-form' />
         </ModalFooter>
       </ModalContent>
     </Modal>

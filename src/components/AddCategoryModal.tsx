@@ -27,9 +27,30 @@ const AddCategoryModal: React.FC<AddCategoryModalProps> = ({ isOpen, onClose }) 
 
   const { register, handleSubmit, formState: { errors } } = useForm();
 
-  const onSubmit = (data: any) => {
-    console.log(data);
-    onClose();
+  const onSubmit = async (formData: any) => {
+    const data = {
+      ...formData,
+      user_id: "3695f015-9880-4d70-98dc-3610c328357f"
+    }
+    try {
+      const response = await fetch('http://localhost:3001/categories/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        console.log('Category added successfully');
+        onClose();
+        window.location.reload()
+      } else {
+        console.error('Failed to add category');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   return (
@@ -49,17 +70,17 @@ const AddCategoryModal: React.FC<AddCategoryModalProps> = ({ isOpen, onClose }) 
         <ModalCloseButton />
 
         <ModalBody>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form id="add-category-form" onSubmit={handleSubmit(onSubmit)}>
 
             <FormControl isRequired my={5}>
               <FormLabel>{t('title')}</FormLabel>
-              <Input placeholder={t('title')} {...register("name", { required: true })} />
+              <Input placeholder={t('title')} {...register("category_name", { required: true })} />
               {errors.name && <span>{t('thisFieldIsRequired')}</span>}
             </FormControl>
             
             <FormControl isRequired my={5}>
               <FormLabel>{t('maxAmount')}</FormLabel>
-              <Input placeholder={t('maxAmount')} {...register("name", { required: true })} />
+              <Input placeholder={t('maxAmount')} {...register("max_amount", { required: true })} />
               {errors.name && <span>{t('thisFieldIsRequired')}</span>}
             </FormControl>
 
@@ -67,8 +88,8 @@ const AddCategoryModal: React.FC<AddCategoryModalProps> = ({ isOpen, onClose }) 
         </ModalBody>
 
         <ModalFooter gap={6}>
-          <CustomButton title={t('save')} type='submit' form='add-category-form' />
           <CustomButton title={t('cancel')} variant='outline' onClick={onClose} />
+          <CustomButton title={t('save')} type='submit' form='add-category-form' />
         </ModalFooter>
       </ModalContent>
     </Modal>
