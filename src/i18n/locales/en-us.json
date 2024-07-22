@@ -57,6 +57,8 @@
     "successfullyDeleted": "Successfully deleted!",
     "failedToDelete": "Failed to delete!",
     "transactionAddedSuccessfully": "Transaction added successfully!",
-    "failedToAddTransaction": "Failed to add transaction!"
+    "failedToAddTransaction": "Failed to add transaction!",
+    "selectCategory": "Select a category",
+    "insertTitle": "Insert a title"
   }
 }

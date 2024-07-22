@@ -13,7 +13,6 @@ import {
   Stack,
   Radio,
   LightMode,
-  Select,
   Switch,
   NumberInput,
   NumberInputField,
@@ -24,6 +23,7 @@ import {
 import { Controller, useForm } from 'react-hook-form';
 import CustomButton from './CustomButton';
 import { useTranslation } from 'react-i18next';
+import CategorySelect from './CategorySelect';
 
 interface AddTransactionModalProps {
   isOpen: boolean;
@@ -84,14 +84,23 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
 
             <FormControl isRequired my={5}>
               <FormLabel>{t('title')}</FormLabel>
-              <Input placeholder={t('title')} {...register("transaction_name", { required: true })} />
+              <Input placeholder={t('insertTitle')} {...register("transaction_name", { required: true })} />
             </FormControl>
 
             <FormControl my={5}>
               <FormLabel>{t('category')}</FormLabel>
-              <Select placeholder="Select category" {...register("category_name")}>
-                <option value="food">Food</option>
-              </Select>
+              <Controller
+                name="category_name"
+                control={control}
+                defaultValue=""
+                render={({ field: { onChange, value } }) => (
+                  <CategorySelect
+                    value={value}
+                    onChange={onChange}
+                    placeholder={t('selectCategory')}
+                  />
+                )}
+              />
             </FormControl>
 
             <FormControl isRequired my={5}>

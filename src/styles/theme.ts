@@ -34,6 +34,9 @@ const Input = {
       field: {
         bg: mode('gray.200', 'gray.700')(props),
         borderColor: mode('purple.300', 'purple.600')(props),
+        _placeholder: {
+          color: mode('gray.700', 'gray.300')(props),
+        },
         _hover: {
           borderColor: mode('purple.500', 'gray.500')(props),
         },
@@ -78,7 +81,7 @@ const Select = {
       field: {
         bg: mode('gray.200', 'gray.700')(props),
         borderColor: mode('purple.300', 'purple.600')(props),
-        color: mode('black', 'white')(props),
+        color: mode('gray.700', 'gray.300')(props),
         _hover: {
           borderColor: mode('purple.400', 'purple.500')(props),
         },
