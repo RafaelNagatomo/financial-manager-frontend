@@ -55,8 +55,8 @@ const AddCategoryModal: React.FC<AddCategoryModalProps> = ({ isOpen, onClose }) 
 
   return (
     <Modal
-      initialFocusRef={initialRef}
-      finalFocusRef={finalRef}
+      // initialFocusRef={initialRef}
+      // finalFocusRef={finalRef}
       isOpen={isOpen}
       onClose={onClose}
       isCentered

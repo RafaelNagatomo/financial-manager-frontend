@@ -31,7 +31,7 @@ export const UpcomingPaymentsTable: React.FC<{
           <Tr>
             <Th>{t('description')}</Th>
             <Th>{t('amount')}</Th>
-            <Th>{t('expireDate')}</Th>
+            <Th>{t('expirationDate')}</Th>
           </Tr>
         </Thead>
         <Tbody>

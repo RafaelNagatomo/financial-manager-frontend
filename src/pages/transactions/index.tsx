@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaPlus } from 'react-icons/fa6';
 import {
@@ -15,7 +15,7 @@ import {
   TabPanel,
   HStack,
   useColorMode,
-  useDisclosure
+  useDisclosure,
 } from '@chakra-ui/react';
 import { TransactionTable } from './TransactionTable';
 import { SpendingByCategoryTable } from './SpendingByCategoryTable';
@@ -24,46 +24,29 @@ import FilterButton from '../../components/FilterButton';
 import CustomButton from '../../components/CustomButton';
 import AddCategoryModal from '../../components/AddCategoryModal';
 import AddTransactionModal from '../../components/AddTransactionModal';
+import useTransactions from '../../hooks/useTransactions';
 
 const Transactions: React.FC = () => {
   const { t } = useTranslation();
   const { colorMode } = useColorMode();
-  const [transactions, setTransactions] = useState([]);
-  const [spendingByCategory, setSpendingByCategory] = useState([]);
-  const [upcomingPayments, setUpcomingPayments] = useState([]);
+  const { 
+    transactions, 
+    spendingByCategory, 
+    upcomingPayments, 
+    fetchTransactions, 
+    fetchSpendingByCategory, 
+    addTransaction 
+  } = useTransactions();
+
   const [changeTabCategory, setChangeTabCategory] = useState<boolean>(false);
-  
+
   const { isOpen: isOpenCategory, onOpen: onOpenCategory, onClose: onCloseCategory } = useDisclosure();
   const { isOpen: isOpenTransaction, onOpen: onOpenTransaction, onClose: onCloseTransaction } = useDisclosure();
 
-  const fetchData = async (endpoint: any) => {
-    try {
-      const response = await fetch(endpoint);
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
-      }
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error('Fetch error:', error);
-      return [];
-    }
-  };
-
   useEffect(() => {
-    const fetchTransactions = async () => {
-      const data = await fetchData('http://localhost:3001/transactions/');
-      setTransactions(data);
-    };
-
-    const fetchSpendingByCategory = async () => {
-      const data = await fetchData('http://localhost:3001/categories/');
-      setSpendingByCategory(data);
-    };
-
     fetchTransactions();
     fetchSpendingByCategory();
-  }, []);
+  }, [fetchTransactions, fetchSpendingByCategory]);
 
   return (
     <HStack gap={5} align='stretch'>
@@ -102,7 +85,7 @@ const Transactions: React.FC = () => {
 
             <TabPanels>
               <TabPanel>
-                <TransactionTable transactions={transactions} t={t} />
+                <TransactionTable transactions={transactions} fetchTransactions={fetchTransactions} />
               </TabPanel>
               <TabPanel>
                 <SpendingByCategoryTable spendingByCategory={spendingByCategory} t={t} />
@@ -134,8 +117,15 @@ const Transactions: React.FC = () => {
         </CardBody>
       </Card>
       
-      <AddCategoryModal isOpen={isOpenCategory} onClose={onCloseCategory} />
-      <AddTransactionModal isOpen={isOpenTransaction} onClose={onCloseTransaction} />
+      <AddCategoryModal
+        isOpen={isOpenCategory}
+        onClose={onCloseCategory}
+      />
+      <AddTransactionModal
+        isOpen={isOpenTransaction}
+        onClose={onCloseTransaction}
+        onTransactionAdded={addTransaction}
+      />
     </HStack>
   );
 };

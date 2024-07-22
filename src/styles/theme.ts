@@ -50,6 +50,28 @@ const Input = {
   },
 }
 
+const NumberInput = {
+  variants: {
+    outline: (props: StyleFunctionProps) => ({
+      field: {
+        bg: mode('gray.200', 'gray.700')(props),
+        borderColor: mode('purple.300', 'purple.600')(props),
+        _hover: {
+          borderColor: mode('purple.500', 'gray.500')(props),
+        },
+        _focus: {
+          borderColor: mode('purple.500', 'purple.500')(props),
+          boxShadow: `0 0 0 1px ${mode('purple.500', 'purple.300')(props)}`,
+        },
+      },
+    }),
+  },
+  defaultProps: {
+    size: 'md',
+    variant: 'outline',
+  },
+}
+
 const Select = {
   variants: {
     outline: (props: StyleFunctionProps) => ({
@@ -121,6 +143,7 @@ export const theme = extendTheme({
   components: {
     Button,
     Input,
+    NumberInput,
     Select,
     Switch,
     Progress

@@ -17,7 +17,7 @@
     "progress": "Progresso",
     "maxAmount": "Valor Max",
     "upcomingPayments": "Próximos Pagamentos",
-    "expireDate": "Data de Validade",
+    "expirationDate": "Data de Validade",
     "newGoal": "Nova Meta",
     "overview": "Visão Geral",
     "remaining": "Restante",
@@ -49,6 +49,14 @@
     "expense": "Despesa",
     "date": "Data",
     "save": "Salvar",
-    "cancel": "Cancelar"
+    "cancel": "Cancelar",
+    "delete": "Deletar",
+    "errorOccured": "Ops! Ocorreu um erro!",
+    "deleteTransaction": "Deletar transação",
+    "areYouSureYouWantToDeleteThisTransaction": "Tem certeza que deseja deletar esta transação?",
+    "successfullyDeleted": "Deletado com sucesso!",
+    "failedToDelete": "Não foi possível excluir!",
+    "transactionAddedSuccessfully": "Transação adicionada com sucesso!",
+    "failedToAddTransaction": "Falha ao adicionar transação!"
   }
 }

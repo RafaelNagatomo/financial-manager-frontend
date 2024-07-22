@@ -1,4 +1,3 @@
-import React, { useRef } from 'react';
 import {
   Modal,
   ModalOverlay,
@@ -13,57 +12,40 @@ import {
   RadioGroup,
   Stack,
   Radio,
+  LightMode,
   Select,
   Switch,
-  LightMode,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
 } from '@chakra-ui/react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import CustomButton from './CustomButton';
 import { useTranslation } from 'react-i18next';
 
 interface AddTransactionModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onTransactionAdded: (transaction: any) => void;
 }
 
-const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClose }) => {
-  const { t } = useTranslation()
-  const initialRef = useRef(null);
-  const finalRef = useRef(null);
+const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
+  isOpen,
+  onClose,
+  onTransactionAdded,
+}) => {
+  const { t } = useTranslation();
+  const { control, handleSubmit, register, setValue } = useForm()
 
-  const { register, handleSubmit, setValue, formState: { errors } } = useForm();
-
-  const onSubmit = async (formData: any) => {
-    const data = {
-      ...formData,
-      user_id: "3695f015-9880-4d70-98dc-3610c328357f",
-      expiration_date: formData.expiration_date ? new Date(formData.expiration_date).toISOString() : null,
-    }
-    try {
-      const response = await fetch('http://localhost:3001/transactions/add', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-
-      if (response.ok) {
-        console.log('Transaction added successfully');
-        onClose();
-        window.location.reload()
-      } else {
-        console.error('Failed to add transaction');
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    }
+  const onSubmit = (data: any) => {
+    onTransactionAdded(data);
+    onClose();
   };
 
   return (
     <Modal
-      initialFocusRef={initialRef}
-      finalFocusRef={finalRef}
       isOpen={isOpen}
       onClose={onClose}
       isCentered
@@ -103,24 +85,39 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClo
             <FormControl isRequired my={5}>
               <FormLabel>{t('title')}</FormLabel>
               <Input placeholder={t('title')} {...register("transaction_name", { required: true })} />
-              {errors.name && <span>{t('thisFieldIsRequired')}</span>}
             </FormControl>
 
             <FormControl my={5}>
               <FormLabel>{t('category')}</FormLabel>
-              <Select placeholder="Select category" {...register("category_name", { required: true })}>
+              <Select placeholder="Select category" {...register("category_name")}>
                 <option value="food">Food</option>
               </Select>
             </FormControl>
 
             <FormControl isRequired my={5}>
               <FormLabel>{t('amount')}</FormLabel>
-              <Input placeholder={t('amount')} {...register("transaction_amount", { required: true })} />
-              {errors.name && <span>{t('thisFieldIsRequired')}</span>}
+              <Controller
+                name="transaction_amount"
+                control={control}
+                rules={{ required: t('thisFieldIsRequired') }}
+                render={({ field }) => (
+                  <NumberInput
+                    min={0}
+                    value={field.value || 0} 
+                    onChange={(value) => field.onChange(Number(value))} 
+                  >
+                    <NumberInputField placeholder={t('amount')} type="number" />
+                    <NumberInputStepper>
+                      <NumberIncrementStepper />
+                      <NumberDecrementStepper />
+                    </NumberInputStepper>
+                  </NumberInput>
+                )}
+              />
             </FormControl>
 
             <FormControl my={5}>
-              <FormLabel>{t('date')}</FormLabel>
+              <FormLabel>{t('expirationDate')}</FormLabel>
               <Input type="date" {...register("expiration_date")} />
             </FormControl>
 
