@@ -59,6 +59,8 @@
     "transactionAddedSuccessfully": "Transação adicionada com sucesso!",
     "failedToAddTransaction": "Falha ao adicionar transação!",
     "selectCategory": "Selecione uma Categoria",
-    "insertTitle": "Insira um título"
+    "insertTitle": "Insira um título",
+    "transactionEditedSuccessfully": "Transação editada com sucesso!",
+    "failedToEditTransaction": "Falha ao editar a transação!"
   }
 }

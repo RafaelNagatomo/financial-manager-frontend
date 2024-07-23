@@ -11,10 +11,10 @@ import { formatAmount } from '../../utils/formatAmount'
 import { useCurrency } from '../../hooks/useCurrency';
 
 export const UpcomingPaymentsTable: React.FC<{
-    upcomingPayments: any[],
+    // upcomingPayments: any[],
     t: (key: string) => string,
   }> = ({
-    upcomingPayments,
+    // upcomingPayments,
     t
   }) => {
     const { currency } = useCurrency()
@@ -35,13 +35,13 @@ export const UpcomingPaymentsTable: React.FC<{
           </Tr>
         </Thead>
         <Tbody>
-          {upcomingPayments.map((item, index) => (
-            <Tr key={index}>
+          {/* {upcomingPayments.map((item, index) => ( */}
+            {/* <Tr key={index}>
               <Td>{item.description}</Td>
               <Td>{formatAmount(item.amount, currency)}</Td>
               <Td>{item.expirateDate}</Td>
-            </Tr>
-          ))}
+            </Tr> */}
+          {/* ))} */}
         </Tbody>
       </Table>
     );

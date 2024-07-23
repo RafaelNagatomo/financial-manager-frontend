@@ -19,6 +19,7 @@ import { formatAmount } from '../../utils/formatAmount';
 import { useCurrency } from '../../hooks/useCurrency';
 import moment from 'moment';
 import ConfirmDeleteModal from '../../components/ConfirmDeleteModal';
+import AddTransactionModal from '../../components/AddTransactionModal';
 import useTransactions, { Transaction } from '../../hooks/useTransactions';
 
 interface TransactionTableProps {
@@ -33,14 +34,26 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
   const { t } = useTranslation();
   const { currency } = useCurrency();
   const { colorMode } = useColorMode();
-  const { deleteTransaction } = useTransactions();
+  const { deleteTransaction, editTransaction } = useTransactions();
   const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
 
-  const handleDeleteTransaction = async (transactionId: number) => {
-    await deleteTransaction(transactionId);
+  const handleDeleteTransaction = async (transaction: Transaction) => {
+    await deleteTransaction(transaction);
     fetchTransactions();
-    setIsModalOpen(false);
+    setIsDeleteModalOpen(false);
+  };
+
+  const handleEditTransaction = (transaction: Transaction) => {
+    setSelectedTransaction(transaction);
+    setIsAddModalOpen(true);
+  };
+
+  const handleUpdateTransaction = async (transaction: Transaction) => {
+    await editTransaction(transaction);
+    fetchTransactions();
+    setIsAddModalOpen(false);
   };
 
   return (
@@ -83,7 +96,7 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
                     aria-label={t('edit')}
                     _hover={{ bg: colorMode === 'dark' ? 'gray.600' : 'gray.300' }}
                     icon={<FaRegEdit size={22} color='#3a9e64' />}
-                    // onClick={() => handleEdit(transaction)}
+                    onClick={() => handleEditTransaction(transaction)}
                   />
                   <IconButton
                     variant='ghost'
@@ -92,7 +105,7 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
                     icon={<FaRegTrashAlt size={22} color='#b94a4a'/>}
                     onClick={() => {
                       setSelectedTransaction(transaction);
-                      setIsModalOpen(true);
+                      setIsDeleteModalOpen(true);
                     }}
                   />
                 </Stack>
@@ -104,9 +117,19 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
 
       {selectedTransaction && (
         <ConfirmDeleteModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          onConfirm={() => handleDeleteTransaction(selectedTransaction.id)}
+          isOpen={isDeleteModalOpen}
+          onClose={() => setIsDeleteModalOpen(false)}
+          onConfirm={() => handleDeleteTransaction(selectedTransaction)}
+        />
+      )}
+
+      {selectedTransaction && (
+        <AddTransactionModal
+          isOpen={isAddModalOpen}
+          onClose={() => setIsAddModalOpen(false)}
+          transaction={selectedTransaction}
+          fetchTransactions={fetchTransactions}
+          onTransactionUpdated={handleUpdateTransaction}
         />
       )}
     </>

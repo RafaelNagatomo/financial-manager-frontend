@@ -31,10 +31,10 @@ const Transactions: React.FC = () => {
   const { colorMode } = useColorMode();
   const { 
     transactions, 
-    spendingByCategory, 
-    upcomingPayments, 
+    // spendingByCategory, 
+    // upcomingPayments, 
     fetchTransactions, 
-    fetchSpendingByCategory, 
+    // fetchSpendingByCategory, 
     addTransaction 
   } = useTransactions();
 
@@ -45,8 +45,8 @@ const Transactions: React.FC = () => {
 
   useEffect(() => {
     fetchTransactions();
-    fetchSpendingByCategory();
-  }, [fetchTransactions, fetchSpendingByCategory]);
+    // fetchSpendingByCategory();
+  }, [fetchTransactions]);
 
   return (
     <HStack gap={5} align='stretch'>
@@ -88,7 +88,7 @@ const Transactions: React.FC = () => {
                 <TransactionTable transactions={transactions} fetchTransactions={fetchTransactions} />
               </TabPanel>
               <TabPanel>
-                <SpendingByCategoryTable spendingByCategory={spendingByCategory} t={t} />
+                <SpendingByCategoryTable t={t} />
               </TabPanel>
             </TabPanels>
           </Tabs>
@@ -110,7 +110,7 @@ const Transactions: React.FC = () => {
           <Tabs variant="enclosed">
             <TabPanels>
               <TabPanel>
-                <UpcomingPaymentsTable upcomingPayments={upcomingPayments} t={t} />
+                <UpcomingPaymentsTable t={t} />
               </TabPanel>
             </TabPanels>
           </Tabs>

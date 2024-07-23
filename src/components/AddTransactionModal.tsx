@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import {
   Modal,
   ModalOverlay,
@@ -24,24 +25,59 @@ import { Controller, useForm } from 'react-hook-form';
 import CustomButton from './CustomButton';
 import { useTranslation } from 'react-i18next';
 import CategorySelect from './CategorySelect';
+import { Transaction } from '../hooks/useTransactions'
 
 interface AddTransactionModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onTransactionAdded: (transaction: any) => void;
+  onTransactionAdded?: (transaction: Transaction) => void;
+  onTransactionUpdated?: (transaction: Transaction) => void;
+  transaction?: Transaction;
+  fetchTransactions?: () => Promise<void>;
 }
 
 const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
   isOpen,
   onClose,
   onTransactionAdded,
+  onTransactionUpdated,
+  transaction,
+  fetchTransactions
 }) => {
   const { t } = useTranslation();
-  const { control, handleSubmit, register, setValue } = useForm()
+  const { control, handleSubmit, register, setValue, reset } = useForm<Transaction>({
+    defaultValues: {
+      transaction_type: transaction?.transaction_type || 'expense',
+      transaction_name: transaction?.transaction_name || '',
+      category_name: transaction?.category_name || '',
+      transaction_amount: transaction?.transaction_amount || 0,
+      expiration_date: transaction?.expiration_date || '',
+      paid: transaction?.paid || false,
+    }
+  });
 
-  const onSubmit = (data: any) => {
-    onTransactionAdded(data);
+
+  useEffect(() => {
+    if (transaction) {
+      reset({
+        transaction_type: transaction.transaction_type,
+        transaction_name: transaction.transaction_name,
+        category_name: transaction.category_name,
+        transaction_amount: transaction.transaction_amount,
+        expiration_date: transaction.expiration_date,
+        paid: transaction.paid,
+      });
+    }
+  }, [transaction, isOpen, reset]);
+
+  const onSubmit = (data: Transaction) => {
+    if (transaction && onTransactionUpdated) {
+      onTransactionUpdated({ ...transaction, ...data });
+    } else if (onTransactionAdded) {
+      onTransactionAdded(data);
+    }
     onClose();
+    fetchTransactions?.();
   };
 
   return (

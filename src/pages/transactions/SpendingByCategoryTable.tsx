@@ -17,10 +17,10 @@ import { formatAmount } from '../../utils/formatAmount'
 import { useCurrency } from '../../hooks/useCurrency';
 
 export const SpendingByCategoryTable: React.FC<{
-    spendingByCategory: any[],
+    // spendingByCategory: any[],
     t: (key: string) => string,
   }> = ({
-    spendingByCategory,
+    // spendingByCategory,
     t
   }) => {
     const { currency } = useCurrency()
@@ -42,7 +42,7 @@ export const SpendingByCategoryTable: React.FC<{
           </Tr>
         </Thead>
         <Tbody>
-          {spendingByCategory.map((item, index) => (
+          {/* {spendingByCategory.map((item, index) => (
             <Tr key={index}>
               <Td>{item.category_name}</Td>
               <Td>{formatAmount(item.max_amount, currency)}</Td>
@@ -77,7 +77,7 @@ export const SpendingByCategoryTable: React.FC<{
                 </Stack>
               </Td>
             </Tr>
-          ))}
+          ))} */}
         </Tbody>
       </Table>
     );
