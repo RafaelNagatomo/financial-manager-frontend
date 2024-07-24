@@ -25,6 +25,7 @@ import CustomButton from '../../components/CustomButton';
 import AddCategoryModal from '../../components/AddCategoryModal';
 import AddTransactionModal from '../../components/AddTransactionModal';
 import useTransactions from '../../hooks/useTransactions';
+import useCategories from '../../hooks/useCategories';
 
 const Transactions: React.FC = () => {
   const { t } = useTranslation();
@@ -34,6 +35,11 @@ const Transactions: React.FC = () => {
     fetchTransactions,
     addTransaction,
   } = useTransactions();
+  const {
+    categories,
+    fetchCategories,
+    addCategory,
+  } = useCategories();
 
   const [isCategoryTab, setIsCategoryTab] = useState<boolean>(false);
 
@@ -50,7 +56,8 @@ const Transactions: React.FC = () => {
 
   useEffect(() => {
     fetchTransactions();
-  }, [fetchTransactions]);
+    fetchCategories();
+  }, [fetchTransactions, fetchCategories]);
 
   return (
     <HStack gap={5} align='stretch'>
@@ -95,7 +102,11 @@ const Transactions: React.FC = () => {
                 />
               </TabPanel>
               <TabPanel>
-                <SpendingByCategoryTable t={t} />
+                <SpendingByCategoryTable
+                  categories={categories}
+                  fetchCategories={fetchCategories}
+                  transactions={transactions}
+                />
               </TabPanel>
             </TabPanels>
           </Tabs>
@@ -127,6 +138,7 @@ const Transactions: React.FC = () => {
       <AddCategoryModal
         isOpen={isCategoryModalOpen}
         onClose={closeCategoryModal}
+        onCategoryAdded={addCategory}
       />
       <AddTransactionModal
         isOpen={isTransactionModalOpen}

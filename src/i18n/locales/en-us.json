@@ -61,6 +61,13 @@
     "selectCategory": "Select a category",
     "insertTitle": "Insert a title",
     "transactionEditedSuccessfully": "Transaction edited successfully!",
-    "failedToEditTransaction": "Failed to edit transaction!"
+    "failedToEditTransaction": "Failed to edit transaction!",
+    "categoryAddedSuccessfully": "Category added successfully!",
+    "failedToAddCategory": "Failed to add category!",
+    "categoryEditedSuccessfully": "Category edited successfully!",
+    "failedToEditCategory": "Failed to edit category!",
+    "enterMaximumValue": "Insert a maximum value",
+    "deleteCategory": "Delete category",
+    "areYouSureYouWantToDeleteThisCategory": "Are you sure you want to delete this category?"
   }
 }

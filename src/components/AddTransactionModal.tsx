@@ -65,8 +65,15 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
   }, [transaction, isOpen, reset]);
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} isCentered>
-      <ModalOverlay bg='blackAlpha.300' backdropFilter='blur(5px) hue-rotate(30deg)' />
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      isCentered
+    >
+      <ModalOverlay
+        bg='blackAlpha.300'
+        backdropFilter='blur(5px) hue-rotate(30deg)'
+      />
       <ModalContent>
         <ModalHeader>{t('createNewTransaction')}</ModalHeader>
         <ModalCloseButton />
@@ -118,7 +125,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
                     value={field.value || 0}
                     onChange={(value) => field.onChange(Number(value))}
                   >
-                    <NumberInputField placeholder={t('amount')} type="number" />
+                    <NumberInputField type="number" />
                     <NumberInputStepper>
                       <NumberIncrementStepper />
                       <NumberDecrementStepper />
@@ -143,6 +150,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
                 />
               </LightMode>
             </FormControl>
+            
           </form>
         </ModalBody>
         <ModalFooter gap={6}>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaArrowTrendUp, FaArrowTrendDown } from "react-icons/fa6";
 import { FaRegTrashAlt, FaRegEdit } from "react-icons/fa";
@@ -62,7 +62,6 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
         layerStyle={colorMode === 'dark' ? 'darkTable' : 'lightTable'}
         variant="unstyled"
         borderRadius={8}
-        w='100%'
       >
         <Thead>
           <Tr>
@@ -124,6 +123,7 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
           isOpen={isDeleteModalOpen}
           onClose={() => setIsDeleteModalOpen(false)}
           onConfirm={() => handleDeleteTransaction(selectedTransaction)}
+          type='transaction'
         />
       )}
 

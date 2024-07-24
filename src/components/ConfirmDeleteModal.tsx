@@ -14,9 +14,15 @@ interface ConfirmDeleteModalProps {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: () => void;
+  type: 'transaction' | 'category';
 }
 
-const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({ isOpen, onClose, onConfirm }) => {
+const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
+  isOpen,
+  onClose,
+  onConfirm,
+  type,
+}) => {
   const { t } = useTranslation()
   const cancelRef = useRef<any>(null);
 
@@ -33,11 +39,19 @@ const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({ isOpen, onClose
       >
         <AlertDialogContent>
           <AlertDialogHeader fontSize="lg" fontWeight="bold">
-            {t('deleteTransaction')}
+            {
+              type === 'transaction'
+              ? t('deleteTransaction')
+              : t('deleteCategory')
+            }
           </AlertDialogHeader>
 
           <AlertDialogBody>
-            {t('areYouSureYouWantToDeleteThisTransaction')}
+            {
+              type === 'transaction'
+              ? t('areYouSureYouWantToDeleteThisTransaction')
+              : t('areYouSureYouWantToDeleteThisCategory')
+            }
           </AlertDialogBody>
 
           <AlertDialogFooter gap={6}>

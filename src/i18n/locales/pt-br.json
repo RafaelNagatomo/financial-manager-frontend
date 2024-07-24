@@ -52,15 +52,22 @@
     "cancel": "Cancelar",
     "delete": "Deletar",
     "errorOccured": "Ops! Ocorreu um erro!",
-    "deleteTransaction": "Deletar transação",
-    "areYouSureYouWantToDeleteThisTransaction": "Tem certeza que deseja deletar esta transação?",
     "successfullyDeleted": "Deletado com sucesso!",
     "failedToDelete": "Não foi possível excluir!",
+    "deleteTransaction": "Deletar transação",
+    "areYouSureYouWantToDeleteThisTransaction": "Tem certeza que deseja deletar esta transação?",
     "transactionAddedSuccessfully": "Transação adicionada com sucesso!",
     "failedToAddTransaction": "Falha ao adicionar transação!",
     "selectCategory": "Selecione uma Categoria",
     "insertTitle": "Insira um título",
     "transactionEditedSuccessfully": "Transação editada com sucesso!",
-    "failedToEditTransaction": "Falha ao editar a transação!"
+    "failedToEditTransaction": "Falha ao editar a transação!",
+    "categoryAddedSuccessfully": "Categoria adicionada com sucesso!",
+    "failedToAddCategory": "Falha ao adicionar a categoria!",
+    "categoryEditedSuccessfully": "Categoria editada com sucesso!",
+    "failedToEditCategory": "Falha ao editar a categoria!",
+    "enterMaximumValue": "Insira um valor máximo",
+    "deleteCategory": "Deletar categoria",
+    "areYouSureYouWantToDeleteThisCategory": "Tem certeza que deseja deletar esta categoria?"
   }
 }
