@@ -32,7 +32,7 @@ const CategorySelect: React.FC<CategorySelectProps> = (props) => {
       {...props}
     >
       {categories.map((category) => (
-        <option key={category.id} value={category.id}>
+        <option key={category.id} value={category.category_name}>
           {category.category_name}
         </option>
       ))}

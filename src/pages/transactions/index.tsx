@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaPlus } from 'react-icons/fa6';
 import {
@@ -29,28 +29,32 @@ import useTransactions from '../../hooks/useTransactions';
 const Transactions: React.FC = () => {
   const { t } = useTranslation();
   const { colorMode } = useColorMode();
-  const { 
-    transactions, 
-    // spendingByCategory, 
-    // upcomingPayments, 
-    fetchTransactions, 
-    // fetchSpendingByCategory, 
-    addTransaction 
+  const {
+    transactions,
+    fetchTransactions,
+    addTransaction,
   } = useTransactions();
 
-  const [changeTabCategory, setChangeTabCategory] = useState<boolean>(false);
+  const [isCategoryTab, setIsCategoryTab] = useState<boolean>(false);
 
-  const { isOpen: isOpenCategory, onOpen: onOpenCategory, onClose: onCloseCategory } = useDisclosure();
-  const { isOpen: isOpenTransaction, onOpen: onOpenTransaction, onClose: onCloseTransaction } = useDisclosure();
+  const {
+    isOpen: isCategoryModalOpen,
+    onOpen: openCategoryModal,
+    onClose: closeCategoryModal
+  } = useDisclosure();
+  const {
+    isOpen: isTransactionModalOpen,
+    onOpen: openTransactionModal,
+    onClose: closeTransactionModal
+  } = useDisclosure();
 
   useEffect(() => {
     fetchTransactions();
-    // fetchSpendingByCategory();
   }, [fetchTransactions]);
 
   return (
     <HStack gap={5} align='stretch'>
-      <Card layerStyle={colorMode}>
+      <Card layerStyle={colorMode} w={1000}>
         <CardHeader>
           <Flex gap='2'>
             <Heading as="h1" size="lg" display="flex" alignItems="center">
@@ -60,8 +64,8 @@ const Transactions: React.FC = () => {
             <FilterButton />
             <CustomButton
               leftIcon={<FaPlus />}
-              title={changeTabCategory ? t('newCategory') : t('newTransaction')}
-              onClick={changeTabCategory ? onOpenCategory : onOpenTransaction}
+              title={isCategoryTab ? t('newCategory') : t('newTransaction')}
+              onClick={isCategoryTab ? openCategoryModal : openTransactionModal}
             />
           </Flex>
         </CardHeader>
@@ -71,13 +75,13 @@ const Transactions: React.FC = () => {
             <TabList fontWeight='bold' w='95%' ml={5}>
               <Tab
                 _selected={{ color: 'purple.500', bg: colorMode === 'dark' ? 'gray.700' : 'gray.100' }}
-                onClick={() => setChangeTabCategory(false)}
+                onClick={() => setIsCategoryTab(false)}
               >
                 {t('transactions')}
               </Tab>
               <Tab
                 _selected={{ color: 'purple.500', bg: colorMode === 'dark' ? 'gray.700' : 'gray.100' }}
-                onClick={() => setChangeTabCategory(true)}
+                onClick={() => setIsCategoryTab(true)}
               >
                 {t('spendingByCategory')}
               </Tab>
@@ -85,7 +89,10 @@ const Transactions: React.FC = () => {
 
             <TabPanels>
               <TabPanel>
-                <TransactionTable transactions={transactions} fetchTransactions={fetchTransactions} />
+                <TransactionTable
+                  transactions={transactions}
+                  fetchTransactions={fetchTransactions}
+                />
               </TabPanel>
               <TabPanel>
                 <SpendingByCategoryTable t={t} />
@@ -116,14 +123,14 @@ const Transactions: React.FC = () => {
           </Tabs>
         </CardBody>
       </Card>
-      
+
       <AddCategoryModal
-        isOpen={isOpenCategory}
-        onClose={onCloseCategory}
+        isOpen={isCategoryModalOpen}
+        onClose={closeCategoryModal}
       />
       <AddTransactionModal
-        isOpen={isOpenTransaction}
-        onClose={onCloseTransaction}
+        isOpen={isTransactionModalOpen}
+        onClose={closeTransactionModal}
         onTransactionAdded={addTransaction}
       />
     </HStack>

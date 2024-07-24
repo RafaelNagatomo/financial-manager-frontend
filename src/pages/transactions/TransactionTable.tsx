@@ -62,6 +62,7 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
         layerStyle={colorMode === 'dark' ? 'darkTable' : 'lightTable'}
         variant="unstyled"
         borderRadius={8}
+        w='100%'
       >
         <Thead>
           <Tr>
@@ -71,14 +72,17 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
             <Th>{t('status')}</Th>
             <Th>{t('value')}</Th>
             <Th>{t('date')}</Th>
-            <Th>{t('actions')}</Th>
           </Tr>
         </Thead>
         <Tbody>
           {transactions.map((transaction) => (
             <Tr key={transaction.id}>
               <Td>
-                {transaction.transaction_type === 'expense' ? <FaArrowTrendDown color='#b94a4a'/> : <FaArrowTrendUp color='#3a9e64'/>}
+                {
+                  transaction.transaction_type === 'expense'
+                  ? <FaArrowTrendDown color='#b94a4a'/>
+                  : <FaArrowTrendUp color='#3a9e64'/>
+                }
               </Td>
               <Td>{transaction.transaction_name}</Td>
               <Td>{transaction.category_name}</Td>
