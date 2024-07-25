@@ -68,8 +68,13 @@
     "failedToEditCategory": "Falha ao editar a categoria!",
     "enterMaximumValue": "Insira um valor máximo",
     "deleteCategory": "Deletar categoria",
+    "areYouSureYouWantToDeleteThisCategory": "Tem certeza que deseja deletar esta categoria?",
     "totalSpentToDate": "Total gasto até o momento",
     "maximuValueStipulated": "Valor máximo estipulado",
-    "filter": "Filtro"
+    "filter": "Filtro",
+    "editTransaction": "Editar transação",
+    "editCategory": "Editar categoria",
+    "there(p)": "Há",
+    "transactionLinkedToTheCategory": "transação vinculada à categoria"
   }
 }

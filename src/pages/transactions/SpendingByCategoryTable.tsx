@@ -146,6 +146,8 @@ export const SpendingByCategoryTable: React.FC<SpendingByCategoryTableProps> = (
             onClose={() => setIsDeleteModalOpen(false)}
             onConfirm={() => handleDeleteCategory(selectedCategory)}
             type='category'
+            transactions={transactions}
+            selectedCategory={selectedCategory.category_name}
           />
         )}
 

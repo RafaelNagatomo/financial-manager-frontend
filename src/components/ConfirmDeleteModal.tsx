@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import { LuAlertTriangle } from "react-icons/lu"
 import CustomButton from './CustomButton';
 import {
   AlertDialog,
@@ -7,14 +8,21 @@ import {
   AlertDialogHeader,
   AlertDialogContent,
   AlertDialogOverlay,
+  Text,
+  Stack,
+  HStack,
+  Box,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next'
+import { Transaction } from '../hooks/useTransactions';
 
 interface ConfirmDeleteModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onConfirm: () => void;
-  type: 'transaction' | 'category';
+  onConfirm?: () => void;
+  type?: 'transaction' | 'category';
+  transactions?: Transaction[];
+  selectedCategory?: string
 }
 
 const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
@@ -22,9 +30,20 @@ const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
   onClose,
   onConfirm,
   type,
+  transactions = [],
+  selectedCategory,
 }) => {
   const { t } = useTranslation()
   const cancelRef = useRef<any>(null);
+
+  const getCategoryTransactionCount = (categoryName: string) => {
+    return transactions
+      .filter(transaction => transaction.category_name === categoryName).length;
+  }
+  const transactionCount = 
+    type === 'category' && selectedCategory
+      ? getCategoryTransactionCount(selectedCategory)
+      : 0;
 
   return (
     <AlertDialog
@@ -39,19 +58,31 @@ const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
       >
         <AlertDialogContent>
           <AlertDialogHeader fontSize="lg" fontWeight="bold">
-            {
-              type === 'transaction'
-              ? t('deleteTransaction')
-              : t('deleteCategory')
-            }
+            <HStack gap={4}>
+              <LuAlertTriangle color='orange' size={30} />
+              <Box>
+                {type === 'transaction' ? t('deleteTransaction') : t('deleteCategory')}
+              </Box>
+            </HStack>
           </AlertDialogHeader>
 
           <AlertDialogBody>
-            {
-              type === 'transaction'
-              ? t('areYouSureYouWantToDeleteThisTransaction')
-              : t('areYouSureYouWantToDeleteThisCategory')
-            }
+            {type === 'category' ? (
+              transactionCount > 0 ? (
+                <Stack gap={3}>
+                  <Text>{t('there(p)')}
+                    <Text as="span" fontWeight='bolder' mx={2}>{transactionCount}</Text>
+                    {t('transações vinculado à categoria')}
+                    <Text as="span" fontWeight='bolder' mx={2}>"{selectedCategory}"</Text>
+                  </Text>
+                  <Text>{t('areYouSureYouWantToDeleteThisCategory')}</Text>
+                </Stack>
+              ) : (
+                t('areYouSureYouWantToDeleteThisCategory')
+              )
+            ) : (
+              t('areYouSureYouWantToDeleteThisTransaction')
+            )}
           </AlertDialogBody>
 
           <AlertDialogFooter gap={6}>
