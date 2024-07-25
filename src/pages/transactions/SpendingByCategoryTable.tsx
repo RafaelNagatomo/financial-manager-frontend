@@ -14,26 +14,25 @@ import {
   useColorMode,
   LightMode,
   IconButton,
+  Tooltip,
 } from '@chakra-ui/react';
 import { formatAmount } from '../../utils/formatAmount'
 import { useCurrency } from '../../hooks/useCurrency';
 import ConfirmDeleteModal from '../../components/ConfirmDeleteModal';
 import AddCategoryModal from '../../components/AddCategoryModal';
 import useCategories, { Category } from '../../hooks/useCategories';
-import useTransactions, { Transaction } from '../../hooks/useTransactions';
+import { Transaction } from '../../hooks/useTransactions';
 
 interface SpendingByCategoryTableProps {
   categories: Category[];
   fetchCategories: () => Promise<void>;
   transactions: Transaction[];
-  // fetchTransactions?: () => Promise<void>;
 }
 
 export const SpendingByCategoryTable: React.FC<SpendingByCategoryTableProps> = ({
     categories,
     fetchCategories,
     transactions,
-    // fetchTransactions,
   }) => {
     const { t } = useTranslation();
     const { currency } = useCurrency();
@@ -79,7 +78,6 @@ export const SpendingByCategoryTable: React.FC<SpendingByCategoryTableProps> = (
               <Th>{t('title')}</Th>
               <Th>{t('maxAmount')}</Th>
               <Th>{t('progress')}</Th>
-              <Th w={50}></Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -92,20 +90,30 @@ export const SpendingByCategoryTable: React.FC<SpendingByCategoryTableProps> = (
                 <Td>{category.category_name}</Td>
                 <Td>{formatAmount(category.max_amount, currency)}</Td>
                 <Td>
-                  <Stack>
-                    <LightMode>
-                      <Progress
-                        borderRadius={5}
-                        hasStripe
-                        value={progressValue}
-                      />
-                    </LightMode>
-                    <Text fontSize={11} style={{alignSelf: 'flex-end'}}>
-                      {Number(totalAmount).toFixed(1)}/{formatAmount(category.max_amount, currency)}
-                    </Text>
-                  </Stack>
+                  <Tooltip
+                    placement='top'
+                    label={
+                      <Text>
+                        <p>{t('totalSpentToDate')}: {formatAmount(totalAmount, currency)}</p>
+                        <p>{t('maximuValueStipulated')}: {formatAmount(category.max_amount, currency)}</p>
+                      </Text>
+                      }
+                  >
+                    <Stack>
+                      <LightMode>
+                        <Progress
+                          borderRadius={5}
+                          hasStripe
+                          value={progressValue}
+                        />
+                      </LightMode>
+                      <Text fontSize={11} style={{alignSelf: 'flex-end'}}>
+                        {(progressValue).toFixed(2)}% / 100%
+                      </Text>
+                    </Stack>
+                  </Tooltip>
                 </Td>
-                <Td>
+                <Td display='flex' justifyContent='end'>
                   <Stack direction="row" spacing={2}>
                     <IconButton
                       variant='ghost'

@@ -92,7 +92,7 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
               </Td>
               <Td>{formatAmount(transaction.transaction_amount, currency)}</Td>
               <Td>{moment(transaction.expiration_date).format('DD/MM/YYYY')}</Td>
-              <Td>
+              <Td display='flex' justifyContent='end'>
                 <Stack direction="row" spacing={2}>
                   <IconButton
                     variant='ghost'

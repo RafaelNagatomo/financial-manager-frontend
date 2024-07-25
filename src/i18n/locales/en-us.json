@@ -68,6 +68,9 @@
     "failedToEditCategory": "Failed to edit category!",
     "enterMaximumValue": "Insert a maximum value",
     "deleteCategory": "Delete category",
-    "areYouSureYouWantToDeleteThisCategory": "Are you sure you want to delete this category?"
+    "areYouSureYouWantToDeleteThisCategory": "Are you sure you want to delete this category?",
+    "totalSpentToDate": "Total spent to date",
+    "maximuValueStipulated": "Maximum value stipulated",
+    "filter": "Filter"
   }
 }

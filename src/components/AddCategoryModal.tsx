@@ -77,7 +77,11 @@ interface AddCategoryModalProps {
 
             <FormControl isRequired my={5}>
               <FormLabel>{t('title')}</FormLabel>
-              <Input placeholder={t('insertTitle')} {...register("category_name", { required: true })} />
+              <Input
+                placeholder={t('insertTitle')}
+                {...register("category_name", { required: true })}
+                isDisabled={!!category}
+              />
             </FormControl>
             
             <FormControl isRequired my={5}>
