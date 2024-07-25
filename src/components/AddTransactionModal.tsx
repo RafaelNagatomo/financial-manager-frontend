@@ -75,7 +75,9 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
         backdropFilter='blur(5px) hue-rotate(30deg)'
       />
       <ModalContent>
-        <ModalHeader>{t('createNewTransaction')}</ModalHeader>
+        <ModalHeader>
+          {onTransactionUpdated ? t('editTransaction') : t('createNewTransaction')}
+        </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <form id="add-transaction-form" onSubmit={handleSubmit(handleTransactionSubmit)}>

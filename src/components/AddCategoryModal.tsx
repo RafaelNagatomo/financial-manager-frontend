@@ -69,7 +69,9 @@ interface AddCategoryModalProps {
         backdropFilter='blur(5px) hue-rotate(30deg)'
       />
       <ModalContent>
-        <ModalHeader>{t('createNewCategory')}</ModalHeader>
+        <ModalHeader>
+          {onCategoryUpdated ? t('editCategory') : t('createNewCategory')}
+        </ModalHeader>
         <ModalCloseButton />
 
         <ModalBody>
@@ -80,7 +82,7 @@ interface AddCategoryModalProps {
               <Input
                 placeholder={t('insertTitle')}
                 {...register("category_name", { required: true })}
-                isDisabled={!!category}
+                isDisabled={!!onCategoryUpdated}
               />
             </FormControl>
             
