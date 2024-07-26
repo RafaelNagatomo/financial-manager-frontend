@@ -68,13 +68,18 @@
     "failedToEditCategory": "Failed to edit category!",
     "enterMaximumValue": "Insert a maximum value",
     "deleteCategory": "Delete category",
-    "areYouSureYouWantToDeleteThisCategory": "Are you sure you want to delete this category?",
     "totalSpentToDate": "Total spent to date",
     "maximuValueStipulated": "Maximum value stipulated",
     "filter": "Filter",
     "editTransaction": "Edit transaction",
     "editCategory": "Edit category",
-    "there(p)": "There (is/are)",
-    "transactionLinkedToTheCategory": "transaction linked to the category"
+    "linkedTransaction_zero": "No linked transactions",
+    "linkedTransaction_one": "Linked transaction",
+    "linkedTransaction_other": "Linked transactions",
+    "transactionLinkedToCategory_zero": "Are you sure you want to delete this category?",
+    "transactionLinkedToCategory_one":
+      "There is {{ count }} transaction linked to category {{ _category }}\n\n$t(transactionLinkedToCategory_zero)",
+    "transactionLinkedToCategory_other":
+      "There are {{ count }} transactions linked to category {{ _category }}\n\n$t(transactionLinkedToCategory_zero)"
   }
 }

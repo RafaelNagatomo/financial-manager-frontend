@@ -9,7 +9,6 @@ import {
   AlertDialogContent,
   AlertDialogOverlay,
   Text,
-  Stack,
   HStack,
   Box,
 } from '@chakra-ui/react';
@@ -68,26 +67,26 @@ const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
 
           <AlertDialogBody>
             {type === 'category' ? (
-              transactionCount > 0 ? (
-                <Stack gap={3}>
-                  <Text>{t('there(p)')}
-                    <Text as="span" fontWeight='bolder' mx={2}>{transactionCount}</Text>
-                    {t('transações vinculado à categoria')}
-                    <Text as="span" fontWeight='bolder' mx={2}>"{selectedCategory}"</Text>
-                  </Text>
-                  <Text>{t('areYouSureYouWantToDeleteThisCategory')}</Text>
-                </Stack>
+              <Text style={{ whiteSpace: 'pre-wrap' }}>
+                {t('transactionLinkedToCategory',
+                  { count: transactionCount, _category: selectedCategory})}
+              </Text>
               ) : (
-                t('areYouSureYouWantToDeleteThisCategory')
-              )
-            ) : (
-              t('areYouSureYouWantToDeleteThisTransaction')
+                t('areYouSureYouWantToDeleteThisTransaction')
             )}
           </AlertDialogBody>
 
           <AlertDialogFooter gap={6}>
-            <CustomButton title={t('cancel')} variant='outline' ref={cancelRef} onClick={onClose} />
-            <CustomButton title={t('delete')} onClick={onConfirm} />
+            <CustomButton
+              title={t('cancel')}
+              variant='outline'
+              ref={cancelRef}
+              onClick={onClose}
+            />
+            <CustomButton
+              title={t('delete')}
+              onClick={onConfirm}
+            />
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialogOverlay>

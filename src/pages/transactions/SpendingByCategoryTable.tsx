@@ -15,6 +15,7 @@ import {
   LightMode,
   IconButton,
   Tooltip,
+  Heading,
 } from '@chakra-ui/react';
 import { formatAmount } from '../../utils/formatAmount'
 import { useCurrency } from '../../hooks/useCurrency';
@@ -65,6 +66,11 @@ export const SpendingByCategoryTable: React.FC<SpendingByCategoryTableProps> = (
         .reduce((total, transaction) => total + Number(transaction.transaction_amount), 0);
     }
 
+    const getCategoryTransactionCount = (categoryName: string) => {
+      return transactions
+        .filter(transaction => transaction.category_name === categoryName).length;
+    }
+
     return (
       <>
         <Table
@@ -84,20 +90,37 @@ export const SpendingByCategoryTable: React.FC<SpendingByCategoryTableProps> = (
             {categories.map((category) => {
               const totalAmount = getCategoryTotal(category.category_name);
               const progressValue = Math.min((Number(totalAmount) / category.max_amount) * 100, 100);
-
+              const transactionCount = getCategoryTransactionCount(category.category_name)
+              
               return (
               <Tr key={category.id}>
                 <Td>{category.category_name}</Td>
                 <Td>{formatAmount(category.max_amount, currency)}</Td>
                 <Td>
                   <Tooltip
+                    hasArrow
                     placement='top'
                     label={
-                      <Text>
-                        <p>{t('totalSpentToDate')}: {formatAmount(totalAmount, currency)}</p>
-                        <p>{t('maximuValueStipulated')}: {formatAmount(category.max_amount, currency)}</p>
-                      </Text>
-                      }
+                      <Stack gap={1}>
+                        <Heading size='sm' my={1}>{category.category_name}</Heading>
+                        <Table size="xs" variant='unstyled'>
+                          <Tbody>
+                            <Tr>
+                              <Td>{t('totalSpentToDate')}</Td>
+                              <Td>{formatAmount(totalAmount, currency)}</Td>
+                            </Tr>
+                            <Tr>
+                              <Td>{t('maximuValueStipulated')}</Td>
+                              <Td>{formatAmount(category.max_amount, currency)}</Td>
+                            </Tr>
+                            <Tr>
+                              <Td>{t('linkedTransaction', { count: transactionCount })}</Td>
+                              <Td>{transactionCount === 0 ? '' : transactionCount}</Td>
+                            </Tr>
+                          </Tbody>
+                        </Table>
+                      </Stack>
+                    }
                   >
                     <Stack>
                       <LightMode>

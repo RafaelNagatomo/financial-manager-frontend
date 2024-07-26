@@ -68,13 +68,18 @@
     "failedToEditCategory": "Falha ao editar a categoria!",
     "enterMaximumValue": "Insira um valor máximo",
     "deleteCategory": "Deletar categoria",
-    "areYouSureYouWantToDeleteThisCategory": "Tem certeza que deseja deletar esta categoria?",
     "totalSpentToDate": "Total gasto até o momento",
     "maximuValueStipulated": "Valor máximo estipulado",
     "filter": "Filtro",
     "editTransaction": "Editar transação",
     "editCategory": "Editar categoria",
-    "there(p)": "Há",
-    "transactionLinkedToTheCategory": "transação vinculada à categoria"
+    "linkedTransaction_zero": "Nenhuma transação vinculada",
+    "linkedTransaction_one": "Transação vinculada",
+    "linkedTransaction_other": "Transações vinculadas",
+    "transactionLinkedToCategory_zero": "Tem certeza que deseja deletar esta categoria?",
+    "transactionLinkedToCategory_one":
+      "Há {{ count }} transação vinculada à categoria {{ _category }}\n\n$t(transactionLinkedToCategory_zero)",
+    "transactionLinkedToCategory_other":
+      "Há {{ count }} transações vinculadas à categoria {{ _category }}\n\n$t(transactionLinkedToCategory_zero)"
   }
 }
