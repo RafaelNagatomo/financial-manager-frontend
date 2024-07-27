@@ -83,8 +83,9 @@
       "Há {{ count }} transação vinculada à categoria {{ _category }}\n\n$t(transactionLinkedToCategory_zero)",
     "transactionLinkedToCategory_other":
       "Há {{ count }} transações vinculadas à categoria {{ _category }}\n\n$t(transactionLinkedToCategory_zero)",
-      "modifiedCategoryName": "Nome da categoria modificada",
-      "transactionsLinkedToTheCategoryWillBeCalled":
-        "As transações vinculadas à categoria, passarão a se chamar"
+    "modifiedCategoryName": "Nome da categoria modificada",
+    "transactionsLinkedToTheCategoryWillBeCalled":
+      "As transações vinculadas à categoria, passarão a se chamar",
+    "amountExceeded": "Valor excedido"
   }
 }

@@ -85,6 +85,7 @@
       "There are {{ count }} transactions linked to category {{ _category }}\n\n$t(transactionLinkedToCategory_zero)",
     "modifiedCategoryName": "Modified category name",
     "transactionsLinkedToTheCategoryWillBeCalled":
-      "Transactions linked to the category will be called"
+      "Transactions linked to the category will be called",
+    "amountExceeded": "Valor excedido"
   }
 }

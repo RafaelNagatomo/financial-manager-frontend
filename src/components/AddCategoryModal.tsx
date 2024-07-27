@@ -43,10 +43,12 @@ interface AddCategoryModalProps {
     const handleCategorySubmit = async (data: Category) => {
       if (category) {
         await editCategory({ ...category, ...data });
-        noticeToast(
-          t('modifiedCategoryName'),
-          `${t('transactionsLinkedToTheCategoryWillBeCalled')} "${data.category_name}".`
-        );
+        if (category.category_name !== data.category_name) {
+          noticeToast(
+            t('modifiedCategoryName'),
+            `${t('transactionsLinkedToTheCategoryWillBeCalled')} "${data.category_name}".`
+          );
+        }
         fetchTransactions()
       } else {
         await addCategory(data);

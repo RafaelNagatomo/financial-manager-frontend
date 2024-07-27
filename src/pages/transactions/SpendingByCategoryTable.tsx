@@ -34,7 +34,7 @@ export const SpendingByCategoryTable: React.FC<SpendingByCategoryTableProps> = (
     const { t } = useTranslation();
     const { currency } = useCurrency();
     const { colorMode } = useColorMode();
-    const { categories, fetchCategories, deleteCategory, editCategory } = useCategories();
+    const { categories, fetchCategories, deleteCategory } = useCategories();
     const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
     const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
@@ -48,12 +48,6 @@ export const SpendingByCategoryTable: React.FC<SpendingByCategoryTableProps> = (
     const handleEditCategory = (category: Category) => {
       setSelectedCategory(category);
       setIsAddModalOpen(true);
-    };
-  
-    const handleUpdateCategory = async (category: Category) => {
-      await editCategory(category);
-      fetchCategories();
-      setIsAddModalOpen(false);
     };
 
     const getCategoryTotal = (categoryName: string) => {
@@ -87,6 +81,7 @@ export const SpendingByCategoryTable: React.FC<SpendingByCategoryTableProps> = (
               const totalAmount = getCategoryTotal(category.category_name);
               const progressValue = Math.min((Number(totalAmount) / category.max_amount) * 100, 100);
               const transactionCount = getCategoryTransactionCount(category.category_name)
+              const exceededLimit = totalAmount > category.max_amount;
               
               return (
               <Tr key={category.id}>
@@ -94,6 +89,7 @@ export const SpendingByCategoryTable: React.FC<SpendingByCategoryTableProps> = (
                 <Td>{formatAmount(category.max_amount, currency)}</Td>
                 <Td>
                   <Tooltip
+                    bg={exceededLimit ? 'red.600' : ''}
                     hasArrow
                     placement='top'
                     label={
@@ -124,10 +120,17 @@ export const SpendingByCategoryTable: React.FC<SpendingByCategoryTableProps> = (
                           borderRadius={5}
                           hasStripe
                           value={progressValue}
+                          colorScheme={exceededLimit ? 'red' : 'purple'}
                         />
                       </LightMode>
                       <Text fontSize={11} style={{alignSelf: 'flex-end'}}>
-                        {(progressValue).toFixed(2)}% / 100%
+                        {
+                          exceededLimit
+                            ? <span style={{ color: 'red' }}>
+                                {t('amountExceeded')}: {formatAmount(totalAmount - category.max_amount, currency)}
+                              </span>
+                            : `${(progressValue).toFixed(2)}% / 100%`
+                        }
                       </Text>
                     </Stack>
                   </Tooltip>
