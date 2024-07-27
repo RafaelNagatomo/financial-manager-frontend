@@ -13,15 +13,14 @@ import {
   Box,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next'
-import { Transaction } from '../contexts/TransactionContext';
 
 interface ConfirmDeleteModalProps {
   isOpen: boolean;
   onClose: () => void;
   onConfirm?: () => void;
-  type?: 'transaction' | 'category';
-  transactions?: Transaction[];
   selectedCategory?: string
+  transactionCount?: number
+  type?: 'transaction' | 'category';
 }
 
 const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
@@ -29,20 +28,11 @@ const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
   onClose,
   onConfirm,
   type,
-  transactions = [],
   selectedCategory,
+  transactionCount,
 }) => {
   const { t } = useTranslation()
   const cancelRef = useRef<any>(null);
-
-  const getCategoryTransactionCount = (categoryName: string) => {
-    return transactions
-      .filter(transaction => transaction.category_name === categoryName).length;
-  }
-  const transactionCount = 
-    type === 'category' && selectedCategory
-      ? getCategoryTransactionCount(selectedCategory)
-      : 0;
 
   return (
     <AlertDialog

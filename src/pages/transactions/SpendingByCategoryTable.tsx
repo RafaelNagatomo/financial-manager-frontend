@@ -22,68 +22,73 @@ import { useCurrency } from '../../hooks/useCurrency';
 import ConfirmDeleteModal from '../../components/ConfirmDeleteModal';
 import AddCategoryModal from '../../components/AddCategoryModal';
 import { useCategories, Category } from '../../contexts/CategoryContext';
-import { Transaction } from '../../contexts/TransactionContext';
+import { useTransactions, Transaction } from '../../contexts/TransactionContext';
 
 interface SpendingByCategoryTableProps {
   transactions: Transaction[];
 }
 
 export const SpendingByCategoryTable: React.FC<SpendingByCategoryTableProps> = ({
-    transactions,
-  }) => {
-    const { t } = useTranslation();
-    const { currency } = useCurrency();
-    const { colorMode } = useColorMode();
-    const { categories, fetchCategories, deleteCategory } = useCategories();
-    const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
-    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
-    const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
-  
-    const handleDeleteCategory = async (category: Category) => {
-      await deleteCategory(category);
+  transactions,
+}) => {
+  const { t } = useTranslation();
+  const { currency } = useCurrency();
+  const { colorMode } = useColorMode();
+  const { categories, fetchCategories, deleteCategory } = useCategories();
+  const { fetchTransactions } = useTransactions();
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
+  const [transactionCount, setTransactionCount] = useState<number>(0);
+
+  const handleDeleteCategory = async (selectedCategory: Category, transactionCount: number) => {
+    if (selectedCategory) {
+      await deleteCategory(selectedCategory, transactionCount);
       fetchCategories();
+      fetchTransactions();
       setIsDeleteModalOpen(false);
-    };
-  
-    const handleEditCategory = (category: Category) => {
-      setSelectedCategory(category);
-      setIsAddModalOpen(true);
-    };
-
-    const getCategoryTotal = (categoryName: string) => {
-      return transactions
-        .filter(transaction => transaction.category_name === categoryName)
-        .reduce((total, transaction) => total + Number(transaction.transaction_amount), 0);
     }
+  };
 
-    const getCategoryTransactionCount = (categoryName: string) => {
-      return transactions
-        .filter(transaction => transaction.category_name === categoryName).length;
-    }
+  const handleEditCategory = (category: Category) => {
+    setSelectedCategory(category);
+    setIsAddModalOpen(true);
+  };
 
-    return (
-      <>
-        <Table
-          layerStyle={colorMode === 'dark' ? 'darkTable' : 'lightTable'}
-          variant="unstyled"
-          borderRadius={8}
-          w='100%'
-        >
-          <Thead>
-            <Tr>
-              <Th>{t('title')}</Th>
-              <Th>{t('maxAmount')}</Th>
-              <Th>{t('progress')}</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {categories.map((category) => {
-              const totalAmount = getCategoryTotal(category.category_name);
-              const progressValue = Math.min((Number(totalAmount) / category.max_amount) * 100, 100);
-              const transactionCount = getCategoryTransactionCount(category.category_name)
-              const exceededLimit = totalAmount > category.max_amount;
-              
-              return (
+  const getCategoryTotal = (categoryName: string) => {
+    return transactions
+      .filter(transaction => transaction.category_name === categoryName)
+      .reduce((total, transaction) => total + Number(transaction.transaction_amount), 0);
+  };
+
+  const getCategoryTransactionCount = (categoryName: string) => {
+    return transactions
+      .filter(transaction => transaction.category_name === categoryName).length;
+  };
+
+  return (
+    <>
+      <Table
+        layerStyle={colorMode === 'dark' ? 'darkTable' : 'lightTable'}
+        variant="unstyled"
+        borderRadius={8}
+        w='100%'
+      >
+        <Thead>
+          <Tr>
+            <Th>{t('title')}</Th>
+            <Th>{t('maxAmount')}</Th>
+            <Th>{t('progress')}</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
+          {categories.map((category) => {
+            const totalAmount = getCategoryTotal(category.category_name);
+            const progressValue = Math.min((Number(totalAmount) / category.max_amount) * 100, 100);
+            const transactionCount = getCategoryTransactionCount(category.category_name);
+            const exceededLimit = totalAmount > category.max_amount;
+
+            return (
               <Tr key={category.id}>
                 <Td>{category.category_name}</Td>
                 <Td>{formatAmount(category.max_amount, currency)}</Td>
@@ -123,12 +128,12 @@ export const SpendingByCategoryTable: React.FC<SpendingByCategoryTableProps> = (
                           colorScheme={exceededLimit ? 'red' : 'purple'}
                         />
                       </LightMode>
-                      <Text fontSize={11} style={{alignSelf: 'flex-end'}}>
+                      <Text fontSize={11} style={{ alignSelf: 'flex-end' }}>
                         {
                           exceededLimit
                             ? <span style={{ color: 'red' }}>
-                                {t('amountExceeded')}: {formatAmount(totalAmount - category.max_amount, currency)}
-                              </span>
+                              {t('amountExceeded')}: {formatAmount(totalAmount - category.max_amount, currency)}
+                            </span>
                             : `${(progressValue).toFixed(2)}% / 100%`
                         }
                       </Text>
@@ -148,39 +153,39 @@ export const SpendingByCategoryTable: React.FC<SpendingByCategoryTableProps> = (
                       variant='ghost'
                       aria-label={t('delete')}
                       _hover={{ bg: colorMode === 'dark' ? 'gray.600' : 'gray.300' }}
-                      icon={<FaRegTrashAlt size={22} color='#b94a4a'/>}
+                      icon={<FaRegTrashAlt size={22} color='#b94a4a' />}
                       onClick={() => {
                         setSelectedCategory(category);
+                        setTransactionCount(transactionCount);
                         setIsDeleteModalOpen(true);
                       }}
                     />
                   </Stack>
                 </Td>
               </Tr>
-              )
-            })}
-          </Tbody>
-        </Table>
+            )
+          })}
+        </Tbody>
+      </Table>
 
-        {selectedCategory && (
-          <ConfirmDeleteModal
-            isOpen={isDeleteModalOpen}
-            onClose={() => setIsDeleteModalOpen(false)}
-            onConfirm={() => handleDeleteCategory(selectedCategory)}
-            type='category'
-            transactions={transactions}
-            selectedCategory={selectedCategory.category_name}
-          />
-        )}
+      {selectedCategory && (
+        <ConfirmDeleteModal
+          isOpen={isDeleteModalOpen}
+          onClose={() => setIsDeleteModalOpen(false)}
+          onConfirm={() => handleDeleteCategory(selectedCategory, transactionCount)}
+          selectedCategory={selectedCategory.category_name}
+          transactionCount={transactionCount}
+          type='category'
+        />
+      )}
 
-        {selectedCategory && (
-          <AddCategoryModal
-            isOpen={isAddModalOpen}
-            onClose={() => setIsAddModalOpen(false)}
-            category={selectedCategory}
-          />
-        )}
-      </>
-    );
-  }
-  
+      {selectedCategory && (
+        <AddCategoryModal
+          isOpen={isAddModalOpen}
+          onClose={() => setIsAddModalOpen(false)}
+          category={selectedCategory}
+        />
+      )}
+    </>
+  );
+}

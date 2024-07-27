@@ -85,8 +85,13 @@
       "Há {{ count }} transações vinculadas à categoria {{ _category }}\n\n$t(transactionLinkedToCategory_zero)",
     "modifiedCategoryName": "Nome da categoria modificada",
     "transactionsLinkedToTheCategoryWillBeCalled":
-      "As transações vinculadas à categoria, passarão a se chamar",
+      "As transações vinculadas a essa categoria, passarão a se chamar",
     "amountExceeded": "Valor excedido",
-    "fillInAllMandatoryFields": "Preencha todos os campos obrigatórios"
+    "fillInAllMandatoryFields": "Preencha todos os campos obrigatórios",
+    "categoryDeleted": "Categoria deletado",
+    "nowTransactionsAreUncategorized_one":
+      "Agora, {{ count }} transação está sem categoria na sua tabela de Transações",
+    "nowTransactionsAreUncategorized_other":
+      "Agora, {{ count }} transações estão sem categoria na sua tabela de Transações"
   }
 }

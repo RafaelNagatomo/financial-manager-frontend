@@ -87,6 +87,11 @@
     "transactionsLinkedToTheCategoryWillBeCalled":
       "Transactions linked to the category will be called",
     "amountExceeded": "Valor excedido",
-    "fillInAllMandatoryFields": "Fill in all mandatory fields"
+    "fillInAllMandatoryFields": "Fill in all mandatory fields",
+    "categoryDeleted": "Category deleted",
+    "nowTransactionsAreUncategorized_one":
+      "Now {{ count }} transaction is uncategorized in your Transactions table",
+    "nowTransactionsAreUncategorized_other":
+      "Now {{ count }} transactions are uncategorized in your Transactions table"
   }
 }

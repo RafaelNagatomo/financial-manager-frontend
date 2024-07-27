@@ -12,7 +12,7 @@ interface CategoryContextType {
   categories: Category[];
   fetchCategories: () => Promise<void>;
   addCategory: (category: Omit<Category, 'id'>) => void;
-  deleteCategory: (category: Category) => void;
+  deleteCategory: (category: Category, transactionCount: number) => void;
   editCategory: (category: Category) => void;
 }
 
@@ -20,7 +20,7 @@ const CategoryContext = createContext<CategoryContextType | undefined>(undefined
 
 export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { t } = useTranslation();
-  const { shortToast } = useCustomToast();
+  const { shortToast, noticeToast } = useCustomToast();
   const [categories, setCategories] = useState<Category[]>([]);
   
   const fetchData = async (endpoint: string) => {
@@ -68,13 +68,19 @@ export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }
   };
 
-  const deleteCategory = async (category: Category) => {
+  const deleteCategory = async (category: Category, transactionCount: number) => {
     try {
       const response = await fetch(`http://localhost:3001/categories/delete/${category.id}`, {
         method: 'DELETE',
       });
       if (response.ok) {
         setCategories(categories.filter(item => item.id !== category.id));
+        if (transactionCount > 0) {
+          noticeToast(
+            t('categoryDeleted'),
+            t('nowTransactionsAreUncategorized', { count: transactionCount }),
+          );
+        }
         shortToast(t('successfullyDeleted'), 'success');
       } else {
         shortToast(t('failedToDelete'), 'error');

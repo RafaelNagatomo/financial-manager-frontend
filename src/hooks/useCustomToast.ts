@@ -9,7 +9,7 @@ const useCustomToast = () => {
   const shortToast = (
     description: string,
     status: Status = 'info',
-    duration: number = 5000,
+    duration: number = 3000,
     position: Position = 'bottom-right'
   ) => {
     toast({
@@ -25,7 +25,7 @@ const useCustomToast = () => {
     title: string,
     description: string,
     status: Status = 'warning',
-    duration: number = 10000,
+    duration: number = 6000,
     position: Position = 'bottom'
   ) => {
     toast({
