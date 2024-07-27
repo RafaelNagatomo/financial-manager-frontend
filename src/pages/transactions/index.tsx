@@ -16,6 +16,7 @@ import {
   HStack,
   useColorMode,
   useDisclosure,
+  SkeletonText,
 } from '@chakra-ui/react';
 import { TransactionTable } from './TransactionTable';
 import { SpendingByCategoryTable } from './SpendingByCategoryTable';
@@ -62,6 +63,7 @@ const Transactions: React.FC = () => {
   return (
     <HStack gap={5} align='stretch'>
       <Card layerStyle={colorMode} w={1000}>
+
         <CardHeader>
           <Flex gap='2'>
             <Heading as="h1" size="lg" display="flex" alignItems="center">
@@ -79,7 +81,7 @@ const Transactions: React.FC = () => {
 
         <CardBody>
           <Tabs variant="enclosed">
-            <TabList fontWeight='bold' w='95%' ml={5}>
+            <TabList fontWeight='bold' w='96.7%' ml={4}>
               <Tab
                 _selected={{ color: 'purple.500', bg: colorMode === 'dark' ? 'gray.700' : 'gray.100' }}
                 onClick={() => setIsCategoryTab(false)}
@@ -94,21 +96,37 @@ const Transactions: React.FC = () => {
               </Tab>
             </TabList>
 
-            <TabPanels>
-              <TabPanel>
-                <TransactionTable
-                  transactions={transactions}
-                  fetchTransactions={fetchTransactions}
-                />
-              </TabPanel>
-              <TabPanel>
-                <SpendingByCategoryTable
-                  categories={categories}
-                  fetchCategories={fetchCategories}
-                  transactions={transactions}
-                />
-              </TabPanel>
-            </TabPanels>
+            
+              <TabPanels>
+                <TabPanel>
+                  <SkeletonText
+                    noOfLines={8}
+                    spacing='3'
+                    skeletonHeight='4'
+                    isLoaded={!!transactions}
+                  >
+                    <TransactionTable
+                      transactions={transactions}
+                      fetchTransactions={fetchTransactions}
+                    />
+                  </SkeletonText>
+
+                </TabPanel>
+                <TabPanel>
+                  <SkeletonText
+                    noOfLines={8}
+                    spacing='3'
+                    skeletonHeight='4'
+                    isLoaded={!!categories}
+                  >
+                    <SpendingByCategoryTable
+                      categories={categories}
+                      fetchCategories={fetchCategories}
+                      transactions={transactions}
+                    />
+                  </SkeletonText>
+                </TabPanel>
+              </TabPanels>
           </Tabs>
         </CardBody>
       </Card>

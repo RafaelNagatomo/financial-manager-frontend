@@ -78,13 +78,13 @@ const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
 
           <AlertDialogFooter gap={6}>
             <CustomButton
-              title={t('cancel')}
+              title={t('no')}
               variant='outline'
               ref={cancelRef}
               onClick={onClose}
             />
             <CustomButton
-              title={t('delete')}
+              title={t('yes')}
               onClick={onConfirm}
             />
           </AlertDialogFooter>

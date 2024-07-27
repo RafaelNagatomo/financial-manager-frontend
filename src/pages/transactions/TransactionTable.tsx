@@ -68,7 +68,7 @@ export const TransactionTable: React.FC<TransactionTableProps> = ({
             <Th>{t('type')}</Th>
             <Th>{t('title')}</Th>
             <Th>{t('category')}</Th>
-            <Th>{t('status')}</Th>
+            <Th>{t('paid')}</Th>
             <Th>{t('value')}</Th>
             <Th>{t('date')}</Th>
           </Tr>
