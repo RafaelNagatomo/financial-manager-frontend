@@ -26,7 +26,7 @@ export const TransactionTable: React.FC = () => {
   const { t } = useTranslation();
   const { currency } = useCurrency();
   const { colorMode } = useColorMode();
-  const { transactions, fetchTransactions, deleteTransaction, editTransaction } = useTransactions();
+  const { transactions, fetchTransactions, deleteTransaction } = useTransactions();
   const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
@@ -42,12 +42,6 @@ export const TransactionTable: React.FC = () => {
   const handleEditTransaction = (transaction: Transaction) => {
     setSelectedTransaction(transaction);
     setIsAddModalOpen(true);
-  };
-
-  const handleUpdateTransaction = async (transaction: Transaction) => {
-    await editTransaction(transaction);
-    fetchTransactions();
-    setIsAddModalOpen(false);
   };
 
   return (
@@ -127,7 +121,6 @@ export const TransactionTable: React.FC = () => {
           isOpen={isAddModalOpen}
           onClose={() => setIsAddModalOpen(false)}
           transaction={selectedTransaction}
-          // onUpdateTransaction={handleUpdateTransaction}
         />
       )}
     </>

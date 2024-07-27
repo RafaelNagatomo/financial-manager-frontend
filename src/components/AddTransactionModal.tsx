@@ -39,8 +39,10 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
   transaction,
 }) => {
   const { t } = useTranslation();
-  const { control, handleSubmit, register, setValue, reset } = useForm<Transaction>();
+  const { control, handleSubmit, register, setValue, reset, watch  } = useForm<Transaction>();
   const { fetchTransactions, addTransaction, editTransaction } = useTransactions()
+  const watchedFields = watch();
+  const isRequiredFieldsEmpty = !watchedFields.transaction_type || !watchedFields.transaction_name || !watchedFields.transaction_amount;
 
   const handleTransactionSubmit = async(data: Transaction) => {
     if (transaction) {
@@ -77,9 +79,9 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
         <ModalCloseButton />
         <ModalBody>
           <form id="add-transaction-form" onSubmit={handleSubmit(handleTransactionSubmit)}>
-            <FormControl as="fieldset" my={5}>
+            <FormControl isRequired as="fieldset" my={5}>
               <FormLabel as="legend">{t('type')}</FormLabel>
-              <RadioGroup defaultValue="expense">
+              <RadioGroup defaultValue={transaction?.transaction_type || undefined} >
                 <Stack spacing={4} direction="row">
                   <Radio value="expense" {...register("transaction_type", { required: true })}>
                     {t('expense')}
@@ -93,7 +95,9 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
 
             <FormControl isRequired my={5}>
               <FormLabel>{t('title')}</FormLabel>
-              <Input placeholder={t('insertTitle')} {...register("transaction_name", { required: true })} />
+              <Input
+                placeholder={t('insertTitle')}
+                {...register("transaction_name", { required: true })} />
             </FormControl>
 
             <FormControl my={5}>
@@ -116,14 +120,13 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
               <Controller
                 name="transaction_amount"
                 control={control}
-                rules={{ required: t('thisFieldIsRequired') }}
                 render={({ field }) => (
                   <NumberInput
                     min={0}
-                    value={field.value || 0}
+                    value={field.value || undefined}
                     onChange={(value) => field.onChange(Number(value))}
                   >
-                    <NumberInputField type="number" />
+                    <NumberInputField type="tel" />
                     <NumberInputStepper>
                       <NumberIncrementStepper />
                       <NumberDecrementStepper />
@@ -152,8 +155,19 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
           </form>
         </ModalBody>
         <ModalFooter gap={6}>
-          <CustomButton title={t('cancel')} variant='outline' onClick={onClose} />
-          <CustomButton title={t('save')} type='submit' form='add-transaction-form' />
+          <CustomButton
+            title={t('cancel')}
+            variant='outline'
+            onClick={onClose}
+          />
+          <CustomButton
+            title={t('save')}
+            type='submit'
+            form='add-transaction-form'
+            isDisabled={isRequiredFieldsEmpty}
+            tooltipDisabled={isRequiredFieldsEmpty}
+            tooltipLabel={t('fillInAllMandatoryFields')}
+          />
         </ModalFooter>
       </ModalContent>
     </Modal>

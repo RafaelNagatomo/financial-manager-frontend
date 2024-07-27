@@ -86,6 +86,7 @@
     "modifiedCategoryName": "Nome da categoria modificada",
     "transactionsLinkedToTheCategoryWillBeCalled":
       "As transações vinculadas à categoria, passarão a se chamar",
-    "amountExceeded": "Valor excedido"
+    "amountExceeded": "Valor excedido",
+    "fillInAllMandatoryFields": "Preencha todos os campos obrigatórios"
   }
 }

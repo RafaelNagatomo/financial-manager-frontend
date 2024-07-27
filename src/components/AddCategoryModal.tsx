@@ -35,10 +35,12 @@ interface AddCategoryModalProps {
     category,
   }) => {
     const { t } = useTranslation();
-    const { control, handleSubmit, register, reset } = useForm<Category>();
+    const { control, handleSubmit, register, reset, watch } = useForm<Category>();
     const { fetchCategories, addCategory, editCategory } = useCategories();
     const { fetchTransactions } = useTransactions();
     const { noticeToast } = useCustomToast();
+    const watchedFields = watch();
+    const isRequiredFieldsEmpty = !watchedFields.category_name || !watchedFields.max_amount;
 
     const handleCategorySubmit = async (data: Category) => {
       if (category) {
@@ -97,19 +99,13 @@ interface AddCategoryModalProps {
               <Controller
                 name="max_amount"
                 control={control}
-                rules={{
-                  validate: value => {
-                    if (value === 0) { return t('thisFieldIsRequired') }
-                    return true;
-                  }
-                }}
                 render={({ field }) => (
                   <NumberInput
                     min={0}
-                    value={field.value || 0}
+                    value={field.value || undefined}
                     onChange={(value) => field.onChange(Number(value))}
                   >
-                    <NumberInputField type="number" />
+                    <NumberInputField type="tel" />
                     <NumberInputStepper>
                       <NumberIncrementStepper />
                       <NumberDecrementStepper />
@@ -122,8 +118,19 @@ interface AddCategoryModalProps {
           </form>
         </ModalBody>
         <ModalFooter gap={6}>
-          <CustomButton title={t('cancel')} variant='outline' onClick={onClose} />
-          <CustomButton title={t('save')} type='submit' form='add-category-form' />
+          <CustomButton
+            title={t('cancel')}
+            variant='outline'
+            onClick={onClose}
+          />
+          <CustomButton
+            title={t('save')}
+            type='submit'
+            form='add-category-form'
+            isDisabled={isRequiredFieldsEmpty}
+            tooltipDisabled={isRequiredFieldsEmpty}
+            tooltipLabel={t('fillInAllMandatoryFields')}
+          />
         </ModalFooter>
       </ModalContent>
     </Modal>

@@ -86,6 +86,7 @@
     "modifiedCategoryName": "Modified category name",
     "transactionsLinkedToTheCategoryWillBeCalled":
       "Transactions linked to the category will be called",
-    "amountExceeded": "Valor excedido"
+    "amountExceeded": "Valor excedido",
+    "fillInAllMandatoryFields": "Fill in all mandatory fields"
   }
 }
