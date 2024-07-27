@@ -21,24 +21,20 @@ import { formatAmount } from '../../utils/formatAmount'
 import { useCurrency } from '../../hooks/useCurrency';
 import ConfirmDeleteModal from '../../components/ConfirmDeleteModal';
 import AddCategoryModal from '../../components/AddCategoryModal';
-import useCategories, { Category } from '../../hooks/useCategories';
-import { Transaction } from '../../hooks/useTransactions';
+import { useCategories, Category } from '../../contexts/CategoryContext';
+import { Transaction } from '../../contexts/TransactionContext';
 
 interface SpendingByCategoryTableProps {
-  categories: Category[];
-  fetchCategories: () => Promise<void>;
   transactions: Transaction[];
 }
 
 export const SpendingByCategoryTable: React.FC<SpendingByCategoryTableProps> = ({
-    categories,
-    fetchCategories,
     transactions,
   }) => {
     const { t } = useTranslation();
     const { currency } = useCurrency();
     const { colorMode } = useColorMode();
-    const { deleteCategory, editCategory } = useCategories();
+    const { categories, fetchCategories, deleteCategory, editCategory } = useCategories();
     const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
     const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
@@ -179,8 +175,6 @@ export const SpendingByCategoryTable: React.FC<SpendingByCategoryTableProps> = (
             isOpen={isAddModalOpen}
             onClose={() => setIsAddModalOpen(false)}
             category={selectedCategory}
-            fetchCategories={fetchCategories}
-            onCategoryUpdated={handleUpdateCategory}
           />
         )}
       </>

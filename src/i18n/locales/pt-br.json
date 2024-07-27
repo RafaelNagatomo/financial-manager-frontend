@@ -55,7 +55,8 @@
     "successfullyDeleted": "Deletado com sucesso!",
     "failedToDelete": "Não foi possível excluir!",
     "deleteTransaction": "Deletar transação",
-    "areYouSureYouWantToDeleteThisTransaction": "Tem certeza que deseja deletar esta transação?",
+    "areYouSureYouWantToDeleteThisTransaction":
+      "Tem certeza que deseja deletar esta transação?",
     "transactionAddedSuccessfully": "Transação adicionada com sucesso!",
     "failedToAddTransaction": "Falha ao adicionar transação!",
     "selectCategory": "Selecione uma Categoria",
@@ -76,10 +77,14 @@
     "linkedTransaction_zero": "Nenhuma transação vinculada",
     "linkedTransaction_one": "Transação vinculada",
     "linkedTransaction_other": "Transações vinculadas",
-    "transactionLinkedToCategory_zero": "Tem certeza que deseja deletar esta categoria?",
+    "transactionLinkedToCategory_zero":
+      "Tem certeza que deseja deletar esta categoria?",
     "transactionLinkedToCategory_one":
       "Há {{ count }} transação vinculada à categoria {{ _category }}\n\n$t(transactionLinkedToCategory_zero)",
     "transactionLinkedToCategory_other":
-      "Há {{ count }} transações vinculadas à categoria {{ _category }}\n\n$t(transactionLinkedToCategory_zero)"
+      "Há {{ count }} transações vinculadas à categoria {{ _category }}\n\n$t(transactionLinkedToCategory_zero)",
+      "modifiedCategoryName": "Nome da categoria modificada",
+      "transactionsLinkedToTheCategoryWillBeCalled":
+        "As transações vinculadas à categoria, passarão a se chamar"
   }
 }

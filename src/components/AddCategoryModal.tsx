@@ -16,40 +16,45 @@ import {
   NumberIncrementStepper,
   NumberDecrementStepper,
 } from '@chakra-ui/react';
-import { Controller, useForm } from 'react-hook-form'
-import CustomButton from './CustomButton';
 import { useTranslation } from 'react-i18next';
-import { Category } from '../hooks/useCategories'
+import { Controller, useForm } from 'react-hook-form'
+import useCustomToast from '../hooks/useCustomToast'
+import CustomButton from './CustomButton';
+import { useCategories, Category } from '../contexts/CategoryContext'
+import { useTransactions } from '../contexts/TransactionContext';
 
 interface AddCategoryModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onCategoryAdded?: (category: Category) => void;
-  onCategoryUpdated?: (category: Category) => void;
-  category?: Category;
-  fetchCategories?: () => Promise<void>;
+  category?: Category
 }
 
   const AddCategoryModal: React.FC<AddCategoryModalProps> = ({
     isOpen,
     onClose,
-    onCategoryAdded,
-    onCategoryUpdated,
     category,
-    fetchCategories,
   }) => {
     const { t } = useTranslation();
     const { control, handleSubmit, register, reset } = useForm<Category>();
+    const { fetchCategories, addCategory, editCategory } = useCategories();
+    const { fetchTransactions } = useTransactions();
+    const { noticeToast } = useCustomToast();
 
-    const handleCategorySubmit = (data: Category) => {
-      if (category && onCategoryUpdated) {
-        onCategoryUpdated({ ...category, ...data });
-      } else if (onCategoryAdded) {
-        onCategoryAdded(data);
+    const handleCategorySubmit = async (data: Category) => {
+      if (category) {
+        await editCategory({ ...category, ...data });
+        noticeToast(
+          t('modifiedCategoryName'),
+          `${t('transactionsLinkedToTheCategoryWillBeCalled')} "${data.category_name}".`
+        );
+        fetchTransactions()
+      } else {
+        await addCategory(data);
       }
-      reset()
+      
+      reset();
       onClose();
-      fetchCategories?.();
+      fetchCategories();
     };
   
     useEffect(() => {
@@ -70,7 +75,7 @@ interface AddCategoryModalProps {
       />
       <ModalContent>
         <ModalHeader>
-          {onCategoryUpdated ? t('editCategory') : t('createNewCategory')}
+          {category ? t('editCategory') : t('createNewCategory')}
         </ModalHeader>
         <ModalCloseButton />
 
@@ -82,7 +87,6 @@ interface AddCategoryModalProps {
               <Input
                 placeholder={t('insertTitle')}
                 {...register("category_name", { required: true })}
-                isDisabled={!!onCategoryUpdated}
               />
             </FormControl>
             

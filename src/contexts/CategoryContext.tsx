@@ -1,6 +1,6 @@
-import { useState, useCallback } from 'react';
+import React, { useState, useCallback, createContext, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
-import useCustomToast from './useCustomToast';
+import useCustomToast from '../hooks/useCustomToast';
 
 export interface Category {
   id: number;
@@ -8,9 +8,19 @@ export interface Category {
   max_amount: number;
 }
 
-const useCategories = () => {
+interface CategoryContextType {
+  categories: Category[];
+  fetchCategories: () => Promise<void>;
+  addCategory: (category: Omit<Category, 'id'>) => void;
+  deleteCategory: (category: Category) => void;
+  editCategory: (category: Category) => void;
+}
+
+const CategoryContext = createContext<CategoryContextType | undefined>(undefined);
+
+export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { t } = useTranslation();
-  const showToast = useCustomToast();
+  const { shortToast } = useCustomToast();
   const [categories, setCategories] = useState<Category[]>([]);
   
   const fetchData = async (endpoint: string) => {
@@ -22,7 +32,7 @@ const useCategories = () => {
       const data = await response.json();
       return data;
     } catch (error) {
-      showToast(t('errorOccured'), 'error');
+      shortToast(t('errorOccured'), 'error');
       return [];
     }
   };
@@ -49,12 +59,12 @@ const useCategories = () => {
 
       if (response.ok) {
         fetchCategories();
-        showToast(t('categoryAddedSuccessfully'), 'success');
+        shortToast(t('categoryAddedSuccessfully'), 'success');
       } else {
-        showToast(t('failedToAddCategory'), 'error');
+        shortToast(t('failedToAddCategory'), 'error');
       }
     } catch (error) {
-      showToast(t('errorOccured'), 'error');
+      shortToast(t('errorOccured'), 'error');
     }
   };
 
@@ -65,12 +75,12 @@ const useCategories = () => {
       });
       if (response.ok) {
         setCategories(categories.filter(item => item.id !== category.id));
-        showToast(t('successfullyDeleted'), 'success');
+        shortToast(t('successfullyDeleted'), 'success');
       } else {
-        showToast(t('failedToDelete'), 'error');
+        shortToast(t('failedToDelete'), 'error');
       }
     } catch (error) {
-      showToast(t('errorOccured'), 'error');
+      shortToast(t('errorOccured'), 'error');
     }
   };
 
@@ -91,22 +101,26 @@ const useCategories = () => {
 
       if (response.ok) {
         fetchCategories();
-        showToast(t('categoryEditedSuccessfully'), 'success');
+        shortToast(t('categoryEditedSuccessfully'), 'success');
       } else {
-        showToast(t('failedToEditCategory'), 'error');
+        shortToast(t('failedToEditCategory'), 'error');
       }
     } catch (error) {
-      showToast(t('errorOccured'), 'error');
+      shortToast(t('errorOccured'), 'error');
     }
   };
 
-  return {
-    categories,
-    fetchCategories,
-    addCategory,
-    deleteCategory,
-    editCategory,
-  };
+  return (
+    <CategoryContext.Provider value={{ categories, fetchCategories, addCategory, deleteCategory, editCategory }}>
+      {children}
+    </CategoryContext.Provider>
+  );
 };
 
-export default useCategories;
+export const useCategories = () => {
+  const context = useContext(CategoryContext);
+  if (!context) {
+    throw new Error('useCategories must be used within a CategoryProvider');
+  }
+  return context;
+};

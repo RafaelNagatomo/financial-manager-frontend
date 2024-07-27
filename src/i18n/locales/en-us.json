@@ -53,7 +53,8 @@
     "delete": "Delete",
     "errorOccured": "Ops! Error occured!",
     "deleteTransaction": "Delete transaction",
-    "areYouSureYouWantToDeleteThisTransaction": "Are you sure you want to delete this transaction?",
+    "areYouSureYouWantToDeleteThisTransaction":
+      "Are you sure you want to delete this transaction?",
     "successfullyDeleted": "Successfully deleted!",
     "failedToDelete": "Failed to delete!",
     "transactionAddedSuccessfully": "Transaction added successfully!",
@@ -76,10 +77,14 @@
     "linkedTransaction_zero": "No linked transactions",
     "linkedTransaction_one": "Linked transaction",
     "linkedTransaction_other": "Linked transactions",
-    "transactionLinkedToCategory_zero": "Are you sure you want to delete this category?",
+    "transactionLinkedToCategory_zero":
+      "Are you sure you want to delete this category?",
     "transactionLinkedToCategory_one":
       "There is {{ count }} transaction linked to category {{ _category }}\n\n$t(transactionLinkedToCategory_zero)",
     "transactionLinkedToCategory_other":
-      "There are {{ count }} transactions linked to category {{ _category }}\n\n$t(transactionLinkedToCategory_zero)"
+      "There are {{ count }} transactions linked to category {{ _category }}\n\n$t(transactionLinkedToCategory_zero)",
+    "modifiedCategoryName": "Modified category name",
+    "transactionsLinkedToTheCategoryWillBeCalled":
+      "Transactions linked to the category will be called"
   }
 }

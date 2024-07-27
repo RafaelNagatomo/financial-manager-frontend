@@ -25,37 +25,33 @@ import { Controller, useForm } from 'react-hook-form';
 import CustomButton from './CustomButton';
 import { useTranslation } from 'react-i18next';
 import CategorySelect from './CategorySelect';
-import { Transaction } from '../hooks/useTransactions';
+import { useTransactions, Transaction } from '../contexts/TransactionContext';
 
 interface AddTransactionModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onTransactionAdded?: (transaction: Transaction) => void;
-  onTransactionUpdated?: (transaction: Transaction) => void;
   transaction?: Transaction;
-  fetchTransactions?: () => Promise<void>;
 }
 
 const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
   isOpen,
   onClose,
-  onTransactionAdded,
-  onTransactionUpdated,
   transaction,
-  fetchTransactions,
 }) => {
   const { t } = useTranslation();
   const { control, handleSubmit, register, setValue, reset } = useForm<Transaction>();
+  const { fetchTransactions, addTransaction, editTransaction } = useTransactions()
 
-  const handleTransactionSubmit = (data: Transaction) => {
-    if (transaction && onTransactionUpdated) {
-      onTransactionUpdated({ ...transaction, ...data });
-    } else if (onTransactionAdded) {
-      onTransactionAdded(data);
+  const handleTransactionSubmit = async(data: Transaction) => {
+    if (transaction) {
+      await editTransaction({ ...transaction, ...data });
+    } else {
+      await addTransaction(data);
     }
+
     reset()
     onClose();
-    fetchTransactions?.();
+    fetchTransactions();
   };
 
   useEffect(() => {
@@ -76,7 +72,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
       />
       <ModalContent>
         <ModalHeader>
-          {onTransactionUpdated ? t('editTransaction') : t('createNewTransaction')}
+          {transaction ? t('editTransaction') : t('createNewTransaction')}
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody>

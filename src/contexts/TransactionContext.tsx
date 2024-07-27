@@ -1,6 +1,6 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, createContext, useContext, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import useCustomToast from './useCustomToast';
+import useCustomToast from '../hooks/useCustomToast';
 
 export interface Transaction {
   id: number;
@@ -12,11 +12,21 @@ export interface Transaction {
   expiration_date: string;
 }
 
-const useTransactions = () => {
+interface TransactionContextProps {
+  transactions: Transaction[];
+  fetchTransactions: () => Promise<void>;
+  addTransaction: (transaction: Omit<Transaction, 'id'>) => Promise<void>;
+  deleteTransaction: (transaction: Transaction) => Promise<void>;
+  editTransaction: (transaction: Transaction) => Promise<void>;
+}
+
+const TransactionContext = createContext<TransactionContextProps | undefined>(undefined);
+
+export const TransactionProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const { t } = useTranslation();
-  const showToast = useCustomToast();
+  const { shortToast } = useCustomToast();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
-  
+
   const fetchData = async (endpoint: string) => {
     try {
       const response = await fetch(endpoint);
@@ -26,7 +36,7 @@ const useTransactions = () => {
       const data = await response.json();
       return data;
     } catch (error) {
-      showToast(t('errorOccured'), 'error');
+      shortToast(t('errorOccured'), 'error');
       return [];
     }
   };
@@ -54,12 +64,12 @@ const useTransactions = () => {
 
       if (response.ok) {
         fetchTransactions();
-        showToast(t('transactionAddedSuccessfully'), 'success');
+        shortToast(t('transactionAddedSuccessfully'), 'success');
       } else {
-        showToast(t('failedToAddTransaction'), 'error');
+        shortToast(t('failedToAddTransaction'), 'error');
       }
     } catch (error) {
-      showToast(t('errorOccured'), 'error');
+      shortToast(t('errorOccured'), 'error');
     }
   };
 
@@ -70,12 +80,12 @@ const useTransactions = () => {
       });
       if (response.ok) {
         setTransactions(transactions.filter(item => item.id !== transaction.id));
-        showToast(t('successfullyDeleted'), 'success');
+        shortToast(t('successfullyDeleted'), 'success');
       } else {
-        showToast(t('failedToDelete'), 'error');
+        shortToast(t('failedToDelete'), 'error');
       }
     } catch (error) {
-      showToast(t('errorOccured'), 'error');
+      shortToast(t('errorOccured'), 'error');
     }
   };
 
@@ -97,22 +107,34 @@ const useTransactions = () => {
 
       if (response.ok) {
         fetchTransactions();
-        showToast(t('transactionEditedSuccessfully'), 'success');
+        shortToast(t('transactionEditedSuccessfully'), 'success');
       } else {
-        showToast(t('failedToEditTransaction'), 'error');
+        shortToast(t('failedToEditTransaction'), 'error');
       }
     } catch (error) {
-      showToast(t('errorOccured'), 'error');
+      shortToast(t('errorOccured'), 'error');
     }
   };
 
-  return {
-    transactions,
-    fetchTransactions,
-    addTransaction,
-    deleteTransaction,
-    editTransaction,
-  };
+  return (
+    <TransactionContext.Provider
+      value={{
+        transactions,
+        fetchTransactions,
+        addTransaction,
+        deleteTransaction,
+        editTransaction,
+      }}
+    >
+      {children}
+    </TransactionContext.Provider>
+  );
 };
 
-export default useTransactions;
+export const useTransactions = () => {
+  const context = useContext(TransactionContext);
+  if (context === undefined) {
+    throw new Error('useTransactions must be used within a TransactionProvider');
+  }
+  return context;
+};

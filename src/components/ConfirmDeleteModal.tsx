@@ -13,7 +13,7 @@ import {
   Box,
 } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next'
-import { Transaction } from '../hooks/useTransactions';
+import { Transaction } from '../contexts/TransactionContext';
 
 interface ConfirmDeleteModalProps {
   isOpen: boolean;
