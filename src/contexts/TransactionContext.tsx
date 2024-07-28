@@ -1,6 +1,7 @@
 import { useState, useCallback, createContext, useContext, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import useCustomToast from '../hooks/useCustomToast';
+import { useCategories } from '../contexts/CategoryContext'
 
 export interface Transaction {
   id: string;
@@ -27,6 +28,7 @@ export const TransactionProvider: React.FC<{ children: ReactNode }> = ({ childre
   const { t } = useTranslation();
   const { shortToast } = useCustomToast();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const { categories, fetchCategories } = useCategories();
 
   const fetchData = async (endpoint: string) => {
     try {
@@ -48,13 +50,35 @@ export const TransactionProvider: React.FC<{ children: ReactNode }> = ({ childre
   }, []);
 
   const addTransaction = async (transaction: Omit<Transaction, 'id'>) => {
-    const data = {
-      ...transaction,
-      user_id: "3695f015-9880-4d70-98dc-3610c328357f",
-      expiration_date: transaction.expiration_date ? new Date(transaction.expiration_date).toISOString() : null,
-    };
-
     try {
+      if (transaction.transaction_type === 'Income') {
+        let categoryExists = categories.some(cat => cat.category_name === 'Income');
+
+        if (!categoryExists) {
+          const categoryResponse = await fetch('http://localhost:3001/categories/add', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              user_id: "3695f015-9880-4d70-98dc-3610c328357f",
+              category_name: 'Income',
+              max_amount: 0
+            }),
+          });
+
+          if (!categoryResponse.ok) {
+            throw new Error('Failed to add income category');
+          }
+          await fetchCategories();
+        }
+      }
+      const data = {
+        ...transaction,
+        user_id: "3695f015-9880-4d70-98dc-3610c328357f",
+        expiration_date: transaction.expiration_date ? new Date(transaction.expiration_date).toISOString() : null,
+        category_name: 'Income'
+      };
       const response = await fetch('http://localhost:3001/transactions/add', {
         method: 'POST',
         headers: {
@@ -64,7 +88,6 @@ export const TransactionProvider: React.FC<{ children: ReactNode }> = ({ childre
       });
 
       if (response.ok) {
-        fetchTransactions();
         shortToast(t('transactionAddedSuccessfully'), 'success');
       } else {
         shortToast(t('failedToAddTransaction'), 'error');

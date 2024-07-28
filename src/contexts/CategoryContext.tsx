@@ -47,8 +47,8 @@ export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       ...category,
       user_id: "3695f015-9880-4d70-98dc-3610c328357f",
     };
-
-    try {
+  
+    try {  
       const response = await fetch('http://localhost:3001/categories/add', {
         method: 'POST',
         headers: {
@@ -56,17 +56,21 @@ export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         },
         body: JSON.stringify(data),
       });
-
+  
       if (response.ok) {
-        fetchCategories();
-        shortToast(t('categoryAddedSuccessfully'), 'success');
+        const result = await response.json();
+        if (result === 'CATEGORY_EXISTS') {
+          shortToast(t('unableToAddExistingCategory'), 'error');
+        } else {
+          shortToast(t('categoryAddedSuccessfully'), 'success');
+        }
       } else {
         shortToast(t('failedToAddCategory'), 'error');
       }
     } catch (error) {
       shortToast(t('errorOccured'), 'error');
     }
-  };
+  }; 
 
   const deleteCategory = async (category: Category, transactionCount: number) => {
     try {

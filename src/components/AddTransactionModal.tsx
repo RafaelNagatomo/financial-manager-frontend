@@ -43,8 +43,12 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
   const { fetchTransactions, addTransaction, editTransaction } = useTransactions()
   const watchedFields = watch();
   const isRequiredFieldsEmpty = !watchedFields.transaction_type || !watchedFields.transaction_name || !watchedFields.transaction_amount;
+  const transactionType = watch('transaction_type');
 
   const handleTransactionSubmit = async(data: Transaction) => {
+    if (transactionType === 'income') {
+      data.category_name = 'income';
+    }
     if (transaction) {
       await editTransaction({ ...transaction, ...data });
     } else {
@@ -126,9 +130,10 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
                 control={control}
                 render={({ field: { onChange, value } }) => (
                   <CategorySelect
-                    value={value}
+                    value={transactionType === 'income' ? 'Income' : value}
                     onChange={onChange}
                     placeholder={t('selectCategory')}
+                    isDisabled={transactionType === 'income'}
                   />
                 )}
               />
