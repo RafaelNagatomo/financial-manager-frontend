@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import useCustomToast from '../hooks/useCustomToast';
 
 export interface Transaction {
-  id: number;
+  id: string;
   transaction_type: string;
   transaction_name: string;
   category_name: string;
@@ -82,6 +82,7 @@ export const TransactionProvider: React.FC<{ children: ReactNode }> = ({ childre
       if (response.ok) {
         setTransactions(transactions.filter(item => item.id !== transaction.id));
         shortToast(t('successfullyDeleted'), 'success');
+        fetchTransactions()
       } else {
         shortToast(t('failedToDelete'), 'error');
       }
@@ -107,8 +108,8 @@ export const TransactionProvider: React.FC<{ children: ReactNode }> = ({ childre
       });
 
       if (response.ok) {
-        fetchTransactions();
         shortToast(t('transactionEditedSuccessfully'), 'success');
+        fetchTransactions();
       } else {
         shortToast(t('failedToEditTransaction'), 'error');
       }

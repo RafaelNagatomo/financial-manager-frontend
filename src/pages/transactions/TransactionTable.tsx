@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaArrowTrendUp, FaArrowTrendDown } from "react-icons/fa6";
 import { FaRegTrashAlt, FaRegEdit } from "react-icons/fa";
@@ -26,15 +26,15 @@ export const TransactionTable: React.FC = () => {
   const { t } = useTranslation();
   const { currency } = useCurrency();
   const { colorMode } = useColorMode();
-  const { transactions, fetchTransactions, deleteTransaction } = useTransactions();
+  const { transactions, deleteTransaction, editTransaction } = useTransactions();
   const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
+  const [transactionsToPaidState, setTransactionsToPaidState] = useState(transactions);
 
   const handleDeleteTransaction = async () => {
     if (selectedTransaction) {
       await deleteTransaction(selectedTransaction);
-      fetchTransactions();
       setIsDeleteModalOpen(false);
     }
   };
@@ -43,6 +43,24 @@ export const TransactionTable: React.FC = () => {
     setSelectedTransaction(transaction);
     setIsAddModalOpen(true);
   };
+
+  const handleTogglePaid = async (transactionId: string, paid: boolean) => {
+    const updatedTransactions = transactionsToPaidState.map((t) =>
+      t.id === transactionId ? { ...t, paid } : t
+    );
+    setTransactionsToPaidState(updatedTransactions);
+
+    try {
+      const transactionToUpdate = updatedTransactions.find((t) => t.id === transactionId);
+      if (transactionToUpdate) {
+        await editTransaction(transactionToUpdate);
+      }
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    setTransactionsToPaidState(transactions);
+  }, [transactions]);
 
   return (
     <>
@@ -88,6 +106,7 @@ export const TransactionTable: React.FC = () => {
                   <Switch
                     isChecked={transaction.paid}
                     isDisabled={!transaction.categoryExists}
+                    onChange={(e) => handleTogglePaid(transaction.id, e.target.checked)}
                   />
                 </LightMode>
               </Td>
