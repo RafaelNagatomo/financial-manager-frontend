@@ -64,19 +64,31 @@ export const TransactionTable: React.FC = () => {
         </Thead>
         <Tbody>
           {transactions.map((transaction) => (
-            <Tr key={transaction.id}>
+            <Tr
+              key={transaction.id}
+              sx={!transaction.categoryExists
+                ? {
+                    color: colorMode === 'dark' ? 'gray.600' : 'gray.400',
+                    cursor: "not-allowed",
+                    textDecoration: "line-through",
+                  }
+                : {}}
+            >
               <Td>
                 {
                   transaction.transaction_type === 'expense'
-                    ? <FaArrowTrendDown color='#b94a4a' />
-                    : <FaArrowTrendUp color='#3a9e64' />
+                    ? <FaArrowTrendDown color={!transaction.categoryExists ? '#693b3b' : '#b94a4a'} />
+                    : <FaArrowTrendUp color={!transaction.categoryExists ? '#3f5749' : '#3a9e64'} />
                 }
               </Td>
               <Td>{transaction.transaction_name}</Td>
               <Td>{transaction.category_name}</Td>
               <Td>
                 <LightMode>
-                  <Switch isChecked={transaction.paid} />
+                  <Switch
+                    isChecked={transaction.paid}
+                    isDisabled={!transaction.categoryExists}
+                  />
                 </LightMode>
               </Td>
               <Td>{formatAmount(transaction.transaction_amount, currency)}</Td>

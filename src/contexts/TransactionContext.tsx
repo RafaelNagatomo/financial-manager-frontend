@@ -10,6 +10,7 @@ export interface Transaction {
   paid: boolean;
   transaction_amount: number;
   expiration_date: string;
+  categoryExists: boolean
 }
 
 interface TransactionContextProps {

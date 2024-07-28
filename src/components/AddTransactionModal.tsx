@@ -79,28 +79,33 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
         <ModalCloseButton />
         <ModalBody>
           <form id="add-transaction-form" onSubmit={handleSubmit(handleTransactionSubmit)}>
-            <FormControl isRequired as="fieldset" my={5}>
+            <FormControl isRequired={transaction?.categoryExists} as="fieldset" my={5}>
               <FormLabel as="legend">{t('type')}</FormLabel>
-              <RadioGroup defaultValue={transaction?.transaction_type || undefined} >
+              <RadioGroup
+                defaultValue={transaction?.transaction_type || undefined}
+                isDisabled={!transaction?.categoryExists}
+              >
                 <Stack spacing={4} direction="row">
-                  <Radio value="expense" {...register("transaction_type", { required: true })}>
+                  <Radio value="expense" {...register("transaction_type")}>
                     {t('expense')}
                   </Radio>
-                  <Radio value="income" {...register("transaction_type", { required: true })}>
+                  <Radio value="income" {...register("transaction_type")}>
                     {t('income')}
                   </Radio>
                 </Stack>
               </RadioGroup>
             </FormControl>
 
-            <FormControl isRequired my={5}>
+            <FormControl isRequired={transaction?.categoryExists} my={5}>
               <FormLabel>{t('title')}</FormLabel>
               <Input
                 placeholder={t('insertTitle')}
-                {...register("transaction_name", { required: true })} />
+                {...register("transaction_name")}
+                isDisabled={!transaction?.categoryExists}
+              />
             </FormControl>
 
-            <FormControl my={5}>
+            <FormControl my={5} isRequired={!transaction?.categoryExists} >
               <FormLabel>{t('category')}</FormLabel>
               <Controller
                 name="category_name"
@@ -115,7 +120,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
               />
             </FormControl>
 
-            <FormControl isRequired my={5}>
+            <FormControl isRequired={transaction?.categoryExists} my={5}>
               <FormLabel>{t('amount')}</FormLabel>
               <Controller
                 name="transaction_amount"
@@ -125,6 +130,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
                     min={0}
                     value={field.value || undefined}
                     onChange={(value) => field.onChange(Number(value))}
+                    isDisabled={!transaction?.categoryExists}
                   >
                     <NumberInputField type="tel" />
                     <NumberInputStepper>
@@ -138,7 +144,10 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
 
             <FormControl my={5}>
               <FormLabel>{t('expirationDate')}</FormLabel>
-              <Input type="date" {...register("expiration_date")} />
+              <Input
+                type="date" {...register("expiration_date")}
+                isDisabled={!transaction?.categoryExists}
+              />
             </FormControl>
 
             <FormControl my={5}>
@@ -148,6 +157,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
                   size="md"
                   {...register("paid")}
                   onChange={(e) => setValue("paid", e.target.checked)}
+                  isDisabled={!transaction?.categoryExists}
                 />
               </LightMode>
             </FormControl>
@@ -164,9 +174,9 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
             title={t('save')}
             type='submit'
             form='add-transaction-form'
-            isDisabled={isRequiredFieldsEmpty}
-            tooltipDisabled={isRequiredFieldsEmpty}
-            tooltipLabel={t('fillInAllMandatoryFields')}
+            isDisabled={!transaction?.categoryExists ? !watchedFields.category_name : isRequiredFieldsEmpty}
+            tooltipDisabled={isRequiredFieldsEmpty || !watchedFields.category_name}
+            tooltipLabel={!transaction?.categoryExists ? t('Preencha uma categoria') : t('fillInAllMandatoryFields')}
           />
         </ModalFooter>
       </ModalContent>
