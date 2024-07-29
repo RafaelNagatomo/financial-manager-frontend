@@ -134,7 +134,7 @@ const Transactions: React.FC = () => {
           <Tabs variant="enclosed">
             <TabPanels>
               <TabPanel>
-                <UpcomingPaymentsTable t={t} />
+                <UpcomingPaymentsTable />
               </TabPanel>
             </TabPanels>
           </Tabs>
