@@ -76,7 +76,7 @@ export const TransactionTable: React.FC = () => {
             <Th>{t('category')}</Th>
             <Th>{t('paid')}</Th>
             <Th>{t('value')}</Th>
-            <Th>{t('date')}</Th>
+            <Th>{t('expirationDate')}</Th>
             <Th>{t('actions')}</Th>
           </Tr>
         </Thead>

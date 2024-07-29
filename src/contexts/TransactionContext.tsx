@@ -51,8 +51,8 @@ export const TransactionProvider: React.FC<{ children: ReactNode }> = ({ childre
 
   const addTransaction = async (transaction: Omit<Transaction, 'id'>) => {
     try {
-      if (transaction.transaction_type === 'Income') {
-        let categoryExists = categories.some(cat => cat.category_name === 'Income');
+      if (transaction.transaction_type === 'income') {
+        let categoryExists = categories.some(cat => cat.category_name === 'income');
 
         if (!categoryExists) {
           const categoryResponse = await fetch('http://localhost:3001/categories/add', {
@@ -62,7 +62,7 @@ export const TransactionProvider: React.FC<{ children: ReactNode }> = ({ childre
             },
             body: JSON.stringify({
               user_id: "3695f015-9880-4d70-98dc-3610c328357f",
-              category_name: 'Income',
+              category_name: 'income',
               max_amount: 0
             }),
           });
@@ -77,7 +77,7 @@ export const TransactionProvider: React.FC<{ children: ReactNode }> = ({ childre
         ...transaction,
         user_id: "3695f015-9880-4d70-98dc-3610c328357f",
         expiration_date: transaction.expiration_date ? new Date(transaction.expiration_date).toISOString() : null,
-        category_name: 'Income'
+        category_name: 'income'
       };
       const response = await fetch('http://localhost:3001/transactions/add', {
         method: 'POST',
@@ -120,7 +120,6 @@ export const TransactionProvider: React.FC<{ children: ReactNode }> = ({ childre
       user_id: "3695f015-9880-4d70-98dc-3610c328357f",
       expiration_date: transaction.expiration_date ? new Date(transaction.expiration_date).toISOString() : null,
     };
-
     try {
       const response = await fetch(`http://localhost:3001/transactions/edit/${transaction.id}`, {
         method: 'PUT',
