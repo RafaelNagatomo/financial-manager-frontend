@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaRegTrashAlt, FaRegEdit } from "react-icons/fa"
+import { GiBoxUnpacking } from "react-icons/gi"
 import {
   Table,
   Thead,
@@ -16,6 +17,7 @@ import {
   IconButton,
   Tooltip,
   Heading,
+  VStack,
 } from '@chakra-ui/react';
 import { formatAmount } from '../../utils/formatAmount'
 import { useCurrency } from '../../hooks/useCurrency';
@@ -40,6 +42,7 @@ export const SpendingByCategoryTable: React.FC<SpendingByCategoryTableProps> = (
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
   const [transactionCount, setTransactionCount] = useState<number>(0);
+  const isCategoriesEmpty = categories.length === 0;
 
   const handleDeleteCategory = async (selectedCategory: Category, transactionCount: number) => {
     if (selectedCategory) {
@@ -82,7 +85,7 @@ export const SpendingByCategoryTable: React.FC<SpendingByCategoryTableProps> = (
           </Tr>
         </Thead>
         <Tbody>
-          {categories.map((category) => {
+          {!isCategoriesEmpty ? categories.map((category) => {
             const totalAmount = getCategoryTotal(category.category_name);
             const progressValue = Math.min((Number(totalAmount) / category.max_amount) * 100, 100);
             const transactionCount = getCategoryTransactionCount(category.category_name);
@@ -164,10 +167,29 @@ export const SpendingByCategoryTable: React.FC<SpendingByCategoryTableProps> = (
                 </Td>
               </Tr>
             )
-          })}
+          }) : (
+            <Tr>
+              <Td colSpan={3} textAlign="center">
+                <VStack
+                  bg={colorMode === 'dark' ? 'gray.600' : 'gray.200'}
+                  color={colorMode === 'dark' ? 'gray.700' : 'gray.400'}
+                  h={200}
+                  p={5}
+                  borderRadius={6}
+                  spacing={8}
+                  justify='center'
+                >
+                  <GiBoxUnpacking size={50} />
+                  <Text fontWeight='bold' fontSize='lg'>
+                    {t('NoData')}
+                  </Text>
+                </VStack>
+              </Td>
+            </Tr>
+          )}
         </Tbody>
       </Table>
-
+        
       {selectedCategory && (
         <ConfirmDeleteModal
           isOpen={isDeleteModalOpen}

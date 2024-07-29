@@ -94,6 +94,7 @@
     "nowTransactionsAreUncategorized_other":
       "Agora, {{ count }} transações estão sem categoria na sua tabela de Transações",
     "unableToAddExistingCategory": "Não foi possível adicionar. Categoria já existente.",
-    "expiredDate": "Data expirado"
+    "expiredDate": "Data expirado",
+    "NoData": "Sem Dados"
   }
 }

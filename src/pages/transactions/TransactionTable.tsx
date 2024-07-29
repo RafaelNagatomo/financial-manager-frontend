@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaArrowTrendUp, FaArrowTrendDown } from "react-icons/fa6";
 import { FaRegTrashAlt, FaRegEdit } from "react-icons/fa";
+import { GiBoxUnpacking } from "react-icons/gi";
 import {
   Table,
   Thead,
@@ -14,6 +15,8 @@ import {
   useColorMode,
   LightMode,
   IconButton,
+  Text,
+  VStack,
 } from '@chakra-ui/react';
 import { formatAmount } from '../../utils/formatAmount';
 import { useCurrency } from '../../hooks/useCurrency';
@@ -31,6 +34,7 @@ export const TransactionTable: React.FC = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
   const [transactionsToPaidState, setTransactionsToPaidState] = useState(transactions);
+  const isTransactionsEmpty = transactions.length === 0;
 
   const handleDeleteTransaction = async () => {
     if (selectedTransaction) {
@@ -81,7 +85,7 @@ export const TransactionTable: React.FC = () => {
           </Tr>
         </Thead>
         <Tbody>
-          {transactions.map((transaction) => (
+          {!isTransactionsEmpty ? transactions.map(transaction => (
             <Tr
               key={transaction.id}
               sx={!transaction.categoryExists
@@ -134,7 +138,26 @@ export const TransactionTable: React.FC = () => {
                 </Stack>
               </Td>
             </Tr>
-          ))}
+          )) : (
+            <Tr>
+              <Td colSpan={7} textAlign="center">
+                <VStack
+                  bg={colorMode === 'dark' ? 'gray.600' : 'gray.200'}
+                  color={colorMode === 'dark' ? 'gray.700' : 'gray.400'}
+                  h={200}
+                  p={5}
+                  borderRadius={6}
+                  spacing={8}
+                  justify='center'
+                >
+                  <GiBoxUnpacking size={50} />
+                  <Text fontWeight='bold' fontSize='lg'>
+                    {t('NoData')}
+                  </Text>
+                </VStack>
+              </Td>
+            </Tr>
+          )}
         </Tbody>
       </Table>
 

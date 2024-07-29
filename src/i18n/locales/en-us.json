@@ -94,6 +94,7 @@
     "nowTransactionsAreUncategorized_other":
       "Now {{ count }} transactions are uncategorized in your Transactions table",
     "unableToAddExistingCategory": "Unable to add. Existing category.",
-    "expiredDate": "Expired date"
+    "expiredDate": "Expired date",
+    "NoData": "No Data"
   }
 }
