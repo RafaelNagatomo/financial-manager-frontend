@@ -54,7 +54,7 @@ const Transactions: React.FC = () => {
 
   return (
     <HStack gap={5} align="stretch">
-      <Card layerStyle={colorMode} w={1000}>
+      <Card layerStyle={colorMode} w={1000} >
         <CardHeader>
           <Flex gap="2">
             <Heading

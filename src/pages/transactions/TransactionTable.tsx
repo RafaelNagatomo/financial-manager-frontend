@@ -144,14 +144,13 @@ export const TransactionTable: React.FC = () => {
                 <VStack
                   bg={colorMode === 'dark' ? 'gray.600' : 'gray.200'}
                   color={colorMode === 'dark' ? 'gray.700' : 'gray.400'}
-                  h={200}
+                  h={100}
                   p={5}
                   borderRadius={6}
-                  spacing={8}
                   justify='center'
                 >
-                  <GiBoxUnpacking size={50} />
-                  <Text fontWeight='bold' fontSize='lg'>
+                  <GiBoxUnpacking size={30} />
+                  <Text fontWeight='bold' fontSize='md'>
                     {t('NoData')}
                   </Text>
                 </VStack>

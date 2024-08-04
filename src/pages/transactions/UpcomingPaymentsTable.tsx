@@ -34,7 +34,7 @@ export const UpcomingPaymentsTable: React.FC = () => {
     <Table
       layerStyle={colorMode === 'dark' ? 'darkTable' : 'lightTable'}
       variant="unstyled"
-      minW={350}
+      minW={360}
       borderRadius={8}
     >
       <Thead>
@@ -47,6 +47,7 @@ export const UpcomingPaymentsTable: React.FC = () => {
       <Tbody>
         {unpaidTransactions.length ? unpaidTransactions.map(transaction => (
           <Tooltip
+            key={transaction.id}
             bg={colorMode === 'dark' ? 'gray.100' : 'gray.700'}
             color={colorMode === 'dark' ? 'gray.700' : 'gray.100'}
             layerStyle={colorMode}
@@ -56,7 +57,6 @@ export const UpcomingPaymentsTable: React.FC = () => {
             isDisabled={!(transaction.expiration_date < today)}
           >
             <Tr
-              key={transaction.id}
               sx={transaction.expiration_date < today
                 ? { color: 'red.500', }
                 : {}}
@@ -72,13 +72,12 @@ export const UpcomingPaymentsTable: React.FC = () => {
               <VStack
                 bg={colorMode === 'dark' ? 'gray.600' : 'gray.200'}
                 color={colorMode === 'dark' ? 'gray.700' : 'gray.400'}
-                h={200}
+                h={100}
                 p={5}
                 borderRadius={6}
-                spacing={8}
                 justify='center'
               >
-                <GiBoxUnpacking size={50} />
+                <GiBoxUnpacking size={30} />
                 <Text fontWeight='bold' fontSize='lg'>
                   {t('NoData')}
                 </Text>

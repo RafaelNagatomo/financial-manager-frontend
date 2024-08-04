@@ -32,7 +32,7 @@ const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
   transactionCount,
 }) => {
   const { t } = useTranslation()
-  const cancelRef = useRef<any>(null);
+  const cancelRef = useRef(null);
 
   return (
     <AlertDialog
