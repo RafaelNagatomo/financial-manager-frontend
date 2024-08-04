@@ -156,10 +156,17 @@ const Settings: React.FC = () =>  {
                   onChange={handleThemeChange}
                 >
                   <Stack spacing={20} direction='row'>
-                    <Radio value='light' style={{ border: '2px solid gray' }}>
+                    <Radio
+                      value='light'
+                      style={{ border: '2px solid gray'
+                    }}>
                       {t('light')}
                     </Radio>
-                    <Radio ml={59} value='dark' style={{ border: '2px solid gray' }}>
+                    <Radio
+                      ml={59}
+                      value='dark'
+                      style={{ border: '2px solid gray'
+                    }}>
                       {t('dark')}
                     </Radio>
                   </Stack>

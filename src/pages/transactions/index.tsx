@@ -31,14 +31,8 @@ import { useCategories } from '../../contexts/CategoryContext';
 const Transactions: React.FC = () => {
   const { t } = useTranslation();
   const { colorMode } = useColorMode();
-  const {
-    transactions,
-    fetchTransactions,
-  } = useTransactions();
-  const {
-    categories,
-    fetchCategories,
-  } = useCategories();
+  const { transactions, fetchTransactions } = useTransactions();
+  const { categories, fetchCategories } = useCategories();
 
   const [isCategoryTab, setIsCategoryTab] = useState<boolean>(false);
 
@@ -63,7 +57,12 @@ const Transactions: React.FC = () => {
       <Card layerStyle={colorMode} w={1000}>
         <CardHeader>
           <Flex gap="2">
-            <Heading as="h1" size="lg" display="flex" alignItems="center">
+            <Heading
+              as="h1"
+              size="lg"
+              display="flex"
+              alignItems="center"
+            >
               {t('transactions')}
             </Heading>
             <Spacer />
@@ -80,13 +79,19 @@ const Transactions: React.FC = () => {
           <Tabs variant="enclosed">
             <TabList fontWeight="bold" w="96.7%" ml={4}>
               <Tab
-                _selected={{ color: 'purple.500', bg: colorMode === 'dark' ? 'gray.700' : 'gray.100' }}
+                _selected={{
+                  color: 'purple.500',
+                  bg: colorMode === 'dark' ? 'gray.700' : 'gray.100'
+                }}
                 onClick={() => setIsCategoryTab(false)}
               >
                 {t('transactions')}
               </Tab>
               <Tab
-                _selected={{ color: 'purple.500', bg: colorMode === 'dark' ? 'gray.700' : 'gray.100' }}
+                _selected={{
+                  color: 'purple.500',
+                  bg: colorMode === 'dark' ? 'gray.700' : 'gray.100'
+                }}
                 onClick={() => setIsCategoryTab(true)}
               >
                 {t('spendingByCategory')}
@@ -141,8 +146,14 @@ const Transactions: React.FC = () => {
         </CardBody>
       </Card>
 
-      <AddCategoryModal isOpen={isCategoryModalOpen} onClose={closeCategoryModal} />
-      <AddTransactionModal isOpen={isTransactionModalOpen} onClose={closeTransactionModal} />
+      <AddCategoryModal
+        isOpen={isCategoryModalOpen}
+        onClose={closeCategoryModal}
+      />
+      <AddTransactionModal
+        isOpen={isTransactionModalOpen}
+        onClose={closeTransactionModal}
+      />
     </HStack>
   );
 };
