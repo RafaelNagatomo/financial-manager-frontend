@@ -8,6 +8,7 @@ import './i18n'
 
 import { CategoryProvider } from './contexts/CategoryContext'
 import { TransactionProvider } from './contexts/TransactionContext'
+import { GoalProvider } from './contexts/GoalContext'
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -17,7 +18,9 @@ root.render(
     <ChakraProvider theme={theme}>
       <CategoryProvider>
         <TransactionProvider>
-          <App />
+          <GoalProvider>
+            <App />
+          </GoalProvider>
         </TransactionProvider>
       </CategoryProvider>
     </ChakraProvider>

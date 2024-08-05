@@ -1,3 +1,5 @@
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Card,
   Image,
@@ -11,52 +13,52 @@ import {
   useColorMode,
   LightMode
 } from '@chakra-ui/react';
-import { useCurrency } from '../../hooks/useCurrency'
 import { formatAmount } from '../../utils/formatAmount'
+import { useCurrency } from '../../hooks/useCurrency'
+import { useGoals, Goal } from '../../contexts/GoalContext';
 
-const GoalsCards: React.FC<{
-  goals: any[],
-  t: (key: string) => string,
-}> = ({
-  goals,
-  t
-}) => {
+const GoalsCards: React.FC = () => {
+  const { t } = useTranslation();
   const { currency } = useCurrency()
   const { colorMode } = useColorMode()
+  const { goals, fetchGoals, deleteGoal } = useGoals();
 
   return (
     <>
       {goals.map((goal, index) => (
-        <WrapItem>
+        <WrapItem key={index}>
           <Card
             layerStyle={colorMode === 'dark' ? 'darkCard' : 'lightCard'}
-            key={index}
             gap={5}
             w={350}
             p={5}
           >
-            <Image src={goal.url} />
-            <Badge size='sm' w={100} variant='solid' colorScheme='purple'>{2} Month left</Badge>
-            <Text fontWeight='bold' fontSize='lg'>{goal.goal}</Text>
-            <Text fontSize='md'>{goal.description}</Text>
+            <Text fontWeight='bold' fontSize='lg'>{goal.goal_name}</Text>
+            <Image
+              // src={goal.goal_image}
+              src={'https://images.tripadeal.com.au/cdn-cgi/image/format=auto,width=2400/https://cstad.s3.ap-southeast-2.amazonaws.com/4456_19D_Taste_of_Italy_Web.jpg'}
+            />
+            {/* <Badge size='sm' w={100} variant='solid' colorScheme='purple'>{2} Month left</Badge> */}
+            <Text fontWeight='bold' fontSize='lg'>{goal.goal_name}</Text>
+            <Text fontSize='md'>{goal.goal_description}</Text>
             <Stack my={4}>
               <LightMode>
                 <Progress
                   borderRadius={5}
                   hasStripe
-                  value={goal.raised * 100 / goal.goalAmount}
+                  value={goal.amount_raised * 100 / goal.goal_amount}
                 />
               </LightMode>
               <Text fontSize={12} style={{alignSelf: 'flex-end'}}>
-                ({(goal.raised * 100 / goal.goalAmount).toFixed(1)}/100%)
+                ({(goal.amount_raised * 100 / goal.goal_amount).toFixed(1)}/100%)
               </Text>
             </Stack>
             <Flex gap={2} fontSize={14}>
               <Text>{t('raised')}</Text>
-              <Text>{formatAmount(goal.raised, currency)}</Text>
+              <Text>{formatAmount(goal.amount_raised, currency)}</Text>
               <Spacer />
               <Text>{t('amount')}</Text>
-              <Text>{formatAmount(goal.goalAmount, currency)}</Text>
+              <Text>{formatAmount(goal.goal_amount, currency)}</Text>
             </Flex>
           </Card>
         </WrapItem>
