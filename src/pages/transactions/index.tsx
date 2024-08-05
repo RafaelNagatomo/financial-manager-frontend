@@ -124,7 +124,7 @@ const Transactions: React.FC = () => {
         </CardBody>
       </Card>
 
-      <Card layerStyle={colorMode}>
+      <Card layerStyle={colorMode} w={400} p={0}>
         <CardHeader>
           <Flex>
             <Heading as="h1" size="lg">
@@ -136,13 +136,7 @@ const Transactions: React.FC = () => {
         </CardHeader>
 
         <CardBody>
-          <Tabs variant="enclosed">
-            <TabPanels>
-              <TabPanel>
-                <UpcomingPaymentsTable />
-              </TabPanel>
-            </TabPanels>
-          </Tabs>
+          <UpcomingPaymentsTable />
         </CardBody>
       </Card>
 

@@ -34,7 +34,6 @@ export const UpcomingPaymentsTable: React.FC = () => {
     <Table
       layerStyle={colorMode === 'dark' ? 'darkTable' : 'lightTable'}
       variant="unstyled"
-      minW={360}
       borderRadius={8}
     >
       <Thead>
