@@ -4,13 +4,13 @@ import useCustomToast from '../hooks/useCustomToast';
 import { useCategories } from '../contexts/CategoryContext'
 
 export interface Goal {
-  id: string;
-  goal_name: string;
-  goal_description: string;
+  id?: string;
+  goal_name?: string;
+  goal_description?: string;
   goal_amount: number;
   amount_raised: number;
-  goal_image: string;
-  goal_date: string;
+  goal_image?: string;
+  goal_date?: string;
 }
 
 interface GoalContextProps {

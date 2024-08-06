@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaPlus } from 'react-icons/fa6';
 import {
@@ -9,22 +9,27 @@ import {
   Spacer,
   Heading,
   HStack,
-  Tabs,
-  TabPanels,
-  TabPanel,
   Wrap,
   useColorMode,
+  useDisclosure,
 } from '@chakra-ui/react';
 import FilterButton from '../../components/FilterButton'
 import CustomButton from '../../components/CustomButton'
 import { GoalsTable } from './GoalsTables'
 import GoalsCards from './GoalsCards';
 import { useGoals } from '../../contexts/GoalContext';
+import AddGoalModal from '../../components/AddGoalModal';
 
 const Goals: React.FC = () =>  {
   const { t } = useTranslation()
   const { colorMode }  = useColorMode();
-  const { goals, fetchGoals } = useGoals();
+  const { fetchGoals } = useGoals();
+
+  const {
+    isOpen: isGoalModalOpen,
+    onOpen: openGoalModal,
+    onClose: closeGoalModal,
+  } = useDisclosure();
 
   useEffect(() => {
     fetchGoals();
@@ -45,7 +50,11 @@ const Goals: React.FC = () =>  {
             </Heading>
             <Spacer />
             <FilterButton />
-            <CustomButton title={t('newGoal')} leftIcon={<FaPlus/>}/>
+            <CustomButton
+              leftIcon={<FaPlus/>}
+              title={t('newGoal')}
+              onClick={openGoalModal}
+            />
           </Flex>
         </CardHeader>
 
@@ -74,7 +83,12 @@ const Goals: React.FC = () =>  {
           <GoalsTable />
         </CardBody>
       </Card>
-  </HStack>
+
+      <AddGoalModal
+        isOpen={isGoalModalOpen}
+        onClose={closeGoalModal}
+      />
+    </HStack>
   )
 }
 
