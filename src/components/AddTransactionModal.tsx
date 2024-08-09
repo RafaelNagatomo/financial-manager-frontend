@@ -130,7 +130,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
                 control={control}
                 render={({ field: { onChange, value } }) => (
                   <CategorySelect
-                  value={transactionType === 'income' ? 'income' : value}
+                    value={transactionType === 'income' ? 'income' : value}
                     onChange={onChange}
                     placeholder={t('selectCategory')}
                     isDisabled={transactionType === 'income'}

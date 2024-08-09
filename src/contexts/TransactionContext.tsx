@@ -1,7 +1,7 @@
 import { useState, useCallback, createContext, useContext, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import useCustomToast from '../hooks/useCustomToast';
-import { useCategories } from '../contexts/CategoryContext'
+import { useCategories, Category } from '../contexts/CategoryContext'
 
 export interface Transaction {
   id: string;
@@ -46,6 +46,23 @@ export const TransactionProvider: React.FC<{ children: ReactNode }> = ({ childre
 
   const fetchTransactions = useCallback(async () => {
     const data = await fetchData('http://localhost:3001/transactions/');
+    const hasIncomeCategory = data.some((transaction: Transaction) => transaction.category_name === 'income');
+  
+    if (hasIncomeCategory) {
+      const categoriesResponse = await fetch('http://localhost:3001/categories/');
+      const categories = await categoriesResponse.json();
+  
+      const transactionCategory = categories.find((cat: Category) => cat.category_name === 'income');
+      if (transactionCategory) {
+        const deleteResponse = await fetch(`http://localhost:3001/categories/delete/${transactionCategory.id}`, {
+          method: 'DELETE',
+        });
+        if (!deleteResponse.ok) {
+          console.error('Failed to delete income category');
+        }
+      }
+    }
+  
     setTransactions(data);
   }, []);
 
@@ -77,7 +94,6 @@ export const TransactionProvider: React.FC<{ children: ReactNode }> = ({ childre
         ...transaction,
         user_id: "3695f015-9880-4d70-98dc-3610c328357f",
         expiration_date: transaction.expiration_date ? new Date(transaction.expiration_date).toISOString() : null,
-        category_name: 'income'
       };
       const response = await fetch('http://localhost:3001/transactions/add', {
         method: 'POST',
@@ -105,7 +121,6 @@ export const TransactionProvider: React.FC<{ children: ReactNode }> = ({ childre
       if (response.ok) {
         setTransactions(transactions.filter(item => item.id !== transaction.id));
         shortToast(t('successfullyDeleted'), 'success');
-        fetchTransactions()
       } else {
         shortToast(t('failedToDelete'), 'error');
       }
