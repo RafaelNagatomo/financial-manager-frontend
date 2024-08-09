@@ -20,7 +20,7 @@ interface ConfirmDeleteModalProps {
   onConfirm?: () => void;
   selectedCategory?: string
   transactionCount?: number
-  type?: 'transaction' | 'category';
+  type?: 'transaction' | 'category' | 'goal';
 }
 
 const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
@@ -50,7 +50,9 @@ const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
             <HStack gap={4}>
               <LuAlertTriangle color='orange' size={30} />
               <Box>
-                {type === 'transaction' ? t('deleteTransaction') : t('deleteCategory')}
+                {type === 'transaction' ? t('deleteTransaction')
+                  : type === 'goal' ? t('deleteGoal')
+                  : t('deleteCategory')}
               </Box>
             </HStack>
           </AlertDialogHeader>
@@ -62,7 +64,8 @@ const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
                   { count: transactionCount, _category: selectedCategory})}
               </Text>
               ) : (
-                t('areYouSureYouWantToDeleteThisTransaction')
+                type === 'transaction' ? t('areYouSureYouWantToDeleteThisTransaction')
+                : t('areYouSureYouWantToDeleteThisGoal')
             )}
           </AlertDialogBody>
 

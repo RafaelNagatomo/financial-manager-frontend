@@ -1,7 +1,7 @@
 import { useState, useCallback, createContext, useContext, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import useCustomToast from '../hooks/useCustomToast';
-import { useCategories } from '../contexts/CategoryContext'
+import { useCategories, Category } from '../contexts/CategoryContext'
 
 export interface Goal {
   id?: string;
@@ -45,6 +45,21 @@ export const GoalProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const fetchGoals = useCallback(async () => {
     const data = await fetchData('http://localhost:3001/goals/');
+  
+    if (data.length === 0) {
+      const categoriesResponse = await fetch('http://localhost:3001/categories/');
+      const categories = await categoriesResponse.json();
+  
+      const goalCategory = categories.find((cat: Category) => cat.category_name === 'goals');
+      if (goalCategory) {
+        const deleteResponse = await fetch(`http://localhost:3001/categories/delete/${goalCategory.id}`, {
+          method: 'DELETE',
+        });
+        if (!deleteResponse.ok) {
+          console.error('Failed to delete goals category');
+        }
+      }
+    }
     setGoals(data);
   }, []);
 
@@ -56,9 +71,7 @@ export const GoalProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         if (!categoryExists) {
           const categoryResponse = await fetch('http://localhost:3001/categories/add', {
             method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
+            headers: {'Content-Type': 'application/json',},
             body: JSON.stringify({
               user_id: "3695f015-9880-4d70-98dc-3610c328357f",
               category_name: 'goals',
@@ -75,8 +88,7 @@ export const GoalProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       const data = {
         ...goal,
         user_id: "3695f015-9880-4d70-98dc-3610c328357f",
-        expiration_date: goal.goal_date ? new Date(goal.goal_date).toISOString() : null,
-        category_name: 'goals'
+        goal_date: goal.goal_date ? new Date(goal.goal_date).toISOString() : null,
       };
       const response = await fetch('http://localhost:3001/goals/add', {
         method: 'POST',
@@ -117,14 +129,12 @@ export const GoalProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const data = {
       ...goal,
       user_id: "3695f015-9880-4d70-98dc-3610c328357f",
-      expiration_date: goal.goal_date ? new Date(goal.goal_date).toISOString() : null,
+      goal_date: goal.goal_date ? new Date(goal.goal_date).toISOString() : null,
     };
     try {
       const response = await fetch(`http://localhost:3001/goals/edit/${goal.id}`, {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: {'Content-Type': 'application/json',},
         body: JSON.stringify(data),
       });
 

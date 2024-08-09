@@ -95,6 +95,11 @@
       "Now {{ count }} transactions are uncategorized in your Transactions table",
     "unableToAddExistingCategory": "Unable to add. Existing category.",
     "expiredDate": "Expired date",
-    "NoData": "No Data"
+    "NoData": "No Data",
+    "goalDate": "Data da Meta",
+    "deleteGoal": "Deletar Meta",
+    "editGoal": "Editar Meta",
+    "areYouSureYouWantToDeleteThisGoal": "Tem certeza que deseja deletar esta meta?",
+    "savingsUntil": "Poupança até"
   }
 }

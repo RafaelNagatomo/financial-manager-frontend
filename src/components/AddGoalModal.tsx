@@ -90,7 +90,6 @@ const AddGoalModal: React.FC<AddGoalModalProps> = ({
                 <FileUpload
                   name={field.name}
                   control={control}
-                  isRequired
                   placeholder={t('uploadFile')}
                 >
                   {t('uploadFile')}
@@ -106,11 +105,11 @@ const AddGoalModal: React.FC<AddGoalModalProps> = ({
               />
             </FormControl>
 
-            <FormControl isRequired my={5}>
+            <FormControl my={5}>
               <FormLabel>{t('description')}</FormLabel>
               <Input
                 placeholder={t('insertDescription')}
-                {...register("goal_description", { required: true })}
+                {...register("goal_description")}
               />
             </FormControl>
             
@@ -132,6 +131,13 @@ const AddGoalModal: React.FC<AddGoalModalProps> = ({
                     </NumberInputStepper>
                   </NumberInput>
                 )}
+              />
+            </FormControl>
+
+            <FormControl my={5}>
+              <FormLabel>{t('goalDate')}</FormLabel>
+              <Input
+                type="date" {...register("goal_date")}
               />
             </FormControl>
 

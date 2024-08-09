@@ -15,7 +15,7 @@ import {
 } from '@chakra-ui/react';
 import FilterButton from '../../components/FilterButton'
 import CustomButton from '../../components/CustomButton'
-import { GoalsTable } from './GoalsTables'
+import { GoalsOverviewsTable } from './GoalsOverviewsTable'
 import GoalsCards from './GoalsCards';
 import { useGoals } from '../../contexts/GoalContext';
 import AddGoalModal from '../../components/AddGoalModal';
@@ -80,7 +80,7 @@ const Goals: React.FC = () =>  {
         </CardHeader>
 
         <CardBody>
-          <GoalsTable />
+          <GoalsOverviewsTable />
         </CardBody>
       </Card>
 

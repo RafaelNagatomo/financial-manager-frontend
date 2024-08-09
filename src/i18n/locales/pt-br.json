@@ -95,6 +95,11 @@
       "Agora, {{ count }} transações estão sem categoria na sua tabela de Transações",
     "unableToAddExistingCategory": "Não foi possível adicionar. Categoria já existente.",
     "expiredDate": "Data expirado",
-    "NoData": "Sem Dados"
+    "NoData": "Sem Dados",
+    "goalDate": "Data da Meta",
+    "deleteGoal": "Deletar Meta",
+    "editGoal": "Editar Meta",
+    "areYouSureYouWantToDeleteThisGoal": "Tem certeza que deseja deletar esta meta?",
+    "savingsUntil": "Poupança até"
   }
 }

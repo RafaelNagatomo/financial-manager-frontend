@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { FaRegTrashAlt, FaRegEdit } from "react-icons/fa";
+import { GiBoxUnpacking } from "react-icons/gi";
 import {
   Card,
   Image,
-  Badge,
+  IconButton,
   Text,
   Flex,
   Spacer,
@@ -11,26 +13,48 @@ import {
   WrapItem,
   Stack,
   useColorMode,
-  LightMode
+  LightMode,
+  HStack,
+  Box,
+  VStack
 } from '@chakra-ui/react';
 import { formatAmount } from '../../utils/formatAmount'
 import { useCurrency } from '../../hooks/useCurrency'
 import { useGoals, Goal } from '../../contexts/GoalContext';
+import ConfirmDeleteModal from '../../components/ConfirmDeleteModal';
+import AddGoalModal from '../../components/AddGoalModal';
+import moment from 'moment';
 
 const GoalsCards: React.FC = () => {
   const { t } = useTranslation();
   const { currency } = useCurrency()
   const { colorMode } = useColorMode()
-  const { goals, fetchGoals, deleteGoal } = useGoals();
+  const { goals, deleteGoal } = useGoals();
+  const [selectedGoal, setSelectedGoal] = useState<Goal | null>(null);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
+  const isGoalsEmpty = goals.length === 0;
+
+  const handleDeleteGoal = async () => {
+    if (selectedGoal) {
+      await deleteGoal(selectedGoal);
+      setIsDeleteModalOpen(false);
+    }
+  };
+
+  const handleEditGoal = (goal: Goal) => {
+    setSelectedGoal(goal);
+    setIsAddModalOpen(true);
+  };
 
   return (
     <>
-      {goals.map((goal, index) => (
+      {!isGoalsEmpty ? goals.map((goal, index) => (
         <WrapItem key={index}>
           <Card
             layerStyle={colorMode === 'dark' ? 'darkCard' : 'lightCard'}
             gap={5}
-            w={350}
+            maxW={470}
             p={5}
           >
             <Text fontWeight='bold' fontSize='lg'>{goal.goal_name}</Text>
@@ -38,8 +62,36 @@ const GoalsCards: React.FC = () => {
               // src={goal.goal_image}
               src={'https://images.tripadeal.com.au/cdn-cgi/image/format=auto,width=2400/https://cstad.s3.ap-southeast-2.amazonaws.com/4456_19D_Taste_of_Italy_Web.jpg'}
             />
-            {/* <Badge size='sm' w={100} variant='solid' colorScheme='purple'>{2} Month left</Badge> */}
-            <Text fontWeight='bold' fontSize='lg'>{goal.goal_name}</Text>
+            <HStack gap='0 !important' justify='end'>
+              {goal.goal_date && (
+                <Box>
+                  <Text fontSize={12}>
+                    {t('savingsUntil')}: 
+                  </Text>
+                  <Text fontSize={12}>
+                    {moment(goal.goal_date).format('DD/MM/YYYY')}
+                  </Text>
+                </Box>
+              )}
+              <Spacer />
+              <IconButton
+                variant='ghost'
+                aria-label={t('edit')}
+                _hover={{ bg: colorMode === 'dark' ? 'gray.600' : 'gray.300' }}
+                icon={<FaRegEdit size={20} color='#3a9e64' />}
+                onClick={() => handleEditGoal(goal)}
+              />
+              <IconButton
+                variant='ghost'
+                aria-label={t('delete')}
+                _hover={{ bg: colorMode === 'dark' ? 'gray.600' : 'gray.300' }}
+                icon={<FaRegTrashAlt size={20} color='#b94a4a' />}
+                onClick={() => {
+                  setSelectedGoal(goal);
+                  setIsDeleteModalOpen(true);
+                }}
+              />
+            </HStack>
             <Text fontSize='md'>{goal.goal_description}</Text>
             <Stack my={4}>
               <LightMode>
@@ -62,7 +114,39 @@ const GoalsCards: React.FC = () => {
             </Flex>
           </Card>
         </WrapItem>
-      ))}
+      )) : (
+        <VStack
+          bg={colorMode === 'dark' ? 'gray.600' : 'gray.200'}
+          color={colorMode === 'dark' ? 'gray.700' : 'gray.400'}
+          h={150}
+          w='100%'
+          p={5}
+          borderRadius={6}
+          justify='center'
+        >
+          <GiBoxUnpacking size={30} />
+          <Text fontWeight='bold' fontSize='md'>
+            {t('NoData')}
+          </Text>
+        </VStack>
+      )}
+
+      {selectedGoal && (
+        <ConfirmDeleteModal
+          isOpen={isDeleteModalOpen}
+          onClose={() => setIsDeleteModalOpen(false)}
+          onConfirm={handleDeleteGoal}
+          type='goal'
+        />
+      )}
+
+      {selectedGoal && (
+        <AddGoalModal
+          isOpen={isAddModalOpen}
+          onClose={() => setIsAddModalOpen(false)}
+          goal={selectedGoal}
+        />
+      )}
     </>
   )
 }
