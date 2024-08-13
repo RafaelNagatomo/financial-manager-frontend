@@ -93,77 +93,81 @@ export const SpendingByCategoryTable: React.FC<SpendingByCategoryTableProps> = (
 
             return (
               <Tr key={category.id}>
-                <Td>{category.category_name}</Td>
+                <Td>{category.category_name === 'goals' ? t('goals') : category.category_name}</Td>
                 <Td>{formatAmount(category.max_amount, currency)}</Td>
-                <Td>
-                  <Tooltip
-                    bg={exceededLimit ? 'red.600' : ''}
-                    hasArrow
-                    placement='top'
-                    label={
-                      <Stack gap={1}>
-                        <Heading size='sm' my={1}>{category.category_name}</Heading>
-                        <Table size="xs" variant='unstyled'>
-                          <Tbody>
-                            <Tr>
-                              <Td>{t('totalSpentToDate')}</Td>
-                              <Td>{formatAmount(totalAmount, currency)}</Td>
-                            </Tr>
-                            <Tr>
-                              <Td>{t('maximuValueStipulated')}</Td>
-                              <Td>{formatAmount(category.max_amount, currency)}</Td>
-                            </Tr>
-                            <Tr>
-                              <Td>{t('linkedTransaction', { count: transactionCount })}</Td>
-                              <Td>{transactionCount === 0 ? '' : transactionCount}</Td>
-                            </Tr>
-                          </Tbody>
-                        </Table>
+                {category.category_name !== 'goals' && (
+                  <Td>
+                    <Tooltip
+                      bg={exceededLimit ? 'red.600' : ''}
+                      hasArrow
+                      placement='top'
+                      label={
+                        <Stack gap={1}>
+                          <Heading size='sm' my={1}>{category.category_name}</Heading>
+                          <Table size="xs" variant='unstyled'>
+                            <Tbody>
+                              <Tr>
+                                <Td>{t('totalSpentToDate')}</Td>
+                                <Td>{formatAmount(totalAmount, currency)}</Td>
+                              </Tr>
+                              <Tr>
+                                <Td>{t('maximumValueStipulated')}</Td>
+                                <Td>{formatAmount(category.max_amount, currency)}</Td>
+                              </Tr>
+                              <Tr>
+                                <Td>{t('linkedTransaction', { count: transactionCount })}</Td>
+                                <Td>{transactionCount === 0 ? '' : transactionCount}</Td>
+                              </Tr>
+                            </Tbody>
+                          </Table>
+                        </Stack>
+                      }
+                    >
+                      <Stack>
+                        <LightMode>
+                          <Progress
+                            borderRadius={5}
+                            hasStripe
+                            value={progressValue}
+                            colorScheme={exceededLimit ? 'red' : 'purple'}
+                          />
+                        </LightMode>
+                        <Text fontSize={11} style={{ alignSelf: 'flex-end' }}>
+                          {
+                            exceededLimit
+                              ? <span style={{ color: 'red' }}>
+                                {t('amountExceeded')}: {formatAmount(totalAmount - category.max_amount, currency)}
+                              </span>
+                              : `${(progressValue).toFixed(2)}% / 100%`
+                          }
+                        </Text>
                       </Stack>
-                    }
-                  >
-                    <Stack>
-                      <LightMode>
-                        <Progress
-                          borderRadius={5}
-                          hasStripe
-                          value={progressValue}
-                          colorScheme={exceededLimit ? 'red' : 'purple'}
-                        />
-                      </LightMode>
-                      <Text fontSize={11} style={{ alignSelf: 'flex-end' }}>
-                        {
-                          exceededLimit
-                            ? <span style={{ color: 'red' }}>
-                              {t('amountExceeded')}: {formatAmount(totalAmount - category.max_amount, currency)}
-                            </span>
-                            : `${(progressValue).toFixed(2)}% / 100%`
-                        }
-                      </Text>
-                    </Stack>
-                  </Tooltip>
-                </Td>
+                    </Tooltip>
+                  </Td>
+                )}
                 <Td display='flex' justifyContent='end'>
-                  <Stack direction="row" spacing={2}>
-                    <IconButton
-                      variant='ghost'
-                      aria-label={t('edit')}
-                      _hover={{ bg: colorMode === 'dark' ? 'gray.600' : 'gray.300' }}
-                      icon={<FaRegEdit size={22} color='#3a9e64' />}
-                      onClick={() => handleEditCategory(category)}
-                    />
-                    <IconButton
-                      variant='ghost'
-                      aria-label={t('delete')}
-                      _hover={{ bg: colorMode === 'dark' ? 'gray.600' : 'gray.300' }}
-                      icon={<FaRegTrashAlt size={22} color='#b94a4a' />}
-                      onClick={() => {
-                        setSelectedCategory(category);
-                        setTransactionCount(transactionCount);
-                        setIsDeleteModalOpen(true);
-                      }}
-                    />
-                  </Stack>
+                  {category.category_name !== 'goals' && (
+                    <Stack direction="row" spacing={2}>
+                      <IconButton
+                        variant='ghost'
+                        aria-label={t('edit')}
+                        _hover={{ bg: colorMode === 'dark' ? 'gray.600' : 'gray.300' }}
+                        icon={<FaRegEdit size={22} color='#3a9e64' />}
+                        onClick={() => handleEditCategory(category)}
+                      />
+                      <IconButton
+                        variant='ghost'
+                        aria-label={t('delete')}
+                        _hover={{ bg: colorMode === 'dark' ? 'gray.600' : 'gray.300' }}
+                        icon={<FaRegTrashAlt size={22} color='#b94a4a' />}
+                        onClick={() => {
+                          setSelectedCategory(category);
+                          setTransactionCount(transactionCount);
+                          setIsDeleteModalOpen(true);
+                        }}
+                      />
+                    </Stack>
+                  )}
                 </Td>
               </Tr>
             )

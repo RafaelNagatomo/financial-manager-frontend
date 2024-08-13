@@ -90,10 +90,8 @@ const AddGoalModal: React.FC<AddGoalModalProps> = ({
                 <FileUpload
                   name={field.name}
                   control={control}
-                  placeholder={t('uploadFile')}
-                >
-                  {t('uploadFile')}
-                </FileUpload>
+                  placeholder={t('selectAnImage')}
+                />
               )}
             />
 

@@ -1,14 +1,20 @@
-import { useState, useCallback, createContext, useContext, ReactNode } from 'react';
+import {
+  useState,
+  useCallback,
+  createContext,
+  useContext,
+  ReactNode
+} from 'react';
 import { useTranslation } from 'react-i18next';
 import useCustomToast from '../hooks/useCustomToast';
 import { useCategories, Category } from '../contexts/CategoryContext'
 
 export interface Goal {
-  id?: string;
+  id?: number;
   goal_name?: string;
   goal_description?: string;
-  goal_amount: number;
-  amount_raised: number;
+  goal_amount?: number;
+  amount_raised?: number;
   goal_image?: string;
   goal_date?: string;
 }

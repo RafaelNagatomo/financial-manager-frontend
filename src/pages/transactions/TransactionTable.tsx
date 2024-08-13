@@ -104,7 +104,13 @@ export const TransactionTable: React.FC = () => {
                 }
               </Td>
               <Td>{transaction.transaction_name}</Td>
-              <Td>{transaction.transaction_type === 'income' ? t('income') : transaction.category_name}</Td>
+              <Td>{
+                transaction.transaction_type === 'income'
+                ? t('income')
+                : transaction.category_name === 'goals'
+                ? t('goals')
+                : transaction.category_name
+              }</Td>
               <Td>
                 <LightMode>
                   <Switch

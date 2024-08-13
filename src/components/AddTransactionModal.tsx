@@ -25,7 +25,9 @@ import { Controller, useForm } from 'react-hook-form';
 import CustomButton from './CustomButton';
 import { useTranslation } from 'react-i18next';
 import CategorySelect from './CategorySelect';
+import GoalSelect from './GoalsSelect';
 import { useTransactions, Transaction } from '../contexts/TransactionContext';
+import { useGoals, Goal } from '../contexts/GoalContext';
 
 interface AddTransactionModalProps {
   isOpen: boolean;
@@ -39,16 +41,43 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
   transaction,
 }) => {
   const { t } = useTranslation();
-  const { control, handleSubmit, register, setValue, reset, watch  } = useForm<Transaction>();
+  const {
+    control,
+    handleSubmit,
+    register,
+    setValue,
+    reset,
+    watch,
+    getValues
+  } = useForm<Transaction>();
   const { fetchTransactions, addTransaction, editTransaction } = useTransactions()
+  const { goals, editGoal } = useGoals()
   const watchedFields = watch();
-  const isRequiredFieldsEmpty = !watchedFields.transaction_type || !watchedFields.transaction_name || !watchedFields.transaction_amount;
+  const isRequiredFieldsEmpty =
+    !watchedFields.transaction_type
+    || !watchedFields.transaction_name
+    || !watchedFields.transaction_amount
   const transactionType = watch('transaction_type');
+  const isGoalTransaction = watchedFields.category_name === 'goals'
 
   const handleTransactionSubmit = async(data: Transaction) => {
-    if (transactionType === 'income') {
+    console.log(data)
+
+    if (isGoalTransaction) {
+      data.transaction_type = 'expense';
+      const selectedGoal = goals.find(goal => Number(getValues('goal_id')) === goal.id);
+      data.transaction_name = selectedGoal?.goal_name ?? "";
+  
+      const editingGoalData: Goal = {
+        id: data.goal_id,
+        amount_raised: data.transaction_amount,
+        goal_name: selectedGoal?.goal_name
+      };
+      await editGoal(editingGoalData);
+    } else if (transactionType === 'income') {
       data.category_name = 'income';
     }
+  
     if (transaction) {
       await editTransaction({ ...transaction, ...data });
     } else {
@@ -90,12 +119,23 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
             <FormControl
               my={5}
               as="fieldset"
-              isRequired={!transaction || transaction?.categoryExists}
+              isRequired={(
+                !transaction || transaction?.categoryExists
+              ) && !isGoalTransaction
+              }
             >
               <FormLabel as="legend">{t('type')}</FormLabel>
               <RadioGroup
-                defaultValue={transaction?.transaction_type || undefined}
-                isDisabled={transaction && !transaction?.categoryExists}
+                defaultValue={
+                  isGoalTransaction
+                  ? "expense"
+                  : transaction?.transaction_type
+                  || undefined
+                }
+                isDisabled={(
+                  transaction && !transaction?.categoryExists
+                ) || isGoalTransaction
+                }
               >
                 <Stack spacing={4} direction="row">
                   <Radio value="expense" {...register("transaction_type")}>
@@ -108,17 +148,37 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
               </RadioGroup>
             </FormControl>
 
-            <FormControl
-              my={5}
-              isRequired={!transaction || transaction?.categoryExists}
-            >
-              <FormLabel>{t('title')}</FormLabel>
-              <Input
-                placeholder={t('insertTitle')}
-                {...register("transaction_name")}
-                isDisabled={transaction && !transaction?.categoryExists}
-              />
-            </FormControl>
+            {isGoalTransaction ? (
+              <FormControl
+                my={5}
+                isRequired={isGoalTransaction}
+              >
+                <FormLabel>{t('goal')}</FormLabel>
+                <Controller
+                  name="goal_id"
+                  control={control}
+                  render={({ field: { onChange, value } }) => (
+                    <GoalSelect
+                      value={value}
+                      onChange={onChange}
+                      placeholder={t('selectGoal')}
+                    />
+                  )}
+                />
+              </FormControl>
+            ) : (
+              <FormControl
+                my={5}
+                isRequired={(!transaction || transaction?.categoryExists) && !isGoalTransaction}
+              >
+                <FormLabel>{t('title')}</FormLabel>
+                <Input
+                  placeholder={t('insertTitle')}
+                  {...register("transaction_name")}
+                  isDisabled={transaction && !transaction?.categoryExists}
+                />
+              </FormControl>
+            )}
 
             <FormControl
               my={5}
@@ -130,7 +190,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
                 control={control}
                 render={({ field: { onChange, value } }) => (
                   <CategorySelect
-                    value={transactionType === 'income' ? 'income' : value}
+                    value={value}
                     onChange={onChange}
                     placeholder={t('selectCategory')}
                     isDisabled={transactionType === 'income'}
@@ -197,7 +257,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
             type='submit'
             form='add-transaction-form'
             isDisabled={
-              transaction && !transaction?.categoryExists
+              (transaction && !transaction?.categoryExists) || isGoalTransaction
               ? !watchedFields.category_name
               : isRequiredFieldsEmpty
             }

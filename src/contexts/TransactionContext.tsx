@@ -5,13 +5,15 @@ import { useCategories, Category } from '../contexts/CategoryContext'
 
 export interface Transaction {
   id: string;
-  transaction_type: string;
-  transaction_name: string;
-  category_name: string;
-  paid: boolean;
+  transaction_type?: string;
+  transaction_name?: string;
+  category_name?: string;
+  paid?: boolean;
   transaction_amount: number;
   expiration_date: string;
-  categoryExists: boolean
+  categoryExists?: boolean
+  goal_id?: number
+  goal_name?: string
 }
 
 interface TransactionContextProps {

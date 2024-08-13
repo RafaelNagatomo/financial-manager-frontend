@@ -68,6 +68,7 @@ const Transactions: React.FC = () => {
             <Spacer />
             <FilterButton />
             <CustomButton
+              w={180}
               leftIcon={<FaPlus />}
               title={isCategoryTab ? t('newCategory') : t('newTransaction')}
               onClick={isCategoryTab ? openCategoryModal : openTransactionModal}
@@ -124,7 +125,7 @@ const Transactions: React.FC = () => {
         </CardBody>
       </Card>
 
-      <Card layerStyle={colorMode} w={400} p={0}>
+      <Card layerStyle={colorMode} w={435} >
         <CardHeader>
           <Flex>
             <Heading as="h1" size="lg">
