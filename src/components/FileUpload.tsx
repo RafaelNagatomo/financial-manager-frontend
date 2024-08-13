@@ -66,6 +66,7 @@ export const FileUpload = <T extends Record<string, any>>({
           style={{ display: 'none' }}
         />
         <Input
+          style={{ cursor: 'pointer' }}
           placeholder={placeholder || "Your file ..."}
           onClick={handleClick}
           readOnly
