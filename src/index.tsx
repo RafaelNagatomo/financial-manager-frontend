@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { CurrencyProvider } from './hooks/useCurrency';
 import { ChakraProvider } from '@chakra-ui/react';
 import { theme } from './styles/theme';
 import App from './App';
@@ -15,14 +16,16 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <ChakraProvider theme={theme}>
-      <CategoryProvider>
-        <TransactionProvider>
-          <GoalProvider>
-            <App />
-          </GoalProvider>
-        </TransactionProvider>
-      </CategoryProvider>
-    </ChakraProvider>
+    <CurrencyProvider>
+      <ChakraProvider theme={theme}>
+        <CategoryProvider>
+          <TransactionProvider>
+            <GoalProvider>
+              <App />
+            </GoalProvider>
+          </TransactionProvider>
+        </CategoryProvider>
+      </ChakraProvider>
+    </CurrencyProvider>
   </React.StrictMode>
 );

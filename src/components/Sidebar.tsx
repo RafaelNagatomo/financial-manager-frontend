@@ -56,6 +56,8 @@ const Sidebar: React.FC = () => {
       h="100vh"
       p={4}
       fontWeight='bold'
+      position="fixed"
+      zIndex="999"
     >
       <Logo />
       <Menu
@@ -68,16 +70,28 @@ const Sidebar: React.FC = () => {
   );
 };
 
-const Logo: React.FC = () => (
-  <Image mt={4} mb={12} src='/logos/logo.png' alt='FiManager-logo'/>
-);
+const Logo: React.FC = () => {
+  const { colorMode } = useColorMode()
+  return (
+    <Image
+      mt={4}
+      mb={12}
+      alt='FiManager-logo'
+      src={
+        colorMode === 'dark'
+        ? '/logos/logo-white.png'
+        : '/logos/logo-black.png'
+      }
+    />
+  )
+};
 
 const Menu: React.FC<{
   menuItems: { route: string; label: string; icon: any }[];
   activeItem: string | null;
   onMenuItemClick: (label: string) => void;
 }> = ({ menuItems, activeItem, onMenuItemClick }) => (
-  <VStack spacing={4} align="stretch">
+  <VStack spacing={4} align="stretch" >
     {menuItems.map((item, index) => (
       <Link to={item.route} key={index} onClick={() => onMenuItemClick(item.label)}>
         <MenuItem item={item} isActive={activeItem === item.label} />
