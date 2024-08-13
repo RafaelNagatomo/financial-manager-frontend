@@ -38,7 +38,7 @@ export const GoalsOverviewsTable: React.FC = () => {
         {!isGoalsEmpty ? goals.map((goal, index) => (
           <Tr key={index}>
             <Td>{goal.goal_name}</Td>
-            <Td>{formatAmount(goal.goal_amount - goal.amount_raised, currency)}</Td>
+            <Td>{formatAmount((goal.goal_amount ?? 0) - (goal.amount_raised ?? 0), currency)}</Td>
           </Tr>
         )) : (
           <Tr>

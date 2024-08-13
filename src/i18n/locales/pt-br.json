@@ -70,7 +70,7 @@
     "enterMaximumValue": "Insira um valor máximo",
     "deleteCategory": "Deletar categoria",
     "totalSpentToDate": "Total gasto até o momento",
-    "maximuValueStipulated": "Valor máximo estipulado",
+    "maximumValueStipulated": "Valor máximo estipulado",
     "filter": "Filtro",
     "editTransaction": "Editar transação",
     "editCategory": "Editar categoria",
@@ -100,6 +100,17 @@
     "deleteGoal": "Deletar Meta",
     "editGoal": "Editar Meta",
     "areYouSureYouWantToDeleteThisGoal": "Tem certeza que deseja deletar esta meta?",
-    "savingsUntil": "Poupança até"
+    "savingsUntil": "Poupança até",
+    "insertDescription": "Insira uma descrição",
+    "createNewGoal": "Crie uma nova meta",
+    "selectAnImage": "Selecione uma imagem",
+    "selectGoal": "Selecione uma meta",
+    "totalRaisedToDate": "Total arrecadado até o momento",
+    "stipulatedGoalValue": "Valor da meta estipulada",
+    "completed": "Concluído",
+    "goalAddedSuccessfully": "Meta adicionada com sucesso!",
+    "goalEditedSuccessfully": "Meta editada com sucesso!",
+    "failedToAddGoal": "Falha ao adicionar meta!",
+    "failedToEditGoal": "Falha ao editar meta!"
   }
 }

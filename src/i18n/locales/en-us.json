@@ -70,7 +70,7 @@
     "enterMaximumValue": "Insert a maximum value",
     "deleteCategory": "Delete category",
     "totalSpentToDate": "Total spent to date",
-    "maximuValueStipulated": "Maximum value stipulated",
+    "maximumValueStipulated": "Maximum value stipulated",
     "filter": "Filter",
     "editTransaction": "Edit transaction",
     "editCategory": "Edit category",
@@ -86,7 +86,7 @@
     "modifiedCategoryName": "Modified category name",
     "transactionsLinkedToTheCategoryWillBeCalled":
       "Transactions linked to the category will be called",
-    "amountExceeded": "Valor excedido",
+    "amountExceeded": "Amount exceeded",
     "fillInAllMandatoryFields": "Fill in all mandatory fields",
     "categoryDeleted": "Category deleted",
     "nowTransactionsAreUncategorized_one":
@@ -96,10 +96,21 @@
     "unableToAddExistingCategory": "Unable to add. Existing category.",
     "expiredDate": "Expired date",
     "NoData": "No Data",
-    "goalDate": "Data da Meta",
-    "deleteGoal": "Deletar Meta",
-    "editGoal": "Editar Meta",
-    "areYouSureYouWantToDeleteThisGoal": "Tem certeza que deseja deletar esta meta?",
-    "savingsUntil": "Poupança até"
+    "goalDate": "Goal date",
+    "deleteGoal": "Delete goal",
+    "editGoal": "Edit goal",
+    "areYouSureYouWantToDeleteThisGoal": "Are you sure you want to delete this goal?",
+    "savingsUntil": "Savings until",
+    "insertDescription": "Insert description",
+    "createNewGoal": "Create a new goal",
+    "selectAnImage": "Select an image",
+    "selectGoal": "Select goal",
+    "totalRaisedToDate": "Total raised to date",
+    "stipulatedGoalValue": "Stipulated goal value",
+    "completed": "Completed",
+    "goalAddedSuccessfully": "Goal added successfully!",
+    "goalEditedSuccessfully": "Goal edited successfully!",
+    "failedToAddGoal": "Failed to add goal!",
+    "failedToEditGoal": "Failed to edit goal!"
   }
 }

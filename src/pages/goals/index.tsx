@@ -18,12 +18,14 @@ import CustomButton from '../../components/CustomButton'
 import { GoalsOverviewsTable } from './GoalsOverviewsTable'
 import GoalsCards from './GoalsCards';
 import { useGoals } from '../../contexts/GoalContext';
+import { useTransactions } from '../../contexts/TransactionContext';
 import AddGoalModal from '../../components/AddGoalModal';
 
 const Goals: React.FC = () =>  {
   const { t } = useTranslation()
   const { colorMode }  = useColorMode();
   const { fetchGoals } = useGoals();
+  const { fetchTransactions } = useTransactions();
 
   const {
     isOpen: isGoalModalOpen,
@@ -33,7 +35,8 @@ const Goals: React.FC = () =>  {
 
   useEffect(() => {
     fetchGoals();
-  }, [fetchGoals]);
+    fetchTransactions();
+  }, [fetchGoals, fetchTransactions]);
 
   return (
     <HStack gap={5} align='stretch'>
@@ -51,6 +54,7 @@ const Goals: React.FC = () =>  {
             <Spacer />
             <FilterButton />
             <CustomButton
+              w={180}
               leftIcon={<FaPlus/>}
               title={t('newGoal')}
               onClick={openGoalModal}
