@@ -15,7 +15,7 @@ const Header: React.FC = () => {
     <Flex
       gap='4'
       w='100%'
-      p='20px 45px 20px 265px'
+      p='10px 45px 10px 265px'
       position="fixed"
       top="0"
       left="0"
@@ -26,24 +26,23 @@ const Header: React.FC = () => {
         : 'rgba(15, 36, 105, 0.103)'
       }
       backdropFilter="blur(5px)"
+      alignItems="center"
     >
       <Text
         fontWeight='bold'
         fontSize='lg'
-        pt={5}
       >
         {t('goodMorning')}, {t('firstName')}!
       </Text>
       <Spacer />
       <Avatar
-        size='lg'
+        size='md'
         name='Segun Adebayo'
         src='https://bit.ly/sage-adebayo'
       />
       <Text
         fontWeight='bold'
         fontSize='lg'
-        pt={5}
       >
         {t('firstName')} {t('lastName')}
       </Text>

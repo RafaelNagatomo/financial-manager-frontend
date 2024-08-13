@@ -54,7 +54,7 @@ export const FileUpload = <T extends Record<string, any>>({
     <FormControl isInvalid={invalid} isRequired={isRequired}>
       <FormLabel htmlFor={name}>{children}</FormLabel>
       <InputGroup>
-        <InputLeftElement pointerEvents="none">
+        <InputLeftElement pointerEvents="none" pl={200} pt={16} >
           <Icon as={FiFile} />
         </InputLeftElement>
         <input
@@ -66,6 +66,9 @@ export const FileUpload = <T extends Record<string, any>>({
           style={{ display: 'none' }}
         />
         <Input
+          pl={110}
+          pt={10}
+          height={160}
           style={{ cursor: 'pointer' }}
           placeholder={placeholder || "Your file ..."}
           onClick={handleClick}

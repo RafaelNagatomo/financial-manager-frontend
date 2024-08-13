@@ -7,9 +7,9 @@ const DefaultLayout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
     <HStack align="stretch">
       <Sidebar />
       <Flex
-        w="100%"
-        h="100%"
-        py={120}
+        w="100vw"
+        minH="100vh"
+        py={100}
         pl={200}
         justifyContent="center"
       >
