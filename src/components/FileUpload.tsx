@@ -3,21 +3,20 @@ import {
   FormControl,
   FormLabel,
   InputGroup,
-  InputLeftElement,
   FormErrorMessage,
-  Icon
+  Image,
 } from "@chakra-ui/react";
-import { FiFile } from "react-icons/fi";
 import { useController, Control, FieldValues, Path, FieldError } from "react-hook-form";
-import { useRef, ReactNode } from "react";
+import { useRef, ReactNode, useState } from "react";
 
 interface FileUploadProps<T extends FieldValues> {
-  name:  Path<T>;
+  name: Path<T>;
   placeholder?: string;
   acceptedFileTypes?: string;
-  control: Control<T>;
+  control?: Control<T>;
   children?: ReactNode;
   isRequired?: boolean;
+  display?: 'none' | 'block' | 'flex';
 }
 
 export const FileUpload = <T extends Record<string, any>>({
@@ -26,9 +25,11 @@ export const FileUpload = <T extends Record<string, any>>({
   acceptedFileTypes,
   control,
   children,
-  isRequired = false
+  isRequired = false,
+  display
 }: FileUploadProps<T>) => {
   const inputRef = useRef<HTMLInputElement>(null);
+  const [preview, setPreview] = useState<string | undefined>(undefined);
   const {
     field: { ref, onChange, value, ...inputProps },
     fieldState: { invalid, error }
@@ -39,8 +40,14 @@ export const FileUpload = <T extends Record<string, any>>({
   });
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      onChange(e.target.files[0]);
+    const file = e.target.files?.[0];
+    if (file) {
+      onChange(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -54,9 +61,6 @@ export const FileUpload = <T extends Record<string, any>>({
     <FormControl isInvalid={invalid} isRequired={isRequired}>
       <FormLabel htmlFor={name}>{children}</FormLabel>
       <InputGroup>
-        <InputLeftElement pointerEvents="none" pl={200} pt={16} >
-          <Icon as={FiFile} />
-        </InputLeftElement>
         <input
           type="file"
           accept={acceptedFileTypes}
@@ -65,17 +69,28 @@ export const FileUpload = <T extends Record<string, any>>({
           onChange={handleFileChange}
           style={{ display: 'none' }}
         />
-        <Input
-          pl={110}
-          pt={10}
-          height={160}
-          style={{ cursor: 'pointer' }}
-          placeholder={placeholder || "Your file ..."}
-          onClick={handleClick}
-          readOnly
-          value={value ? (value as File).name : ""}
-          {...inputProps}
-        />
+        {preview ? (
+          <Image
+            src={preview}
+            alt="Preview"
+            w='100%'
+            h={250}
+            style={{ cursor: 'pointer', display: display }}
+            onClick={handleClick}
+          />
+        ) : (
+          <Input
+            pl={150}
+            pt={10}
+            h={250}
+            style={{ cursor: 'pointer', display: display }}
+            placeholder={placeholder || "Your file ..."}
+            onClick={handleClick}
+            readOnly
+            value={value ? (value as File).name : ""}
+            {...inputProps}
+          />
+        )}
       </InputGroup>
       <FormErrorMessage>
         {error && (error as FieldError).message}

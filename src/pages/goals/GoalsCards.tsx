@@ -79,6 +79,9 @@ const GoalsCards: React.FC = () => {
         const totalAmount = getGoalTotal((goal.goal_name ?? ''));
         const transactionCount = getCategoryTransactionCount((goal.goal_name ?? ''));
         const goalCompleted = totalAmount >= (goal.goal_amount ?? 0);
+        const imageUrl = goal.goal_image 
+        ? `${goal.goal_image}` 
+        : '/media/placeholder.png';
 
         return (
           <WrapItem key={index}>
@@ -111,7 +114,8 @@ const GoalsCards: React.FC = () => {
                   backgroundRepeat="no-repeat"
                   backgroundSize="cover"
                   position="absolute"
-                  src={(goal.goal_image ?? '/media/placeholder.png')}
+                  src={imageUrl}
+                  alt={goal.goal_name || 'Goal Image'}
                 />
               </Box>
               <HStack justify='end'>

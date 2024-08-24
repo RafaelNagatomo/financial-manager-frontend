@@ -41,7 +41,7 @@ const AddGoalModal: React.FC<AddGoalModalProps> = ({
   const watchedFields = watch();
   const isRequiredFieldsEmpty = !watchedFields.goal_name || !watchedFields.goal_amount;
 
-  const handleGoalSubmit = async (data: Goal) => {
+  const handleGoalSubmit: (data: Goal) => Promise<void> = async (data) => {
     if (goal) {
       await editGoal({ ...goal, ...data });
       if (goal.goal_name !== data.goal_name) {
@@ -67,6 +67,7 @@ const AddGoalModal: React.FC<AddGoalModalProps> = ({
 
   return (
     <Modal
+      size='lg'
       isOpen={isOpen}
       onClose={onClose}
       isCentered
@@ -90,6 +91,7 @@ const AddGoalModal: React.FC<AddGoalModalProps> = ({
                 <FileUpload
                   name={field.name}
                   control={control}
+                  acceptedFileTypes="image/*"
                   placeholder={t('selectAnImage')}
                 />
               )}

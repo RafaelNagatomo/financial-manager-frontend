@@ -16,13 +16,13 @@ export interface Goal {
   goal_amount?: number;
   amount_raised?: number;
   goal_image?: string;
-  goal_date?: string;
+  goal_date?: string | null;
 }
 
 interface GoalContextProps {
   goals: Goal[];
   fetchGoals: () => Promise<void>;
-  addGoal: (goal: Omit<Goal, 'id'>) => Promise<void>;
+  addGoal: (goal: Omit<Goal, 'id'>, goalImageFile?: File) => Promise<void>;
   deleteGoal: (goal: Goal) => Promise<void>;
   editGoal: (goal: Goal) => Promise<void>;
 }
@@ -65,8 +65,13 @@ export const GoalProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           console.error('Failed to delete goals category');
         }
       }
+    } else {
+      const updatedGoals = data.map((goal: Goal) => ({
+        ...goal,
+        goal_image: goal.goal_image ? `http://localhost:3001/uploads/${goal.goal_image}` : '',
+      }));
+      setGoals(updatedGoals);
     }
-    setGoals(data);
   }, []);
 
   const addGoal = async (goal: Omit<Goal, 'id'>) => {
@@ -91,25 +96,32 @@ export const GoalProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           await fetchCategories();
         }
       }
-      const data = {
-        ...goal,
-        user_id: "3695f015-9880-4d70-98dc-3610c328357f",
-        goal_date: goal.goal_date ? new Date(goal.goal_date).toISOString() : null,
-      };
+      const formData = new FormData();
+        formData.append('user_id', "3695f015-9880-4d70-98dc-3610c328357f");
+        formData.append('goal_name', goal.goal_name || '');
+        formData.append('goal_description', goal.goal_description || '');
+        formData.append('goal_amount', goal.goal_amount ? goal.goal_amount.toString() : '0');
+        formData.append('amount_raised', goal.amount_raised?.toString() || '0');
+        formData.append('goal_date', goal.goal_date ? new Date(goal.goal_date).toISOString() : '');
+        formData.append('goal_image', goal.goal_image || '');
+
+        console.log(formData);
+
       const response = await fetch('http://localhost:3001/goals/add', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
+        body: formData,
       });
 
       if (response.ok) {
         shortToast(t('goalAddedSuccessfully'), 'success');
+        fetchGoals();
       } else {
+        const errorText = await response.text()
+        console.error(errorText)
         shortToast(t('failedToAddGoal'), 'error');
       }
     } catch (error) {
+      console.error(error)
       shortToast(t('errorOccured'), 'error');
     }
   };
@@ -132,17 +144,30 @@ export const GoalProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
 
   const editGoal = async (goal: Goal) => {
-    const data = {
-      ...goal,
-      user_id: "3695f015-9880-4d70-98dc-3610c328357f",
-      goal_date: goal.goal_date ? new Date(goal.goal_date).toISOString() : null,
-    };
-    try {
-      const response = await fetch(`http://localhost:3001/goals/edit/${goal.id}`, {
-        method: 'PUT',
-        headers: {'Content-Type': 'application/json',},
-        body: JSON.stringify(data),
-      });
+    const formData = new FormData();
+    formData.append('user_id', "3695f015-9880-4d70-98dc-3610c328357f");
+    if (goal.goal_name) {
+      formData.append('goal_name', goal.goal_name);
+    }
+    if (goal.goal_description) {
+      formData.append('goal_description', goal.goal_description);
+    }
+    if (goal.goal_amount !== undefined && goal.goal_amount !== null) {
+      formData.append('goal_amount', goal.goal_amount.toString());
+    }
+    if (goal.amount_raised !== undefined && goal.amount_raised !== null) {
+      formData.append('amount_raised', goal.amount_raised.toString());
+    }
+    if (goal.goal_date) {
+      formData.append('goal_date', new Date(goal.goal_date).toISOString());
+    }
+    if (goal.goal_image) {formData.append('goal_image', goal.goal_image)}
+
+      try {
+        const response = await fetch(`http://localhost:3001/goals/edit/${goal.id}`, {
+          method: 'PUT',
+          body: formData,
+        });
 
       if (response.ok) {
         shortToast(t('goalEditedSuccessfully'), 'success');
