@@ -250,9 +250,14 @@ const Dashboard: React.FC = () =>  {
         templateColumns='repeat(3, 1fr)'
         borderRadius={8}
         gap={4}
-        
       >
-        <GridItem borderRadius={8} rowSpan={1} colSpan={1} layerStyle={colorMode} >
+        <GridItem
+          borderRadius={8}
+          rowSpan={1}
+          colSpan={1}
+          layerStyle={colorMode}
+          boxShadow='rgba(0, 0, 0, 0.39) 0px 3px 8px'
+        >
           <HStack  py='15px' px='80px'>
             <Stat>
               <Stack gap={2}>
@@ -278,7 +283,13 @@ const Dashboard: React.FC = () =>  {
           </HStack>
         </GridItem>
 
-        <GridItem borderRadius={8} rowSpan={1} colSpan={1} layerStyle={colorMode} >
+        <GridItem
+          borderRadius={8}
+          rowSpan={1}
+          colSpan={1}
+          layerStyle={colorMode}
+          boxShadow='rgba(0, 0, 0, 0.39) 0px 3px 8px'
+        >
           <HStack  py='15px' px='80px'>
             <Stat>
               <Stack gap={2}>
@@ -304,7 +315,13 @@ const Dashboard: React.FC = () =>  {
           </HStack>
         </GridItem>
 
-        <GridItem borderRadius={8} rowSpan={1} colSpan={1} layerStyle={colorMode} >
+        <GridItem
+          borderRadius={8}
+          rowSpan={1}
+          colSpan={1}
+          layerStyle={colorMode}
+          boxShadow='rgba(0, 0, 0, 0.39) 0px 3px 8px'
+        >
           <HStack  py='15px' px='80px'>
             <Stat>
               <Stack gap={2}>
@@ -335,6 +352,7 @@ const Dashboard: React.FC = () =>  {
           borderRadius={8}
           colSpan={2}
           layerStyle={colorMode}
+          boxShadow='rgba(0, 0, 0, 0.39) 0px 3px 8px'
         >
           <Heading size="md" mb={2}>
             {t('spendingByCategory')}
@@ -374,12 +392,14 @@ const Dashboard: React.FC = () =>  {
                   return (
                     <Card
                       key={index}
-                      p='8px 30px'
+                      p='0 30px'
+                      my='4px'
                       w={280}
                       h={100}
                       justify='center'
                       layerStyle={colorMode === 'dark' ? 'darkCard' : 'lightCard'}
                       flexShrink={0}
+                      boxShadow='rgba(0, 0, 0, 0.178) 4px 2px 2px'
                     >
                       <HStack>
                         <VStack>
@@ -443,7 +463,13 @@ const Dashboard: React.FC = () =>  {
           </Center>
         </GridItem>
           
-        <GridItem borderRadius={8} rowSpan={3} colSpan={1} layerStyle={colorMode} >
+        <GridItem
+          borderRadius={8}
+          rowSpan={3}
+          colSpan={1}
+          layerStyle={colorMode}
+          boxShadow='rgba(0, 0, 0, 0.39) 0px 3px 8px'
+        >
           <Stack p={4} h='100%'>
             <Heading size="md" mb={4}>
               {t('balanceByCategory')}
@@ -454,7 +480,13 @@ const Dashboard: React.FC = () =>  {
           </Stack>
         </GridItem>
         
-        <GridItem borderRadius={8} rowSpan={2} colSpan={2} layerStyle={colorMode} >
+        <GridItem
+          borderRadius={8}
+          rowSpan={2}
+          colSpan={2}
+          layerStyle={colorMode}
+          boxShadow='rgba(0, 0, 0, 0.39) 0px 3px 8px'
+        >
           <Stack p={4} h='100%'>
             <HStack>
               <Heading size="md" mb={4}>
