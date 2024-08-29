@@ -20,6 +20,7 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import { formatAmount } from '../../utils/formatAmount'
+import { getCategoryTotal } from '../../utils/getTotals'
 import { useCurrency } from '../../hooks/useCurrency';
 import ConfirmDeleteModal from '../../components/ConfirmDeleteModal';
 import AddCategoryModal from '../../components/AddCategoryModal';
@@ -58,12 +59,6 @@ export const SpendingByCategoryTable: React.FC<SpendingByCategoryTableProps> = (
     setIsAddModalOpen(true);
   };
 
-  const getCategoryTotal = (categoryName: string) => {
-    return transactions
-      .filter(transaction => transaction.category_name === categoryName)
-      .reduce((total, transaction) => total + Number(transaction.transaction_amount), 0);
-  };
-
   const getCategoryTransactionCount = (categoryName: string) => {
     return transactions
       .filter(transaction => transaction.category_name === categoryName).length;
@@ -86,7 +81,7 @@ export const SpendingByCategoryTable: React.FC<SpendingByCategoryTableProps> = (
         </Thead>
         <Tbody>
           {!isCategoriesEmpty ? categories.map((category) => {
-            const totalAmount = getCategoryTotal(category.category_name);
+            const totalAmount = getCategoryTotal(category.category_name, transactions);
             const progressValue = Math.min((Number(totalAmount) / category.max_amount) * 100, 100);
             const transactionCount = getCategoryTransactionCount(category.category_name);
             const exceededLimit = totalAmount > category.max_amount;

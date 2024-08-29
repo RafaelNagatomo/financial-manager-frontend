@@ -14,6 +14,7 @@ export interface Transaction {
   categoryExists?: boolean
   goal_id?: number
   goal_name?: string
+  created_at?: string
 }
 
 interface TransactionContextProps {
