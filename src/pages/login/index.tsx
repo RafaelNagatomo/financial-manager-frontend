@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next';
 import { CgFacebook } from "react-icons/cg";
 import { FcGoogle } from "react-icons/fc"
@@ -23,6 +24,7 @@ import CustomButton from '../../components/CustomButton';
 const Login: React.FC = () =>  {
   const { t } = useTranslation()
   const { colorMode } = useColorMode();
+  const navigate = useNavigate()
 
   return (
     <HStack>
@@ -96,7 +98,12 @@ const Login: React.FC = () =>  {
             label={t('email')}
             labelPosition='topStart'
           />
-          <CustomButton title={t('Login')} w='100%' h='50px' />
+          <CustomButton
+            title={t('Login')}
+            w='100%'
+            h='50px'
+            onClick={() => navigate('/dashboard')}
+          />
 
           <HStack mt={10}>
             <Divider borderWidth='1.5px' borderColor='black.500'/>
