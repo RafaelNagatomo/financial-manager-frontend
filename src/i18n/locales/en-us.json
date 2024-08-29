@@ -13,6 +13,7 @@
     "category": "Category",
     "tag": "Tag",
     "paid": "Paid",
+    "notPaid": "Not paid",
     "amount": "Amount",
     "progress": "Progress",
     "maxAmount": "Max Amount",
@@ -46,7 +47,10 @@
     "title": "Title",
     "type": "Type",
     "income": "Income",
+    "incomes": "Incomes",
     "expense": "Expense",
+    "expenses": "Expenses",
+    "savings": "Economias",
     "date": "Date",
     "save": "Save",
     "cancel": "Cancel",
@@ -111,6 +115,12 @@
     "goalAddedSuccessfully": "Goal added successfully!",
     "goalEditedSuccessfully": "Goal edited successfully!",
     "failedToAddGoal": "Failed to add goal!",
-    "failedToEditGoal": "Failed to edit goal!"
+    "failedToEditGoal": "Failed to edit goal!",
+    "monthlyBalance": "Monthly balance",
+    "weeklyBalance": "Weekly balance",
+    "balanceByCategory": "Balance by category",
+    "balance": "Balance",
+    "selectYear": "Select year",
+    "paidNotpaid": "Pago/Não pago"     
   }
 }
