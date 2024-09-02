@@ -121,6 +121,7 @@
     "balanceByCategory": "Balance by category",
     "balance": "Balance",
     "selectYear": "Select year",
-    "paidNotpaid": "Pago/Não pago"     
+    "paidNotpaid": "Pago/Não pago",
+    "resetColors": "Reset colors"
   }
 }

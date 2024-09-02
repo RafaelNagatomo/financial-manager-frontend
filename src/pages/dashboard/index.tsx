@@ -22,6 +22,8 @@ import {
   IconButton,
   Center,
   VStack,
+  Button,
+  LightMode,
 } from '@chakra-ui/react';
 import { useCurrency } from '../../hooks/useCurrency';
 import { formatAmount } from '../../utils/formatAmount'
@@ -49,7 +51,7 @@ const Dashboard: React.FC = () =>  {
   const { goals, fetchGoals } = useGoals();
   const { transactions, fetchTransactions } = useTransactions();
   const [translateX, setTranslateX] = useState(0);
-  const [pieChartColors, setpieChartColors] = useState<string[]>([]);
+  const [pieChartColors, setPieChartColors] = useState<string[]>([]);
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
 
   const incomesTotal = getCategoryTotal('income', transactions)
@@ -69,14 +71,26 @@ const Dashboard: React.FC = () =>  {
     new Set(transactions.map(transaction => moment(transaction.created_at).year()))
   )
 
-  const getRandomColor = () => {
-    const letters = '0123456789ABCDEF'
-    let color = '#'
-    for (let i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)]
+  const generateColors = (numColors: number, resetColors: boolean = false): string[] => {
+    const letters = '123456789ABCDE'
+    const existingColors = resetColors
+    ? new Set<string>()
+    : new Set<string>(JSON.parse(localStorage.getItem('generatedColors') || '[]'))
+  
+    while (existingColors.size < numColors) {
+      const color = '#' + Array.from({ length: 6 },
+        () => letters[Math.floor(Math.random() * letters.length)]).join('')
+      existingColors.add(color)
     }
-    return color
+    const colorsArray = Array.from(existingColors)
+    localStorage.setItem('generatedColors', JSON.stringify(colorsArray))
+    return colorsArray
   }
+
+  const handleResetColors = () => {
+    const colors = generateColors(categories.length, true)
+    setPieChartColors(colors)
+  }  
 
   const handleArrowClick = (direction: any) => {
     setTranslateX((prev) => {
@@ -88,6 +102,10 @@ const Dashboard: React.FC = () =>  {
     });
   };
 
+  const handleYearChange = (value: string) => {
+    setSelectedYear(Number(value));
+  };
+
   const lineData = {
     labels: [
       t('January'), t('February'), t('March'), t('April'), t('May'),
@@ -97,13 +115,13 @@ const Dashboard: React.FC = () =>  {
     datasets: [
       {
         label: t('incomes'),
-        data: generateMonthlyData(transactions, 'expense', selectedYear ?? undefined),
+        data: generateMonthlyData(transactions, 'income', selectedYear ?? undefined),
         borderColor: 'rgba(54, 162, 235, 1)',
         backgroundColor: 'rgba(54, 162, 235, 0.2)',
       },
       {
         label: t('expenses'),
-        data: generateMonthlyData(transactions, 'income', selectedYear ?? undefined),
+        data: generateMonthlyData(transactions, 'expense', selectedYear ?? undefined),
         borderColor: 'rgba(255, 99, 132, 1)',
         backgroundColor: 'rgba(255, 99, 132, 0.2)',
       },
@@ -222,14 +240,14 @@ const Dashboard: React.FC = () =>  {
     }
   };
 
-  const handleYearChange = (value: string) => {
-    setSelectedYear(Number(value));
-  };
-
   useEffect(() => {
-    const getColors = categories.map(() => getRandomColor());
-    setpieChartColors(getColors);
-  }, []);
+    const colors = generateColors(categories.length)
+    const filteredColors = categories
+      .filter(category => category.category_name !== 'goals')
+      .map((_, index) => colors[index])
+  
+    setPieChartColors(filteredColors)
+  }, [categories]);
 
   useEffect(() => {
     fetchGoals();
@@ -242,7 +260,6 @@ const Dashboard: React.FC = () =>  {
       <Heading as="h1" size="lg">
         {t('dashboard')}
       </Heading>
-      
       <Grid
         h='100%'
         w='100%'
@@ -471,9 +488,17 @@ const Dashboard: React.FC = () =>  {
           boxShadow='rgba(0, 0, 0, 0.39) 0px 3px 8px'
         >
           <Stack p={4} h='100%'>
-            <Heading size="md" mb={4}>
-              {t('balanceByCategory')}
-            </Heading>
+            <HStack align='stretch'>
+              <Heading size="md" mb={4}>
+                {t('balanceByCategory')}
+              </Heading>
+              <Spacer />
+              <LightMode>
+                <Button onClick={handleResetColors}>
+                  {t('resetColors')}
+                </Button>
+              </LightMode>
+            </HStack>
             <Box w='100%' h='100%'>
               <PieChart data={pieData} options={optionsDisplay} />
             </Box>

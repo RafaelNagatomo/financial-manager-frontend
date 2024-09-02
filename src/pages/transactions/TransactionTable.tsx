@@ -18,12 +18,25 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { formatAmount } from '../../utils/formatAmount';
 import { useCurrency } from '../../hooks/useCurrency';
 import moment from 'moment';
 import ConfirmDeleteModal from '../../components/ConfirmDeleteModal';
 import AddTransactionModal from '../../components/AddTransactionModal';
 import { useTransactions, Transaction } from '../../contexts/TransactionContext';
+
+const MotionTr = motion(Tr)
+
+const animationVariants = {
+  initial: { opacity: 0, y: -100 },
+  animate: { opacity: 1, y: 0 },
+  exit: {
+    opacity: 0,
+    scale: 0.2,
+    transition: {duration: [0.4], ease: "backIn",}
+  },
+}
 
 export const TransactionTable: React.FC = () => {
   const { t } = useTranslation();
@@ -40,6 +53,7 @@ export const TransactionTable: React.FC = () => {
     if (selectedTransaction) {
       await deleteTransaction(selectedTransaction);
       setIsDeleteModalOpen(false);
+      setSelectedTransaction(null)
     }
   };
 
@@ -85,84 +99,96 @@ export const TransactionTable: React.FC = () => {
           </Tr>
         </Thead>
         <Tbody>
-          {!isTransactionsEmpty ? transactions.map(transaction => (
-            <Tr
-              key={transaction.id}
-              sx={!transaction.categoryExists
-                ? {
-                    color: colorMode === 'dark' ? 'gray.600' : 'gray.400',
-                    cursor: "not-allowed",
-                    textDecoration: "line-through",
-                  }
-                : {}}
-            >
-              <Td>
-                {
-                  transaction.transaction_type === 'expense'
-                    ? <FaArrowTrendDown color={!transaction.categoryExists ? '#693b3b' : '#b94a4a'} />
-                    : <FaArrowTrendUp color={!transaction.categoryExists ? '#3f5749' : '#3a9e64'} />
+          <AnimatePresence>
+            {!isTransactionsEmpty ? transactions.map(transaction => (
+              <MotionTr
+                key={transaction.id}
+                variants={animationVariants}
+                initial='initial'
+                animate='animate'
+                exit='exit'
+                transition={{ type: "spring", stiffness: 500, damping: 20 }}
+                _hover={{
+                  backgroundColor: colorMode === 'dark' ? '#323e52' : '#dbe0e6',
+                  transition: 'background-color 0.4s ease',
+                }}
+                sx={!transaction.categoryExists
+                  ? {
+                      color: colorMode === 'dark' ? 'gray.600' : 'gray.400',
+                      cursor: "not-allowed",
+                      textDecoration: "line-through",
+                    }
+                  : {}
                 }
-              </Td>
-              <Td>{transaction.transaction_name}</Td>
-              <Td>{
-                transaction.transaction_type === 'income'
-                ? t('income')
-                : transaction.category_name === 'goals'
-                ? t('goals')
-                : transaction.category_name
-              }</Td>
-              <Td>
-                <LightMode>
-                  <Switch
-                    isChecked={transaction.paid}
-                    isDisabled={!transaction.categoryExists}
-                    onChange={(e) => handleTogglePaid(transaction.id, e.target.checked)}
-                  />
-                </LightMode>
-              </Td>
-              <Td>{formatAmount(transaction.transaction_amount, currency)}</Td>
-              <Td>{moment(transaction.expiration_date).format('DD/MM/YYYY')}</Td>
-              <Td display='flex' justifyContent='end'>
-                <Stack direction="row" spacing={2}>
-                  <IconButton
-                    variant='ghost'
-                    aria-label={t('edit')}
-                    _hover={{ bg: colorMode === 'dark' ? 'gray.600' : 'gray.300' }}
-                    icon={<FaRegEdit size={22} color='#3a9e64' />}
-                    onClick={() => handleEditTransaction(transaction)}
-                  />
-                  <IconButton
-                    variant='ghost'
-                    aria-label={t('delete')}
-                    _hover={{ bg: colorMode === 'dark' ? 'gray.600' : 'gray.300' }}
-                    icon={<FaRegTrashAlt size={22} color='#b94a4a' />}
-                    onClick={() => {
-                      setSelectedTransaction(transaction);
-                      setIsDeleteModalOpen(true);
-                    }}
-                  />
-                </Stack>
-              </Td>
-            </Tr>
-          )) : (
-            <Tr>
-              <Td colSpan={7} textAlign="center">
-                <VStack
-                  bg={colorMode === 'dark' ? 'gray.600' : 'gray.200'}
-                  color={colorMode === 'dark' ? 'gray.700' : 'gray.400'}
-                  h={100}
-                  p={5}
-                  borderRadius={6}
-                  justify='center'
-                >
-                  <GiBoxUnpacking size={30} />
-                  <Text fontWeight='bold' fontSize='md'>
-                    {t('NoData')}
-                  </Text>
-                </VStack>
-              </Td>
-            </Tr>
-          )}
+              >
+                <Td>
+                  {
+                    transaction.transaction_type === 'expense'
+                      ? <FaArrowTrendDown color={!transaction.categoryExists ? '#693b3b' : '#b94a4a'} />
+                      : <FaArrowTrendUp color={!transaction.categoryExists ? '#3f5749' : '#3a9e64'} />
+                  }
+                </Td>
+                <Td>{transaction.transaction_name}</Td>
+                <Td>{
+                  transaction.transaction_type === 'income'
+                  ? t('income')
+                  : transaction.category_name === 'goals'
+                  ? t('goals')
+                  : transaction.category_name
+                }</Td>
+                <Td>
+                  <LightMode>
+                    <Switch
+                      isChecked={transaction.paid}
+                      isDisabled={!transaction.categoryExists}
+                      onChange={(e) => handleTogglePaid(transaction.id, e.target.checked)}
+                    />
+                  </LightMode>
+                </Td>
+                <Td>{formatAmount(transaction.transaction_amount, currency)}</Td>
+                <Td>{moment(transaction.expiration_date).format('DD/MM/YYYY')}</Td>
+                <Td display='flex' justifyContent='end'>
+                  <Stack direction="row" spacing={2}>
+                    <IconButton
+                      variant='ghost'
+                      aria-label={t('edit')}
+                      _hover={{ bg: colorMode === 'dark' ? 'gray.600' : 'gray.300' }}
+                      icon={<FaRegEdit size={22} color='#3a9e64' />}
+                      onClick={() => handleEditTransaction(transaction)}
+                    />
+                    <IconButton
+                      variant='ghost'
+                      aria-label={t('delete')}
+                      _hover={{ bg: colorMode === 'dark' ? 'gray.600' : 'gray.300' }}
+                      icon={<FaRegTrashAlt size={22} color='#b94a4a' />}
+                      onClick={() => {
+                        setSelectedTransaction(transaction);
+                        setIsDeleteModalOpen(true);
+                      }}
+                    />
+                  </Stack>
+                </Td>
+              </MotionTr>
+            )) : (
+              <Tr>
+                <Td colSpan={7} textAlign="center">
+                  <VStack
+                    bg={colorMode === 'dark' ? 'gray.600' : 'gray.200'}
+                    color={colorMode === 'dark' ? 'gray.700' : 'gray.400'}
+                    h={100}
+                    p={5}
+                    borderRadius={6}
+                    justify='center'
+                  >
+                    <GiBoxUnpacking size={30} />
+                    <Text fontWeight='bold' fontSize='md'>
+                      {t('NoData')}
+                    </Text>
+                  </VStack>
+                </Td>
+              </Tr>
+            )}
+          </AnimatePresence>
         </Tbody>
       </Table>
 

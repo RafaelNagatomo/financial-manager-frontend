@@ -36,7 +36,13 @@ export const GoalsOverviewsTable: React.FC = () => {
       </Thead>
       <Tbody>
         {!isGoalsEmpty ? goals.map((goal, index) => (
-          <Tr key={index}>
+          <Tr
+            key={index}
+            _hover={{
+              backgroundColor: colorMode === 'dark' ? '#323e52' : '#dbe0e6',
+              transition: 'background-color 0.4s ease',
+            }}
+          >
             <Td>{goal.goal_name}</Td>
             <Td>{formatAmount((goal.goal_amount ?? 0) - (goal.amount_raised ?? 0), currency)}</Td>
           </Tr>
