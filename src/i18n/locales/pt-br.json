@@ -134,6 +134,10 @@
     "December": "Dezembro",
     "selectYear": "Selecione o ano",
     "paidNotpaid": "Pago/Não pago",
-    "resetColors": "Redefinir cores"
+    "totalSpent": "Total gasto",
+    "totalRemaining": "Total restante",
+    "totalExceeded": "Total excedido",
+    "categoryExceeded": "Categoria excedido",
+    "totalInvested": "Total investido"
   }
 }

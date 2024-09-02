@@ -24,6 +24,7 @@ import {
   VStack,
   Button,
   LightMode,
+  Tooltip,
 } from '@chakra-ui/react';
 import { useCurrency } from '../../hooks/useCurrency';
 import { formatAmount } from '../../utils/formatAmount'
@@ -65,7 +66,7 @@ const Dashboard: React.FC = () =>  {
 
   const categoryBalance = categories
     .filter(category => category.category_name !== 'goals')
-    .map(category => category.max_amount - getCategoryTotal(category.category_name, transactions))
+    .map(category => Math.max(category.max_amount - getCategoryTotal(category.category_name, transactions), 0))
 
   const years: number[] = Array.from(
     new Set(transactions.map(transaction => moment(transaction.created_at).year()))
@@ -205,12 +206,44 @@ const Dashboard: React.FC = () =>  {
     },
   };
 
-  const optionsDisplay = {
+  const pieOptions = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        display: true
+        display: true,
+        labels: {
+          generateLabels: function (chart: any) {
+            const data = chart.data;
+            if (data.labels.length && data.datasets.length) {
+              return data.labels.map((label: any, i: any) => {
+                const value = data.datasets[0].data[i];
+                return {
+                  text: `${label}: ${value}`,
+                  fontColor: colorMode === 'dark' ? '#D1D2D5' : '#292B2D',
+                  fillStyle: data.datasets[0].backgroundColor[i],
+                  strokeStyle: data.datasets[0].backgroundColor[i],
+                  lineWidth: 1,
+                  index: i,
+                };
+              });
+            }
+            return [];
+          },
+        },
+      },
+    }
+  };
+
+  const lineOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: true,
+        labels: {
+          color: colorMode === 'dark' ? '#D1D2D5' : '#292B2D',
+        },
       },
       title: {
         display: false,
@@ -345,7 +378,7 @@ const Dashboard: React.FC = () =>  {
                 <StatLabel fontSize='20px'>
                   {t('savings')}
                 </StatLabel>
-                <StatNumber fontSize='40px'>
+                <StatNumber fontSize='40px' color={incomesTotal > expensesTotal ? 'green.400' : 'red.400'}>
                   {formatAmount(incomesTotal - expensesTotal, currency)}
                 </StatNumber>
                 <StatHelpText>
@@ -390,12 +423,16 @@ const Dashboard: React.FC = () =>  {
                     labels: [''],
                     datasets: [
                       {
-                        label: t('Total Gasto'),
+                        label: category.category_name !== 'goals' ? t('totalSpent') : t('totalInvested'),
                         data: [totalAmount],
                         backgroundColor: 'rgba(255, 99, 133, 0.589)',
                       },
                       {
-                        label: t('Total Restante'),
+                        label:
+                          category.category_name !== 'goals' &&
+                          category.max_amount < totalAmount
+                            ? t('totalExceeded')
+                            : t('totalRemaining'),
                         data: [
                           category.category_name === 'goals'
                           ? goalsAmountTotal - totalAmount
@@ -423,9 +460,27 @@ const Dashboard: React.FC = () =>  {
                           <Heading size="16px">
                             {`${t(category.category_name)}`}
                           </Heading>
-                          <Text fontSize='15px'>
-                            {formatAmount(totalAmount, currency)}
-                          </Text>
+                          <Tooltip
+                            bg='red.400'
+                            placement='bottom'
+                            hasArrow
+                            defaultIsOpen
+                            label={
+                              category.category_name !== 'goals' && category.max_amount < totalAmount
+                              ? t('categoryExceeded')
+                              : ''
+                            }
+                          >
+                            <Text
+                              fontSize='15px'
+                              color={
+                                category.category_name !== 'goals' &&
+                                category.max_amount < totalAmount ? 'red.400' : ''
+                              }
+                            >
+                              {formatAmount(totalAmount, currency)}
+                            </Text>
+                          </Tooltip>
                         </VStack>
                         <Spacer />
                         <Box w={150} h={50}>
@@ -500,7 +555,7 @@ const Dashboard: React.FC = () =>  {
               </LightMode>
             </HStack>
             <Box w='100%' h='100%'>
-              <PieChart data={pieData} options={optionsDisplay} />
+              <PieChart data={pieData} options={pieOptions} />
             </Box>
           </Stack>
         </GridItem>
@@ -527,7 +582,7 @@ const Dashboard: React.FC = () =>  {
               />
             </HStack>
             <Box w='100%' h='100%'>
-              <LineChart data={lineData} options={optionsDisplay} />
+              <LineChart data={lineData} options={lineOptions} />
             </Box>
           </Stack>
         </GridItem>

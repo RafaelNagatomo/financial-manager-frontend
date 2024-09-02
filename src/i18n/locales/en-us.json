@@ -122,6 +122,11 @@
     "balance": "Balance",
     "selectYear": "Select year",
     "paidNotpaid": "Pago/Não pago",
-    "resetColors": "Reset colors"
+    "resetColors": "Reset colors",
+    "totalSpent": "Total spent",
+    "totalRemaining": "Total remaining",
+    "totalExceeded": "Total exceeded",
+    "categoryExceeded": "Category exceeded",
+    "totalInvested": "Total invested"
   }
 }
