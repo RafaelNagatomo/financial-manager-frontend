@@ -66,7 +66,6 @@ const Transactions: React.FC = () => {
               {t('transactions')}
             </Heading>
             <Spacer />
-            <FilterButton />
             <CustomButton
               w={180}
               leftIcon={<FaPlus />}
@@ -131,8 +130,6 @@ const Transactions: React.FC = () => {
             <Heading as="h1" size="lg">
               {t('upcomingPayments')}
             </Heading>
-            <Spacer />
-            <FilterButton />
           </Flex>
         </CardHeader>
 

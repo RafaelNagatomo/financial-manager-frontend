@@ -52,7 +52,6 @@ const Goals: React.FC = () =>  {
               {t('goals')}
             </Heading>
             <Spacer />
-            <FilterButton />
             <CustomButton
               w={180}
               leftIcon={<FaPlus/>}
@@ -78,8 +77,6 @@ const Goals: React.FC = () =>  {
             >
               {t('overview')}
             </Heading>
-            <Spacer />
-            <FilterButton />
           </Flex>
         </CardHeader>
 
