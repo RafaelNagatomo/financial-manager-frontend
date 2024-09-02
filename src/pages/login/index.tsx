@@ -102,7 +102,7 @@ const Login: React.FC = () =>  {
             title={t('Login')}
             w='100%'
             h='50px'
-            onClick={() => navigate('/dashboard')}
+            onClick={() => navigate('/loading')}
           />
 
           <HStack mt={10}>
