@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion } from 'framer-motion'
 import {
@@ -120,7 +120,9 @@ const Menu: React.FC<{
 const MenuItem: React.FC<{
   item: { route: string; label: string; icon: any };
   isActive: boolean
-}> = ({ item, isActive }) => {
+}> = ({ item }) => {
+  const location = useLocation()
+  const isActive = location.pathname === item.route
   const [isHovered, setIsHovered] = useState(false)
   const MotionBox = motion(Box)
 
