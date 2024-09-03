@@ -13,7 +13,6 @@ import {
   useColorMode,
   useDisclosure,
 } from '@chakra-ui/react';
-import FilterButton from '../../components/FilterButton'
 import CustomButton from '../../components/CustomButton'
 import { GoalsOverviewsTable } from './GoalsOverviewsTable'
 import GoalsCards from './GoalsCards';

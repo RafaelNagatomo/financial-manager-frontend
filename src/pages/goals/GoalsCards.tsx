@@ -81,10 +81,10 @@ const GoalsCards: React.FC = () => {
       .filter(transaction => transaction.transaction_name === goalName).length;
   };
 
-  useEffect(() => {
-    fetchGoals();
-    fetchTransactions();
-  }, [fetchGoals, fetchTransactions]);
+  // useEffect(() => {
+  //   fetchGoals();
+  //   fetchTransactions();
+  // }, [fetchGoals, fetchTransactions]);
 
   return (
     <>

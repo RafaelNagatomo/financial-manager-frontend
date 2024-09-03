@@ -21,7 +21,6 @@ import {
 import { TransactionTable } from './TransactionTable';
 import { SpendingByCategoryTable } from './SpendingByCategoryTable';
 import { UpcomingPaymentsTable } from './UpcomingPaymentsTable';
-import FilterButton from '../../components/FilterButton';
 import CustomButton from '../../components/CustomButton';
 import AddCategoryModal from '../../components/AddCategoryModal';
 import AddTransactionModal from '../../components/AddTransactionModal';

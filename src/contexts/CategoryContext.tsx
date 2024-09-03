@@ -23,23 +23,10 @@ export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const { shortToast, noticeToast } = useCustomToast();
   const [categories, setCategories] = useState<Category[]>([]);
   
-  const fetchData = async (endpoint: string) => {
-    try {
-      const response = await fetch(endpoint);
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
-      }
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      shortToast(t('errorOccured'), 'error');
-      return [];
-    }
-  };
-
   const fetchCategories = useCallback(async () => {
-    const data = await fetchData('http://localhost:3001/categories/');
-    setCategories(data);
+    const response = await fetch('http://localhost:3001/categories/');
+    const categoriesResponse = await response.json();
+    setCategories(categoriesResponse);
   }, []);
 
   const addCategory = async (category: Omit<Category, 'id'>) => {

@@ -35,42 +35,35 @@ export const GoalProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [goals, setGoals] = useState<Goal[]>([]);
   const { categories, fetchCategories } = useCategories();
 
-  const fetchData = async (endpoint: string) => {
+  const fetchGoals = useCallback(async () => {
     try {
-      const response = await fetch(endpoint);
+      const response = await fetch('http://localhost:3001/goals/');
       if (!response.ok) {
         throw new Error(`Error: ${response.status}`);
       }
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      shortToast(t('errorOccured'), 'error');
-      return [];
-    }
-  };
-
-  const fetchGoals = useCallback(async () => {
-    const data = await fetchData('http://localhost:3001/goals/');
-  
-    if (data.length === 0) {
-      const categoriesResponse = await fetch('http://localhost:3001/categories/');
-      const categories = await categoriesResponse.json();
-  
-      const goalCategory = categories.find((cat: Category) => cat.category_name === 'goals');
-      if (goalCategory) {
-        const deleteResponse = await fetch(`http://localhost:3001/categories/delete/${goalCategory.id}`, {
-          method: 'DELETE',
-        });
-        if (!deleteResponse.ok) {
-          console.error('Failed to delete goals category');
+      const goalsResponse = await response.json();
+      if (goalsResponse.length === 0) {
+        const categoriesResponse = await fetch('http://localhost:3001/categories/');
+        const categories = await categoriesResponse.json();
+    
+        const goalCategory = categories.find((cat: Category) => cat.category_name === 'goals');
+        if (goalCategory) {
+          const deleteResponse = await fetch(`http://localhost:3001/categories/delete/${goalCategory.id}`, {
+            method: 'DELETE',
+          });
+          if (!deleteResponse.ok) {
+            console.error('Failed to delete goals category');
+          }
         }
+      } else {
+        const updatedGoals = goalsResponse.map((goal: Goal) => ({
+          ...goal,
+          goal_image: goal.goal_image ? `http://localhost:3001/uploads/${goal.goal_image}` : '',
+        }));
+        setGoals(updatedGoals);
       }
-    } else {
-      const updatedGoals = data.map((goal: Goal) => ({
-        ...goal,
-        goal_image: goal.goal_image ? `http://localhost:3001/uploads/${goal.goal_image}` : '',
-      }));
-      setGoals(updatedGoals);
+    } catch (error) {
+      console.error('Erro ao buscar metas ou categorias:', error);
     }
   }, []);
 

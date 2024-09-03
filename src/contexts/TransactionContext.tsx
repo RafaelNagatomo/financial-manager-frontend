@@ -33,40 +33,34 @@ export const TransactionProvider: React.FC<{ children: ReactNode }> = ({ childre
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const { categories, fetchCategories } = useCategories();
 
-  const fetchData = async (endpoint: string) => {
+  const fetchTransactions = useCallback(async () => {
     try {
-      const response = await fetch(endpoint);
+      const response = await fetch('http://localhost:3001/transactions/');
       if (!response.ok) {
         throw new Error(`Error: ${response.status}`);
       }
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      shortToast(t('errorOccured'), 'error');
-      return [];
-    }
-  };
-
-  const fetchTransactions = useCallback(async () => {
-    const data = await fetchData('http://localhost:3001/transactions/');
-    const hasIncomeCategory = data.some((transaction: Transaction) => transaction.category_name === 'income');
-  
-    if (hasIncomeCategory) {
-      const categoriesResponse = await fetch('http://localhost:3001/categories/');
-      const categories = await categoriesResponse.json();
-  
-      const transactionCategory = categories.find((cat: Category) => cat.category_name === 'income');
-      if (transactionCategory) {
-        const deleteResponse = await fetch(`http://localhost:3001/categories/delete/${transactionCategory.id}`, {
-          method: 'DELETE',
-        });
-        if (!deleteResponse.ok) {
-          console.error('Failed to delete income category');
+      const transactionsResponse = await response.json();
+      const hasIncomeCategory = transactionsResponse.some((transaction: Transaction) => transaction.category_name === 'income');
+    
+      if (hasIncomeCategory) {
+        const categoriesResponse = await fetch('http://localhost:3001/categories/');
+        const categories = await categoriesResponse.json();
+    
+        const transactionCategory = categories.find((cat: Category) => cat.category_name === 'income');
+        if (transactionCategory) {
+          const deleteResponse = await fetch(`http://localhost:3001/categories/delete/${transactionCategory.id}`, {
+            method: 'DELETE',
+          });
+          if (!deleteResponse.ok) {
+            console.error('Failed to delete income category');
+          }
         }
       }
+    
+      setTransactions(transactionsResponse);
+    } catch (error) {
+      console.error('Erro ao buscar transações:', error);
     }
-  
-    setTransactions(data);
   }, []);
 
   const addTransaction = async (transaction: Omit<Transaction, 'id'>) => {
