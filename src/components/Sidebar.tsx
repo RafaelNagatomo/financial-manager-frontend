@@ -19,6 +19,7 @@ import { RiDashboardHorizontalLine } from "react-icons/ri"
 import { PiCrown } from "react-icons/pi"
 import { IoSettingsOutline } from "react-icons/io5"
 import { BiLogOut } from "react-icons/bi"
+import { useAuth } from '../contexts/AuthContext';
 
 const Sidebar: React.FC = () => {
   const { t } = useTranslation();
@@ -183,22 +184,27 @@ const MenuItem: React.FC<{
   );
 }
 
-const LogoutButton: React.FC = () => (
-  <Flex mt={500} width='100%'>
-    <Link to="/login" style={{ width: 200 }}>
-      <LightMode>
-        <Button
-          justifyContent="start"
-          width='100%'
-          variant="outline"
-          _hover={{ bg: 'purple.500', color: 'white', border: 'none' }}
-          leftIcon={<BiLogOut size={18} style={{ marginRight: 30 }} />}
-        >
-          Log out
-        </Button>
-      </LightMode>
-    </Link>
-  </Flex>
-);
+const LogoutButton: React.FC = () => {
+  const { logout } = useAuth();
+
+  return (
+    <Flex mt={500} width='100%'>
+      <Link to="/auth" style={{ width: 200 }}>
+        <LightMode>
+          <Button
+            justifyContent="start"
+            width='100%'
+            variant="outline"
+            _hover={{ bg: 'purple.500', color: 'white', border: 'none' }}
+            leftIcon={<BiLogOut size={18} style={{ marginRight: 30 }} />}
+            onClick={logout}
+          >
+            Log out
+          </Button>
+        </LightMode>
+      </Link>
+    </Flex>
+  )
+}
 
 export default Sidebar;
