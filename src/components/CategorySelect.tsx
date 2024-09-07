@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Select, SelectProps } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
+import useCustomToast from '../hooks/useCustomToast';
+import { getAuthHeaders } from '../utils/getAuthHeaders'
+import { useAuth } from '../contexts/AuthContext'
+import axios from 'axios';
 
 type Category = {
     id: number;
@@ -13,14 +17,20 @@ const CategorySelect: React.FC<CategorySelectProps> = (props) => {
   const { t } = useTranslation();
   const [categories, setCategories] = useState<Category[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>();
+  const { noticeToast } = useCustomToast();
+  const { user } = useAuth();
 
   useEffect(() => {
-    fetch('http://localhost:3001/categories/')
-      .then(response => response.json())
-      .then(data => {
-        setCategories(data);
+    axios.get('http://localhost:3001/categories/', {
+      headers: getAuthHeaders(),
+      params: { userId: user?.id }
+    })
+      .then((response) => {
+        setCategories(response.data);
       })
-      .catch();
+      .catch((error) => {
+        noticeToast(t('errorFetchingCategories') + `${error}`, 'error')
+      });
   }, []);
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {

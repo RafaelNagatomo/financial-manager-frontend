@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Select, SelectProps } from '@chakra-ui/react';
 import { useTranslation } from 'react-i18next';
+import useCustomToast from '../hooks/useCustomToast';
+import { getAuthHeaders } from '../utils/getAuthHeaders'
+import { useAuth } from '../contexts/AuthContext'
+import axios from 'axios';
 
 type Goal = {
     id: number;
@@ -13,14 +17,20 @@ const GoalSelect: React.FC<GoalSelectProps> = (props) => {
   const { t } = useTranslation();
   const [goals, setGoals] = useState<Goal[]>([]);
   const [selectedGoal, setSelectedGoal] = useState<string>();
+  const { noticeToast } = useCustomToast();
+  const { user } = useAuth();
 
   useEffect(() => {
-    fetch('http://localhost:3001/goals/')
-      .then(response => response.json())
-      .then(data => {
-        setGoals(data);
+    axios.get('http://localhost:3001/goals/', {
+      headers: getAuthHeaders(),
+      params: { userId: user?.id }
+    })
+      .then((response) => {
+        setGoals(response.data);
       })
-      .catch(error => console.error('Error fetching goals:', error));
+      .catch((error) => {
+        noticeToast(t('errorFetchingGoals') + `${error}`, 'error')
+      });
   }, []);
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
