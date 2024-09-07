@@ -61,8 +61,6 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({
   const isGoalTransaction = watchedFields.category_name === 'goals'
 
   const handleTransactionSubmit = async(data: Transaction) => {
-    console.log(data)
-
     if (isGoalTransaction) {
       data.transaction_type = 'expense';
       const selectedGoal = goals.find(goal => Number(getValues('goal_id')) === goal.id);

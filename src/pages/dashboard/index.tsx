@@ -351,7 +351,11 @@ const Dashboard: React.FC = () =>  {
                 </StatNumber>
                 <StatHelpText>
                   <StatArrow type='decrease' />
-                  {(expensesTotal * 100 / incomesTotal).toFixed(2)}%
+                  {
+                    incomesTotal === 0
+                      ? 0
+                      : ((expensesTotal / incomesTotal) * 100).toFixed(2)
+                  }%
                 </StatHelpText>
               </Stack>
             </Stat>
@@ -383,7 +387,11 @@ const Dashboard: React.FC = () =>  {
                 </StatNumber>
                 <StatHelpText>
                   <StatArrow type={incomesTotal > expensesTotal ? 'increase' : 'decrease'} />
-                  {((incomesTotal - expensesTotal) * 100 / incomesTotal).toFixed(2)}%
+                  {
+                    incomesTotal === 0
+                    ? 0
+                    : (((incomesTotal - expensesTotal) / incomesTotal) * 100).toFixed(2)
+                  }%
                 </StatHelpText>
               </Stack>
             </Stat>
@@ -511,6 +519,7 @@ const Dashboard: React.FC = () =>  {
                 isDisabled={translateX === 0 || categories.length < 3}
                 transition="opacity 0.4s"
                 aria-label={''}
+                visibility={categories.length === 0 ? 'hidden' : 'visible'}
               />
               <IconButton
                 icon={
@@ -531,6 +540,7 @@ const Dashboard: React.FC = () =>  {
                 isDisabled={translateX === maxTranslateX || categories.length < 3}
                 transition="opacity 0.4s"
                 aria-label={''}
+                visibility={categories.length === 0 ? 'hidden' : 'visible'}
               />
           </Center>
         </GridItem>
