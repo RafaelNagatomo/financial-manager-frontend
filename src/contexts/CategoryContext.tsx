@@ -1,6 +1,9 @@
 import React, { useState, useCallback, createContext, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import useCustomToast from '../hooks/useCustomToast';
+import { useAuth } from '../contexts/AuthContext'
+import { getAuthHeaders } from '../utils/getAuthHeaders'
+import axios from 'axios';
 
 export interface Category {
   id: number;
@@ -22,30 +25,30 @@ export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const { t } = useTranslation();
   const { shortToast, noticeToast } = useCustomToast();
   const [categories, setCategories] = useState<Category[]>([]);
+  const { user } = useAuth();
   
   const fetchCategories = useCallback(async () => {
-    const response = await fetch('http://localhost:3001/categories/');
-    const categoriesResponse = await response.json();
+    const response = await axios.get('http://localhost:3001/categories/', {
+      headers: getAuthHeaders(),
+      params: { userId: user?.id }
+    });
+    const categoriesResponse = response.data;
     setCategories(categoriesResponse);
   }, []);
 
   const addCategory = async (category: Omit<Category, 'id'>) => {
     const data = {
       ...category,
-      user_id: "3695f015-9880-4d70-98dc-3610c328357f",
+      user_id: user?.id,
     };
   
     try {  
-      const response = await fetch('http://localhost:3001/categories/add', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
+      const response = await axios.post('http://localhost:3001/categories/add', data, {
+        headers: getAuthHeaders(),
       });
   
-      if (response.ok) {
-        const result = await response.json();
+      if (response.status === 201) {
+        const result = response.data;
         if (result === 'CATEGORY_EXISTS') {
           shortToast(t('unableToAddExistingCategory'), 'error');
         } else {
@@ -55,16 +58,16 @@ export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         shortToast(t('failedToAddCategory'), 'error');
       }
     } catch (error) {
-      shortToast(t('errorOccured'), 'error');
+      shortToast(t('errorOccured') + `${error}`, 'error');
     }
   }; 
 
   const deleteCategory = async (category: Category, transactionCount: number) => {
     try {
-      const response = await fetch(`http://localhost:3001/categories/delete/${category.id}`, {
-        method: 'DELETE',
+      const response = await axios.delete(`http://localhost:3001/categories/delete/${category.id}`, {
+        headers: getAuthHeaders(),
       });
-      if (response.ok) {
+      if (response.status === 200) {
         setCategories(categories.filter(item => item.id !== category.id));
         if (transactionCount > 0) {
           noticeToast(
@@ -77,38 +80,42 @@ export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         shortToast(t('failedToDelete'), 'error');
       }
     } catch (error) {
-      shortToast(t('errorOccured'), 'error');
+      shortToast(t('errorOccured') + `${error}`, 'error');
     }
   };
 
   const editCategory = async (category: Category) => {
     const data = {
       ...category,
-      user_id: "3695f015-9880-4d70-98dc-3610c328357f",
+      user_id: user?.id,
     };
 
     try {
-      const response = await fetch(`http://localhost:3001/categories/edit/${category.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
+      const response = await axios.put(`http://localhost:3001/categories/edit/${category.id}`, data, {
+        headers: getAuthHeaders(),
       });
 
-      if (response.ok) {
+      if (response.status === 200) {
         fetchCategories();
         shortToast(t('categoryEditedSuccessfully'), 'success');
       } else {
         shortToast(t('failedToEditCategory'), 'error');
       }
     } catch (error) {
-      shortToast(t('errorOccured'), 'error');
+      shortToast(t('errorOccured') + `${error}`, 'error');
     }
   };
 
   return (
-    <CategoryContext.Provider value={{ categories, fetchCategories, addCategory, deleteCategory, editCategory }}>
+    <CategoryContext.Provider
+      value={{
+        categories,
+        fetchCategories,
+        addCategory,
+        deleteCategory,
+        editCategory
+      }}
+    >
       {children}
     </CategoryContext.Provider>
   );

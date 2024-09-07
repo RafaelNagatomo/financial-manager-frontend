@@ -1,13 +1,10 @@
-import {
-  useState,
-  useCallback,
-  createContext,
-  useContext,
-  ReactNode
-} from 'react';
+import { useState, useCallback, createContext, useContext, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import useCustomToast from '../hooks/useCustomToast';
 import { useCategories, Category } from '../contexts/CategoryContext'
+import { useAuth } from '../contexts/AuthContext'
+import { getAuthHeaders } from '../utils/getAuthHeaders'
+import axios from 'axios';
 
 export interface Goal {
   id?: number;
@@ -34,26 +31,28 @@ export const GoalProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const { shortToast } = useCustomToast();
   const [goals, setGoals] = useState<Goal[]>([]);
   const { categories, fetchCategories } = useCategories();
+  const { user } = useAuth();
 
   const fetchGoals = useCallback(async () => {
     try {
-      const response = await fetch('http://localhost:3001/goals/');
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
-      }
-      const goalsResponse = await response.json();
+      const response = await axios.get('http://localhost:3001/goals/', {
+        headers: getAuthHeaders(),
+        params: { userId: user?.id }
+      });
+      const goalsResponse = await response.data;
+
       if (goalsResponse.length === 0) {
-        const categoriesResponse = await fetch('http://localhost:3001/categories/');
-        const categories = await categoriesResponse.json();
+        const categoriesResponse = await axios.get('http://localhost:3001/categories/', {
+          headers: getAuthHeaders(),
+          params: { userId: user?.id }
+        });
+        const categories = await categoriesResponse.data;
     
         const goalCategory = categories.find((cat: Category) => cat.category_name === 'goals');
         if (goalCategory) {
-          const deleteResponse = await fetch(`http://localhost:3001/categories/delete/${goalCategory.id}`, {
-            method: 'DELETE',
+          await axios.delete(`http://localhost:3001/categories/delete/${goalCategory.id}`, {
+            headers: getAuthHeaders(),
           });
-          if (!deleteResponse.ok) {
-            console.error('Failed to delete goals category');
-          }
         }
       } else {
         const updatedGoals = goalsResponse.map((goal: Goal) => ({
@@ -63,7 +62,7 @@ export const GoalProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         setGoals(updatedGoals);
       }
     } catch (error) {
-      console.error('Erro ao buscar metas ou categorias:', error);
+      shortToast(t('Erro ao buscar metas ou categorias:') + `${error}`, 'error');
     }
   }, []);
 
@@ -73,24 +72,18 @@ export const GoalProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         let categoryExists = categories.some(cat => cat.category_name === 'goals');
 
         if (!categoryExists) {
-          const categoryResponse = await fetch('http://localhost:3001/categories/add', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json',},
-            body: JSON.stringify({
-              user_id: "3695f015-9880-4d70-98dc-3610c328357f",
+          await axios.post('http://localhost:3001/categories/add', {
+              user_id: user?.id,
               category_name: 'goals',
               max_amount: null
-            }),
+          }, {
+            headers: getAuthHeaders(),
           });
-
-          if (!categoryResponse.ok) {
-            throw new Error('Failed to add goals category');
-          }
           await fetchCategories();
         }
       }
       const formData = new FormData();
-        formData.append('user_id', "3695f015-9880-4d70-98dc-3610c328357f");
+        formData.append('user_id', user?.id || '');
         formData.append('goal_name', goal.goal_name || '');
         formData.append('goal_description', goal.goal_description || '');
         formData.append('goal_amount', goal.goal_amount ? goal.goal_amount.toString() : '0');
@@ -98,33 +91,32 @@ export const GoalProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         formData.append('goal_date', goal.goal_date ? new Date(goal.goal_date).toISOString() : '');
         formData.append('goal_image', goal.goal_image || '');
 
-        console.log(formData);
-
-      const response = await fetch('http://localhost:3001/goals/add', {
-        method: 'POST',
-        body: formData,
+      const response = await axios.post('http://localhost:3001/goals/add', formData, {
+        headers: {
+          ...getAuthHeaders(),
+          'Content-Type': 'multipart/form-data',
+        },
       });
 
-      if (response.ok) {
-        shortToast(t('goalAddedSuccessfully'), 'success');
+      if (response.status === 201) {
         fetchGoals();
+        shortToast(t('goalAddedSuccessfully'), 'success');
       } else {
-        const errorText = await response.text()
-        console.error(errorText)
-        shortToast(t('failedToAddGoal'), 'error');
+        const errorText = await response.data
+        shortToast(t('failedToAddGoal') + `${errorText}`, 'error');
       }
     } catch (error) {
-      console.error(error)
-      shortToast(t('errorOccured'), 'error');
+      shortToast(t('errorOccured') + `${error}`, 'error');
     }
   };
 
   const deleteGoal = async (goal: Goal) => {
     try {
-      const response = await fetch(`http://localhost:3001/goals/delete/${goal.id}`, {
-        method: 'DELETE',
+      const response = await axios.delete(`http://localhost:3001/goals/delete/${goal.id}`, {
+        headers: getAuthHeaders(),
       });
-      if (response.ok) {
+
+      if (response.status === 200) {
         setGoals(goals.filter(item => item.id !== goal.id));
         shortToast(t('successfullyDeleted'), 'success');
         fetchGoals()
@@ -132,13 +124,13 @@ export const GoalProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         shortToast(t('failedToDelete'), 'error');
       }
     } catch (error) {
-      shortToast(t('errorOccured'), 'error');
+      shortToast(t('errorOccured') + `${error}`, 'error');
     }
   };
 
   const editGoal = async (goal: Goal) => {
     const formData = new FormData();
-    formData.append('user_id', "3695f015-9880-4d70-98dc-3610c328357f");
+    formData.append('user_id', user?.id || '');
     if (goal.goal_name) {
       formData.append('goal_name', goal.goal_name);
     }
@@ -157,19 +149,21 @@ export const GoalProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     if (goal.goal_image) {formData.append('goal_image', goal.goal_image)}
 
       try {
-        const response = await fetch(`http://localhost:3001/goals/edit/${goal.id}`, {
-          method: 'PUT',
-          body: formData,
+        const response = await axios.put(`http://localhost:3001/goals/edit/${goal.id}`, formData, {
+          headers: {
+            ...getAuthHeaders(),
+            'Content-Type': 'multipart/form-data',
+          },
         });
 
-      if (response.ok) {
-        shortToast(t('goalEditedSuccessfully'), 'success');
+      if (response.status === 200) {
         fetchGoals();
+        shortToast(t('goalEditedSuccessfully'), 'success');
       } else {
         shortToast(t('failedToEditGoal'), 'error');
       }
     } catch (error) {
-      shortToast(t('errorOccured'), 'error');
+      shortToast(t('errorOccured') + `${error}`, 'error');
     }
   };
 

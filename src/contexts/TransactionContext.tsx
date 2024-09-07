@@ -2,6 +2,9 @@ import { useState, useCallback, createContext, useContext, ReactNode } from 'rea
 import { useTranslation } from 'react-i18next';
 import useCustomToast from '../hooks/useCustomToast';
 import { useCategories, Category } from '../contexts/CategoryContext'
+import { useAuth } from '../contexts/AuthContext'
+import { getAuthHeaders } from '../utils/getAuthHeaders'
+import axios from 'axios';
 
 export interface Transaction {
   id: string;
@@ -29,126 +32,107 @@ const TransactionContext = createContext<TransactionContextProps | undefined>(un
 
 export const TransactionProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const { t } = useTranslation();
-  const { shortToast } = useCustomToast();
+  const { shortToast, noticeToast } = useCustomToast();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const { categories, fetchCategories } = useCategories();
+  const { user } = useAuth();
 
   const fetchTransactions = useCallback(async () => {
     try {
-      const response = await fetch('http://localhost:3001/transactions/');
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
-      }
-      const transactionsResponse = await response.json();
+      const response = await axios.get('http://localhost:3001/transactions/',
+        {
+        headers: getAuthHeaders(),
+        params: { userId: user?.id }
+      });
+      const transactionsResponse = response.data;
       const hasIncomeCategory = transactionsResponse.some((transaction: Transaction) => transaction.category_name === 'income');
     
       if (hasIncomeCategory) {
-        const categoriesResponse = await fetch('http://localhost:3001/categories/');
-        const categories = await categoriesResponse.json();
+        const categoriesResponse = await axios.get('http://localhost:3001/categories/', {
+          headers: getAuthHeaders(),
+          params: { userId: user?.id }
+        });
+        const categories = categoriesResponse.data;
     
         const transactionCategory = categories.find((cat: Category) => cat.category_name === 'income');
         if (transactionCategory) {
-          const deleteResponse = await fetch(`http://localhost:3001/categories/delete/${transactionCategory.id}`, {
-            method: 'DELETE',
+          await axios.delete(`http://localhost:3001/categories/delete/${transactionCategory.id}`, {
+            headers: getAuthHeaders(),
           });
-          if (!deleteResponse.ok) {
-            console.error('Failed to delete income category');
-          }
         }
       }
     
       setTransactions(transactionsResponse);
     } catch (error) {
-      console.error('Erro ao buscar transações:', error);
+      noticeToast(t('errorFetchingTransactions') + `${error}`, 'error');
     }
   }, []);
 
   const addTransaction = async (transaction: Omit<Transaction, 'id'>) => {
     try {
       if (transaction.transaction_type === 'income') {
-        let categoryExists = categories.some(cat => cat.category_name === 'income');
-
+        const categoryExists = categories.some(cat => cat.category_name === 'income');
         if (!categoryExists) {
-          const categoryResponse = await fetch('http://localhost:3001/categories/add', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              user_id: "3695f015-9880-4d70-98dc-3610c328357f",
-              category_name: 'income',
-              max_amount: 0
-            }),
+          await axios.post('http://localhost:3001/categories/add', {
+            user_id: user?.id,
+            category_name: 'income',
+            max_amount: 0
+          }, {
+            headers: getAuthHeaders(),
           });
-
-          if (!categoryResponse.ok) {
-            throw new Error('Failed to add income category');
-          }
           await fetchCategories();
         }
       }
       const data = {
         ...transaction,
-        user_id: "3695f015-9880-4d70-98dc-3610c328357f",
+        user_id: user?.id,
         expiration_date: transaction.expiration_date ? new Date(transaction.expiration_date).toISOString() : null,
       };
-      const response = await fetch('http://localhost:3001/transactions/add', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
+      const response = await axios.post('http://localhost:3001/transactions/add', data, {
+        headers: getAuthHeaders(),
       });
-
-      if (response.ok) {
+      
+      if (response.status === 201) {
         shortToast(t('transactionAddedSuccessfully'), 'success');
       } else {
         shortToast(t('failedToAddTransaction'), 'error');
       }
     } catch (error) {
-      shortToast(t('errorOccured'), 'error');
+      shortToast(t('errorOccured') + `${error}`, 'error');
     }
   };
 
   const deleteTransaction = async (transaction: Transaction) => {
     try {
-      const response = await fetch(`http://localhost:3001/transactions/delete/${transaction.id}`, {
-        method: 'DELETE',
+      await axios.delete(`http://localhost:3001/transactions/delete/${transaction.id}`, {
+        headers: getAuthHeaders(),
       });
-      if (response.ok) {
         setTransactions(transactions.filter(item => item.id !== transaction.id));
         shortToast(t('successfullyDeleted'), 'success');
-      } else {
-        shortToast(t('failedToDelete'), 'error');
-      }
     } catch (error) {
-      shortToast(t('errorOccured'), 'error');
+      shortToast(t('failedToDelete') + `${error}`, 'error');
     }
   };
 
   const editTransaction = async (transaction: Transaction) => {
     const data = {
       ...transaction,
-      user_id: "3695f015-9880-4d70-98dc-3610c328357f",
+      user_id: user?.id,
       expiration_date: transaction.expiration_date ? new Date(transaction.expiration_date).toISOString() : null,
     };
     try {
-      const response = await fetch(`http://localhost:3001/transactions/edit/${transaction.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
+      const response = await axios.put(`http://localhost:3001/transactions/edit/${transaction.id}`, data, {
+        headers: getAuthHeaders(),
       });
 
-      if (response.ok) {
-        shortToast(t('transactionEditedSuccessfully'), 'success');
+      if (response.status === 200) {
         fetchTransactions();
+        shortToast(t('transactionEditedSuccessfully'), 'success');
       } else {
         shortToast(t('failedToEditTransaction'), 'error');
       }
     } catch (error) {
-      shortToast(t('errorOccured'), 'error');
+      shortToast(t('errorOccured') + `${error}`, 'error');
     }
   };
 
