@@ -127,6 +127,20 @@
     "totalRemaining": "Total remaining",
     "totalExceeded": "Total exceeded",
     "categoryExceeded": "Category exceeded",
-    "totalInvested": "Total invested"
+    "totalInvested": "Total invested",
+    "emailAlreadyExists": "E-mail already exists",
+    "invalidEmail": "Invalid e-mail",
+    "invalidPassword": "Invalid password",
+    "invalidOrExpiredToken": "Invalid or expired token",
+    "userNotFound": "User not found",
+    "noTokenProvided": "No token provided",
+    "anUnknownErrorOccurred": "An unknown error occurred",
+    "loggedInUserData": "Logged in user data",
+    "errorFetchingTransactions": "Error fetching transactions: ",
+    "errorFetchingCategories": "Error fetching categories: ",
+    "errorFetchingGoals:": "Error fetching goals: ",
+    "enterPassword": "Enter password",
+    "register": "Register",
+    "userRegisteredSuccessfully": "User registered successfully"
   }
 }

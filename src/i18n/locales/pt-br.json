@@ -138,6 +138,23 @@
     "totalRemaining": "Total restante",
     "totalExceeded": "Total excedido",
     "categoryExceeded": "Categoria excedido",
-    "totalInvested": "Total investido"
+    "totalInvested": "Total investido",
+    "emailAlreadyExists": "E-mail já existente",
+    "invalidEmail": "E-mail inválido",
+    "invalidPassword": "Senha inválida",
+    "invalidOrExpiredToken": "Token inválido ou expirado",
+    "userNotFound": "Usuário não encontrado",
+    "noTokenProvided": "Nenhum token fornecido",
+    "anUnknownErrorOccurred": "Ocorreu um erro desconhecido",
+    "failedToLogin": "Falha ao fazer login",
+    "failedToRegister": "Falha ao registrar",
+    "Unauthorized": "Não autorizado",
+    "loggedInUserData": "Dados do usuário logado",
+    "errorFetchingTransactions": "Erro ao buscar transações: ",
+    "errorFetchingCategories": "Erro ao buscar categorias: ",
+    "errorFetchingGoals:": "Erro ao buscar metas: ",
+    "enterPassword": "Digite a senha",
+    "register": "Cadastre-se",
+    "userRegisteredSuccessfully": "Usuário registrado com sucesso-se"
   }
 }
