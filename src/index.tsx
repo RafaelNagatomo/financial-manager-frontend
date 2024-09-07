@@ -7,6 +7,7 @@ import App from './App';
 import './index.css'
 import './i18n'
 
+import { AuthProvider } from './contexts/AuthContext';
 import { CategoryProvider } from './contexts/CategoryContext'
 import { TransactionProvider } from './contexts/TransactionContext'
 import { GoalProvider } from './contexts/GoalContext'
@@ -16,16 +17,18 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <CurrencyProvider>
-      <ChakraProvider theme={theme}>
-        <CategoryProvider>
-          <TransactionProvider>
-            <GoalProvider>
-              <App />
-            </GoalProvider>
-          </TransactionProvider>
-        </CategoryProvider>
-      </ChakraProvider>
-    </CurrencyProvider>
+    <AuthProvider>
+      <CurrencyProvider>
+        <ChakraProvider theme={theme}>
+          <CategoryProvider>
+            <TransactionProvider>
+              <GoalProvider>
+                <App />
+              </GoalProvider>
+            </TransactionProvider>
+          </CategoryProvider>
+        </ChakraProvider>
+      </CurrencyProvider>
+    </AuthProvider>
   </React.StrictMode>
 );
