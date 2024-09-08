@@ -17,12 +17,12 @@ const Header: React.FC = () => {
 
   const getGreeting = () => {
     const hour = new Date().getHours();
-    if (hour < 12) {
-      return { greeting: t('goodMorning'), icon: <PiSunHorizonDuotone size={25} color='#e6a93a' /> };
-    } else if (hour < 18) {
-      return { greeting: t('goodAfternoon'), icon: <PiSunDuotone size={25} color='#e6a93a' /> };
+    if (hour > 17 || hour < 4) {
+      return { greeting: t('goodEvening'), icon: <PiMoonStarsDuotone size={25} color='#dcf85c' /> };
+    } else if (hour > 11) {
+      return { greeting: t('goodAfternoon'), icon: <PiSunDuotone size={25} color='#e6793a' /> };
     } else {
-      return { greeting: t('goodEvening'), icon: <PiMoonStarsDuotone size={25} color='#faf75c' /> };
+      return { greeting: t('goodMorning'), icon: <PiSunHorizonDuotone size={25} color='#e6d53a' /> };
     }
   };
   const greetingInfo = getGreeting();
