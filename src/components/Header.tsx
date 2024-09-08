@@ -1,15 +1,31 @@
 import { useTranslation } from 'react-i18next';
+import { PiSunHorizonDuotone, PiSunDuotone, PiMoonStarsDuotone  } from "react-icons/pi";
 import {
   Flex,
   Spacer,
   Avatar,
   Text,
-  useColorMode
+  useColorMode,
+  HStack
 } from '@chakra-ui/react';
+import { useAuth } from '../contexts/AuthContext';
 
 const Header: React.FC = () => {
   const { t } = useTranslation()
   const { colorMode } = useColorMode();
+  const { user } = useAuth();
+
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) {
+      return { greeting: t('goodMorning'), icon: <PiSunHorizonDuotone size={25} color='#e6a93a' /> };
+    } else if (hour < 18) {
+      return { greeting: t('goodAfternoon'), icon: <PiSunDuotone size={25} color='#e6a93a' /> };
+    } else {
+      return { greeting: t('goodEvening'), icon: <PiMoonStarsDuotone size={25} color='#faf75c' /> };
+    }
+  };
+  const greetingInfo = getGreeting();
 
   return (
     <Flex
@@ -32,19 +48,23 @@ const Header: React.FC = () => {
         fontWeight='bold'
         fontSize='lg'
       >
-        {t('goodMorning')}, {t('firstName')}!
+        <HStack>
+          <Flex>{greetingInfo.icon}</Flex>
+          <Flex>{greetingInfo.greeting},</Flex>
+          <Flex>{user?.first_name} !</Flex>
+        </HStack>
       </Text>
       <Spacer />
       <Avatar
         size='md'
-        name='Segun Adebayo'
-        src='https://bit.ly/sage-adebayo'
+        bg='purple.500'
+        src='https://bit.ly/broken-link'
       />
       <Text
         fontWeight='bold'
         fontSize='lg'
       >
-        {t('firstName')} {t('lastName')}
+        {user?.first_name} {user?.last_name}
       </Text>
     </Flex>
   )
