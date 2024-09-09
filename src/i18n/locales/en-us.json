@@ -148,6 +148,13 @@
     "changePassword": "Change Password",
     "currentPassword": "Current password",
     "newPassword": "New password",
-    "confirmNewPassword": "confirm new password"
+    "confirmNewPassword": "confirm new password",
+    "userEditedSuccessfully": "User edited successfully!",
+    "failedToEdit": "Failed to edit",
+    "passwordEditedSuccessfully": "Password edited successfully!",
+    "passwordsDoNotMatch": "Passwords do not match",
+    "passwordRequired": "Password required",
+    "confirmChangePassword": "Confirm change password",
+    "areYouSureChangePassword": "Are you sure you want to change password?"
   }
 }

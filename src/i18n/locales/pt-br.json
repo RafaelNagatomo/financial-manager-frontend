@@ -162,6 +162,13 @@
     "changePassword": "Alterar Senha",
     "currentPassword": "Senha atual",
     "newPassword": "Nova senha",
-    "confirmNewPassword": "Confirme a nova senha"
+    "confirmNewPassword": "Confirme a nova senha",
+    "userEditedSuccessfully": "Usuário editado comsucesso!",
+    "failedToEdit": "Falha ao editar",
+    "passwordEditedSuccessfully": "Senha alterado com sucesso!",
+    "passwordsDoNotMatch": "Senhas não correspondem",
+    "passwordRequired": "Senha obrigatório",
+    "confirmChangePassword": "Confirme a alteração de senha",
+    "areYouSureChangePassword": "Tem certeza de que deseja alterar a senha?"
   }
 }

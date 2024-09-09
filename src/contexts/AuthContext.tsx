@@ -31,6 +31,10 @@ interface AuthContextType {
     lastName?: string,
     email?: string,
   ) => Promise<void>;
+  changePassword: (
+    currentPassword?: string,
+    newPassword?: string,
+  ) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -106,11 +110,32 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
     
     try {
-      console.log(data)
       await axios.put(`http://localhost:3001/auth/editUser/${user?.id}`, data, {
         headers: getAuthHeaders(),
       });
-      shortToast(t('usereditedSuccessfully'), 'success');
+      shortToast(t('userEditedSuccessfully'), 'success');
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const errorMessage = error.response?.data?.error || t('anUnknownErrorOccurred');
+        shortToast(t(`${errorMessage}`), 'error');
+      } else {
+        shortToast(t('anUnknownErrorOccurred'), 'error');
+      }
+      throw new Error(t('failedToEdit'));
+    }
+  };
+
+ const changePassword = async (currentPassword?: string, newPassword?: string) => {
+    const data = {
+      currentPassword,
+      newPassword,
+    };
+    
+    try {
+      await axios.put(`http://localhost:3001/auth/changePassword/${user?.id}`, data, {
+        headers: getAuthHeaders(),
+      });
+      shortToast(t('passwordEditedSuccessfully'), 'success');
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const errorMessage = error.response?.data?.error || t('anUnknownErrorOccurred');
@@ -135,7 +160,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         login,
         logout,
         registerUser,
-        editUser
+        editUser,
+        changePassword
       }}
     >
       {!loading && children}
