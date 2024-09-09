@@ -10,6 +10,8 @@ const MotionBox = motion(Box)
 export default function FiManagerLoader() {
   const [scope, animate] = useAnimate()
   const navigate = useNavigate()
+  const isMobile = window.innerWidth <= 768
+  const isTablet = window.innerWidth <= 992
 
   useEffect(() => {
     const animateLoader = async () => {
@@ -59,7 +61,7 @@ export default function FiManagerLoader() {
         <svg
           version="1.0"
           xmlns="http://www.w3.org/2000/svg"
-          width="700pt"
+          width={ isMobile ? "250pt" : isTablet ? "400pt" : "700pt" }
           height="180pt"
           viewBox="0 0 611.000000 114.000000"
           preserveAspectRatio="xMidYMid meet"

@@ -75,6 +75,13 @@ const NumberInput = {
   },
 }
 
+const breakpoints = {
+  sm: '30em', // 480px - Mobile
+  md: '48em', // 768px - Tablet
+  lg: '62em', // 992px - Horizontal tablet
+  xl: '80em', // 1280px - Desktop
+};
+
 const Select = {
   variants: {
     outline: (props: StyleFunctionProps) => ({
@@ -151,5 +158,6 @@ export const theme = extendTheme({
     Switch,
     Progress
   },
+  breakpoints
 });
 

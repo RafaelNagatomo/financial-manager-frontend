@@ -57,8 +57,8 @@ const Login: React.FC<{onSwitch: () => void}> = ({ onSwitch }) => {
         w={500}
         h={550}
         p={8}
+        m={5}
         zIndex={3}
-        m='auto'
         align='center'
         bg='rgba(255, 255, 255, 0.075)'
         backdropFilter="blur(7px)"

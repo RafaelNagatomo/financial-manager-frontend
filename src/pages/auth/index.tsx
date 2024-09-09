@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Box,
-  HStack,
+  Stack,
   Text,
   Image,
   Center,
@@ -21,7 +21,13 @@ const Auth: React.FC = () =>  {
   const toggleView = () => setIsLogin(!isLogin);
 
   return (
-    <HStack>
+    <Stack
+      flexDirection={{ base: 'column', md: 'row' }}
+      spacing={8}
+      w="100%"
+      h={{ base: '100%', md: '100vh' }}
+      alignItems={{ base: "center"}}
+    >
       <Box
         position="fixed"
         top={0}
@@ -36,8 +42,9 @@ const Auth: React.FC = () =>  {
         zIndex={1}
       />
       <VStack
-        w={800}
-        h='100vh'
+        w={{ base: '90%', md: '800px' }}
+        h={{ base: '100%', md: '100vh' }}
+        mt={{base: '20px', md: '0'}}
         p={8}
         spacing={8}
         zIndex={2}
@@ -48,7 +55,7 @@ const Auth: React.FC = () =>  {
         backdropFilter="blur(7px)"
       >
         <Image
-          w={350}
+          w={{ base: '250px', md: '350px' }}
           alt='FiManager-logo'
           src={
             colorMode === 'dark'
@@ -57,19 +64,19 @@ const Auth: React.FC = () =>  {
           }
         />
         <Box textAlign='center'>
-          <Text fontSize='2xl' my={20}>
+          <Text fontSize={{ base: 'xl', md: '2xl' }} my={{ base: '0', md: 20 }}>
             {t('letsGo')}!
           </Text>
-          <Text fontSize='3xl' textAlign="center">
+          <Text fontSize={{ base: '2xl', md: '3xl' }} textAlign="center">
             {t('welcomeTo')}
           </Text>
-          <Text fontSize='3xl' fontWeight='bold'>
+          <Text fontSize={{ base: '2xl', md: '3xl' }} fontWeight='bold'>
             Financial Manager
           </Text>
         </Box>
       </VStack>
 
-      <Center w='100%'>
+      <Center w={{ base: '100%', md: '50%' }}>
         <AnimatePresence mode="wait">
           {isLogin ? (
             <Login key="login" onSwitch={toggleView} />
@@ -79,7 +86,7 @@ const Auth: React.FC = () =>  {
         </AnimatePresence>
       </Center>
       
-    </HStack>
+    </Stack>
   )
 };
 

@@ -52,8 +52,8 @@ const Register: React.FC<{onSwitch: () => void}> = ({ onSwitch }) =>  {
         w={500}
         h={550}
         p={8}
+        m={5}
         zIndex={3}
-        m='auto'
         align='center'
         bg='rgba(255, 255, 255, 0.075)'
         backdropFilter="blur(7px)"
@@ -76,7 +76,7 @@ const Register: React.FC<{onSwitch: () => void}> = ({ onSwitch }) =>  {
           py={10}
         />
         <CardHeader display="flex" alignItems="center">
-          <Heading as="h2" size="2xl">
+          <Heading as="h2" size={{ base: "2xl", md: "xl"}}>
             {t('register')}
           </Heading>
         </CardHeader>
