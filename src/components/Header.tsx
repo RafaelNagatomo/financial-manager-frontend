@@ -14,15 +14,25 @@ const Header: React.FC = () => {
   const { t } = useTranslation()
   const { colorMode } = useColorMode();
   const { user } = useAuth();
+  const isMobile = window.innerWidth <= 768
 
   const getGreeting = () => {
     const hour = new Date().getHours();
     if (hour > 17 || hour < 4) {
-      return { greeting: t('goodEvening'), icon: <PiMoonStarsDuotone size={25} color='#dcf85c' /> };
+      return {
+        greeting: t('goodEvening'),
+        icon: <PiMoonStarsDuotone size={25} color='#dcf85c' />
+      };
     } else if (hour > 11) {
-      return { greeting: t('goodAfternoon'), icon: <PiSunDuotone size={25} color='#e6793a' /> };
+      return {
+        greeting: t('goodAfternoon'),
+        icon: <PiSunDuotone size={25} color='#e6793a' />
+      };
     } else {
-      return { greeting: t('goodMorning'), icon: <PiSunHorizonDuotone size={25} color='#e6d53a' /> };
+      return {
+        greeting: t('goodMorning'),
+        icon: <PiSunHorizonDuotone size={25} color='#e6d53a' />
+      };
     }
   };
   const greetingInfo = getGreeting();
@@ -31,7 +41,11 @@ const Header: React.FC = () => {
     <Flex
       gap='4'
       w='100%'
-      p='10px 45px 10px 265px'
+      p={{
+        base: '10px 10px 10px 65px',
+        md: '10px 45px 10px 65px',
+        lg: '10px 45px 10px 265px'
+      }}
       position="fixed"
       top="0"
       left="0"
@@ -46,7 +60,7 @@ const Header: React.FC = () => {
     >
       <Text
         fontWeight='bold'
-        fontSize='lg'
+        fontSize={{ base: 'md', md:'lg' }}
       >
         <HStack>
           <Flex>{greetingInfo.icon}</Flex>
@@ -64,7 +78,7 @@ const Header: React.FC = () => {
         fontWeight='bold'
         fontSize='lg'
       >
-        {user?.first_name} {user?.last_name}
+        {isMobile ? '' : `${user?.first_name} ${user?.last_name}`}
       </Text>
     </Flex>
   )

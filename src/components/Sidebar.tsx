@@ -12,12 +12,14 @@ import {
   Button,
   LightMode,
   useColorMode,
+  useBreakpointValue,
+  IconButton
 } from '@chakra-ui/react';
 
 import { FaMoneyBillTransfer } from "react-icons/fa6"
 import { RiDashboardHorizontalLine } from "react-icons/ri"
 import { PiCrown } from "react-icons/pi"
-import { IoSettingsOutline } from "react-icons/io5"
+import { IoMenu, IoSettingsOutline } from "react-icons/io5"
 import { BiLogOut } from "react-icons/bi"
 import { useAuth } from '../contexts/AuthContext';
 
@@ -25,7 +27,11 @@ const Sidebar: React.FC = () => {
   const { t } = useTranslation();
   const [activeItem, setActiveItem] = useState<string | null>(null);
   const { colorMode } = useColorMode()
+  const isSidebarVisible = useBreakpointValue({ base: false, md: false, lg: true });
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
   const handleMenuItemClick = (label: string) => setActiveItem(label);
+  const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
   const menuItems = [
     {
@@ -50,25 +56,41 @@ const Sidebar: React.FC = () => {
     },
   ];
 
-
   return (
-    <Box
-      layerStyle={colorMode}
-      w="220px"
-      h="100vh"
-      p={4}
-      fontWeight='bold'
-      position="fixed"
-      zIndex="999"
-    >
-      <Logo />
-      <Menu
-        menuItems={menuItems}
-        activeItem={activeItem}
-        onMenuItemClick={handleMenuItemClick}
-      />
-      <LogoutButton />
-    </Box>
+    <>
+      {!isSidebarVisible && (
+        <IconButton
+          aria-label="Open Menu"
+          icon={<IoMenu />}
+          position="fixed"
+          top={4}
+          left={4}
+          zIndex="1000"
+          onClick={toggleSidebar}
+        />
+      )}
+
+      {(isSidebarVisible || isSidebarOpen) && (
+        <Box
+          layerStyle={colorMode}
+          w="220px"
+          h="100vh"
+          p={4}
+          fontWeight='bold'
+          position="fixed"
+          zIndex="999"
+          mt={{ base: 20, md: 20 }}
+        >
+          <Logo />
+          <Menu
+            menuItems={menuItems}
+            activeItem={activeItem}
+            onMenuItemClick={handleMenuItemClick}
+          />
+          <LogoutButton />
+        </Box>
+      )}
+    </>
   );
 };
 

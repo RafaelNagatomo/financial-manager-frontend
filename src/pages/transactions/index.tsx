@@ -17,6 +17,7 @@ import {
   useColorMode,
   useDisclosure,
   SkeletonText,
+  Stack,
 } from '@chakra-ui/react';
 import { TransactionTable } from './TransactionTable';
 import { SpendingByCategoryTable } from './SpendingByCategoryTable';
@@ -52,8 +53,8 @@ const Transactions: React.FC = () => {
   }, [fetchTransactions, fetchCategories]);
 
   return (
-    <HStack gap={5} align="stretch">
-      <Card layerStyle={colorMode} w={1000} >
+    <Stack gap={5} align="stretch" direction={{ base: 'column', md: 'column', lg: 'row' }}>
+      <Card layerStyle={colorMode} w={{ base: 450, lg: 1000 }} >
         <CardHeader>
           <Flex gap="2">
             <Heading
@@ -74,7 +75,7 @@ const Transactions: React.FC = () => {
           </Flex>
         </CardHeader>
 
-        <CardBody>
+        <CardBody p={{ base: 1 }}>
           <Tabs variant="enclosed">
             <TabList fontWeight="bold" w="96.7%" ml={4}>
               <Tab
@@ -123,7 +124,7 @@ const Transactions: React.FC = () => {
         </CardBody>
       </Card>
 
-      <Card layerStyle={colorMode} w={435} >
+      <Card layerStyle={colorMode} w={{ base: '100%', lg: 435 }} >
         <CardHeader>
           <Flex>
             <Heading as="h1" size="lg">
@@ -145,7 +146,7 @@ const Transactions: React.FC = () => {
         isOpen={isTransactionModalOpen}
         onClose={closeTransactionModal}
       />
-    </HStack>
+    </Stack>
   );
 };
 

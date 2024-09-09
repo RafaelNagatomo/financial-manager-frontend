@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaArrowTrendUp, FaArrowTrendDown } from "react-icons/fa6";
-import { FaRegTrashAlt, FaRegEdit } from "react-icons/fa";
+import { FaRegTrashAlt, FaRegEdit, FaEllipsisV } from "react-icons/fa";
 import { GiBoxUnpacking } from "react-icons/gi";
 import {
   Table,
@@ -17,6 +17,10 @@ import {
   IconButton,
   Text,
   VStack,
+  Menu,
+  MenuList,
+  MenuItem,
+  MenuButton,
 } from '@chakra-ui/react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { formatAmount } from '../../utils/formatAmount';
@@ -48,6 +52,7 @@ export const TransactionTable: React.FC = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
   const [transactionsToPaidState, setTransactionsToPaidState] = useState(transactions);
   const isTransactionsEmpty = transactions.length === 0;
+  const isMobile = window.innerWidth <= 768
 
   const handleDeleteTransaction = async () => {
     if (selectedTransaction) {
@@ -89,13 +94,13 @@ export const TransactionTable: React.FC = () => {
       >
         <Thead>
           <Tr>
-            <Th>{t('type')}</Th>
+            {!isMobile && (<Th>{t('type')}</Th>)}
             <Th>{t('title')}</Th>
             <Th>{t('category')}</Th>
-            <Th>{t('paid')}</Th>
+            {!isMobile && (<Th>{t('paid')}</Th>)}
             <Th>{t('value')}</Th>
-            <Th>{t('expirationDate')}</Th>
-            <Th>{t('actions')}</Th>
+            {!isMobile && (<Th>{t('expirationDate')}</Th>)}
+            {!isMobile && (<Th>{t('actions')}</Th>)}
           </Tr>
         </Thead>
         <Tbody>
@@ -121,13 +126,13 @@ export const TransactionTable: React.FC = () => {
                   : {}
                 }
               >
-                <Td>
-                  {
-                    transaction.transaction_type === 'expense'
-                      ? <FaArrowTrendDown color={!transaction.categoryExists ? '#693b3b' : '#b94a4a'} />
-                      : <FaArrowTrendUp color={!transaction.categoryExists ? '#3f5749' : '#3a9e64'} />
-                  }
-                </Td>
+                {!isMobile && (
+                  <Td>
+                      {transaction.transaction_type === 'expense'
+                        ? <FaArrowTrendDown color={!transaction.categoryExists ? '#693b3b' : '#b94a4a'} />
+                        : <FaArrowTrendUp color={!transaction.categoryExists ? '#3f5749' : '#3a9e64'} />}
+                  </Td>
+                )}
                 <Td>{transaction.transaction_name}</Td>
                 <Td>{
                   transaction.transaction_type === 'income'
@@ -136,38 +141,75 @@ export const TransactionTable: React.FC = () => {
                   ? t('goals')
                   : transaction.category_name
                 }</Td>
-                <Td>
-                  <LightMode>
-                    <Switch
-                      isChecked={transaction.paid}
-                      isDisabled={!transaction.categoryExists}
-                      onChange={(e) => handleTogglePaid(transaction.id, e.target.checked)}
-                    />
-                  </LightMode>
-                </Td>
+                {!isMobile && (
+                  <Td>
+                    <LightMode>
+                      <Switch
+                        isChecked={transaction.paid}
+                        isDisabled={!transaction.categoryExists}
+                        onChange={(e) => handleTogglePaid(transaction.id, e.target.checked)}
+                      />
+                    </LightMode>
+                  </Td>
+                )}
                 <Td>{formatAmount(transaction.transaction_amount, currency)}</Td>
-                <Td>{moment(transaction.expiration_date).format('DD/MM/YYYY')}</Td>
-                <Td display='flex' justifyContent='end'>
-                  <Stack direction="row" spacing={2}>
-                    <IconButton
-                      variant='ghost'
-                      aria-label={t('edit')}
-                      _hover={{ bg: colorMode === 'dark' ? 'gray.600' : 'gray.300' }}
-                      icon={<FaRegEdit size={22} color='#3a9e64' />}
-                      onClick={() => handleEditTransaction(transaction)}
-                    />
-                    <IconButton
-                      variant='ghost'
-                      aria-label={t('delete')}
-                      _hover={{ bg: colorMode === 'dark' ? 'gray.600' : 'gray.300' }}
-                      icon={<FaRegTrashAlt size={22} color='#b94a4a' />}
-                      onClick={() => {
-                        setSelectedTransaction(transaction);
-                        setIsDeleteModalOpen(true);
-                      }}
-                    />
-                  </Stack>
-                </Td>
+
+                {!isMobile && (
+                  <Td>{moment(transaction.expiration_date).format('DD/MM/YYYY')}</Td>
+                )}
+
+                {isMobile ? (
+                  <Td display='flex' justifyContent='end' w={5}>
+                    <Menu>
+                      <MenuButton
+                        as={IconButton}
+                        aria-label="Options"
+                        icon={<FaEllipsisV size={20} />}
+                        variant='ghost'
+                        _hover={{ bg: colorMode === 'dark' ? 'gray.600' : 'gray.300' }}
+                      />
+                      <MenuList>
+                        <MenuItem
+                          icon={<FaRegEdit size={18} color='#3a9e64' />}
+                          onClick={() => handleEditTransaction(transaction)}
+                        >
+                          {t('edit')}
+                        </MenuItem>
+                        <MenuItem
+                          icon={<FaRegTrashAlt size={18} color='#b94a4a' />}
+                          onClick={() => {
+                            setSelectedTransaction(transaction);
+                            setIsDeleteModalOpen(true);
+                          }}
+                        >
+                          {t('delete')}
+                        </MenuItem>
+                      </MenuList>
+                    </Menu>
+                  </Td>
+                ) : (
+                  <Td display='flex' justifyContent='end'>
+                    <Stack direction="row" spacing={2}>
+                      <IconButton
+                        variant='ghost'
+                        aria-label={t('edit')}
+                        _hover={{ bg: colorMode === 'dark' ? 'gray.600' : 'gray.300' }}
+                        icon={<FaRegEdit size={22} color='#3a9e64' />}
+                        onClick={() => handleEditTransaction(transaction)}
+                      />
+                      <IconButton
+                        variant='ghost'
+                        aria-label={t('delete')}
+                        _hover={{ bg: colorMode === 'dark' ? 'gray.600' : 'gray.300' }}
+                        icon={<FaRegTrashAlt size={22} color='#b94a4a' />}
+                        onClick={() => {
+                          setSelectedTransaction(transaction);
+                          setIsDeleteModalOpen(true);
+                        }}
+                      />
+                    </Stack>
+                  </Td>
+                )}
               </MotionTr>
             )) : (
               <Tr>

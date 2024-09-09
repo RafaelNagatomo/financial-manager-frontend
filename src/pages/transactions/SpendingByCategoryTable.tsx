@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FaRegTrashAlt, FaRegEdit } from "react-icons/fa"
+import { FaRegTrashAlt, FaRegEdit, FaEllipsisV } from "react-icons/fa"
 import { GiBoxUnpacking } from "react-icons/gi"
 import {
   Table,
@@ -18,6 +18,10 @@ import {
   Tooltip,
   Heading,
   VStack,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
 } from '@chakra-ui/react';
 import { formatAmount } from '../../utils/formatAmount'
 import { getCategoryTotal } from '../../utils/getTotals'
@@ -57,6 +61,7 @@ export const SpendingByCategoryTable: React.FC<SpendingByCategoryTableProps> = (
   const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
   const [transactionCount, setTransactionCount] = useState<number>(0);
   const isCategoriesEmpty = categories.length === 0;
+  const isMobile = window.innerWidth <= 768
 
   const handleDeleteCategory = async (selectedCategory: Category, transactionCount: number) => {
     if (selectedCategory) {
@@ -166,30 +171,64 @@ export const SpendingByCategoryTable: React.FC<SpendingByCategoryTableProps> = (
                         </Tooltip>
                       </Td>
                     )}
-                    <Td display='flex' justifyContent='end'>
-                      {category.category_name !== 'goals' && (
-                        <Stack direction="row" spacing={2}>
-                          <IconButton
-                            variant='ghost'
-                            aria-label={t('edit')}
-                            _hover={{ bg: colorMode === 'dark' ? 'gray.600' : 'gray.300' }}
-                            icon={<FaRegEdit size={22} color='#3a9e64' />}
-                            onClick={() => handleEditCategory(category)}
-                          />
-                          <IconButton
-                            variant='ghost'
-                            aria-label={t('delete')}
-                            _hover={{ bg: colorMode === 'dark' ? 'gray.600' : 'gray.300' }}
-                            icon={<FaRegTrashAlt size={22} color='#b94a4a' />}
-                            onClick={() => {
-                              setSelectedCategory(category);
-                              setTransactionCount(transactionCount);
-                              setIsDeleteModalOpen(true);
-                            }}
-                          />
-                        </Stack>
-                      )}
-                    </Td>
+                    {isMobile ? (
+                      <Td display='flex' justifyContent='end' w={8}>
+                        {category.category_name !== 'goals' && (
+                          <Menu>
+                            <MenuButton
+                              as={IconButton}
+                              aria-label="Options"
+                              icon={<FaEllipsisV size={20} />}
+                              variant='ghost'
+                              _hover={{ bg: colorMode === 'dark' ? 'gray.600' : 'gray.300' }}
+                            />
+                            <MenuList>
+                              <MenuItem
+                                icon={<FaRegEdit size={18} color='#3a9e64' />}
+                                onClick={() => handleEditCategory(category)}
+                              >
+                                {t('edit')}
+                              </MenuItem>
+                              <MenuItem
+                                icon={<FaRegTrashAlt size={18} color='#b94a4a' />}
+                                onClick={() => {
+                                  setSelectedCategory(category);
+                                  setTransactionCount(transactionCount);
+                                  setIsDeleteModalOpen(true);
+                                }}
+                              >
+                                {t('delete')}
+                              </MenuItem>
+                            </MenuList>
+                          </Menu>
+                        )}
+                      </Td>
+                    ) : (
+                      <Td display='flex' justifyContent='end'>
+                        {category.category_name !== 'goals' && (
+                          <Stack direction="row" spacing={2}>
+                            <IconButton
+                              variant='ghost'
+                              aria-label={t('edit')}
+                              _hover={{ bg: colorMode === 'dark' ? 'gray.600' : 'gray.300' }}
+                              icon={<FaRegEdit size={22} color='#3a9e64' />}
+                              onClick={() => handleEditCategory(category)}
+                            />
+                            <IconButton
+                              variant='ghost'
+                              aria-label={t('delete')}
+                              _hover={{ bg: colorMode === 'dark' ? 'gray.600' : 'gray.300' }}
+                              icon={<FaRegTrashAlt size={22} color='#b94a4a' />}
+                              onClick={() => {
+                                setSelectedCategory(category);
+                                setTransactionCount(transactionCount);
+                                setIsDeleteModalOpen(true);
+                              }}
+                            />
+                          </Stack>
+                        )}
+                      </Td>
+                    )}
                   </MotionTr>
                 )
               })}

@@ -54,6 +54,8 @@ const Dashboard: React.FC = () =>  {
   const [translateX, setTranslateX] = useState(0);
   const [pieChartColors, setPieChartColors] = useState<string[]>([]);
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
+  const isMobile = window.innerWidth <= 768
+  const isTablet = window.innerWidth <= 992
 
   const incomesTotal = getCategoryTotal('income', transactions)
   const expensesTotal = getTransactionsTotal('expense', transactions)
@@ -61,7 +63,7 @@ const Dashboard: React.FC = () =>  {
 
   const categoriesArray = Object.values(categories)
   const itemWidth = 288;
-  const visibleItems = 3;
+  const visibleItems = isMobile ? 1 : isTablet ? 2 : 3;
   const maxTranslateX = -(itemWidth * (categoriesArray.length - visibleItems));
 
   const categoryBalance = categories
@@ -289,26 +291,30 @@ const Dashboard: React.FC = () =>  {
   }, [fetchGoals, fetchTransactions, fetchCategories]);
 
   return (
-    <Stack w='calc(100% - 100px)' h='100%'>
+    <Stack
+      w={{ base: '100%', md: '100%', lg: 'calc(100% - 100px)' }}
+      h='100%'
+    >
       <Heading as="h1" size="lg">
         {t('dashboard')}
       </Heading>
       <Grid
         h='100%'
         w='100%'
-        templateRows='repeat(4, 1fr)'
-        templateColumns='repeat(3, 1fr)'
+        templateRows={{ base: 'repeat(2, 1fr)', md: 'repeat(2, 1fr)', lg: 'repeat(4, 1fr)' }}
+        templateColumns={{ base: '1fr', md: '1fr', lg: 'repeat(3, 1fr)' }}
         borderRadius={8}
         gap={4}
       >
         <GridItem
+          w='auto'
           borderRadius={8}
           rowSpan={1}
           colSpan={1}
           layerStyle={colorMode}
           boxShadow='rgba(0, 0, 0, 0.39) 0px 3px 8px'
         >
-          <HStack  py='15px' px='80px'>
+          <HStack  py='15px' px={{ base: '20px', md: '80px', lg: '80px' }}>
             <Stat>
               <Stack gap={2}>
                 <StatLabel fontSize='20px'>
@@ -334,13 +340,14 @@ const Dashboard: React.FC = () =>  {
         </GridItem>
 
         <GridItem
+          w='auto'
           borderRadius={8}
           rowSpan={1}
           colSpan={1}
           layerStyle={colorMode}
           boxShadow='rgba(0, 0, 0, 0.39) 0px 3px 8px'
         >
-          <HStack  py='15px' px='80px'>
+          <HStack  py='15px' px={{ base: '20px', md: '80px', lg: '80px' }}>
             <Stat>
               <Stack gap={2}>
                 <StatLabel fontSize='20px'>
@@ -370,13 +377,14 @@ const Dashboard: React.FC = () =>  {
         </GridItem>
 
         <GridItem
+          w='auto'
           borderRadius={8}
           rowSpan={1}
           colSpan={1}
           layerStyle={colorMode}
           boxShadow='rgba(0, 0, 0, 0.39) 0px 3px 8px'
         >
-          <HStack  py='15px' px='80px'>
+          <HStack  py='15px' px={{ base: '20px', md: '80px', lg: '80px' }}>
             <Stat>
               <Stack gap={2}>
                 <StatLabel fontSize='20px'>
@@ -406,9 +414,10 @@ const Dashboard: React.FC = () =>  {
         </GridItem>
 
         <GridItem
+          w={{ base: 400, md: 750, lg: 'auto'}}
           p='15px'
           borderRadius={8}
-          colSpan={2}
+          colSpan={{ base: 1, md: 1, lg: 2 }}
           layerStyle={colorMode}
           boxShadow='rgba(0, 0, 0, 0.39) 0px 3px 8px'
         >
@@ -546,6 +555,7 @@ const Dashboard: React.FC = () =>  {
         </GridItem>
           
         <GridItem
+          w='auto'
           borderRadius={8}
           rowSpan={3}
           colSpan={1}
@@ -571,9 +581,10 @@ const Dashboard: React.FC = () =>  {
         </GridItem>
         
         <GridItem
+          w='auto'
           borderRadius={8}
-          rowSpan={2}
-          colSpan={2}
+          rowSpan={{ base: 1, md: 2, lg: 2 }}
+          colSpan={{ base: 1, md: 1, lg: 2 }}
           layerStyle={colorMode}
           boxShadow='rgba(0, 0, 0, 0.39) 0px 3px 8px'
         >

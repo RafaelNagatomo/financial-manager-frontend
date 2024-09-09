@@ -9,8 +9,8 @@ const DefaultLayout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
       <Flex
         w="100vw"
         minH="100vh"
-        py={100}
-        pl={200}
+        py={{ base: 70, md: 70, lg: 100}}
+        pl={{ lg: 200}}
         justifyContent="center"
       >
         <Header />
