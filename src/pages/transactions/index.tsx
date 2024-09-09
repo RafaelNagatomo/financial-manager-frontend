@@ -13,11 +13,10 @@ import {
   TabPanels,
   Tab,
   TabPanel,
-  HStack,
+  Stack,
   useColorMode,
   useDisclosure,
   SkeletonText,
-  Stack,
 } from '@chakra-ui/react';
 import { TransactionTable } from './TransactionTable';
 import { SpendingByCategoryTable } from './SpendingByCategoryTable';
@@ -54,7 +53,7 @@ const Transactions: React.FC = () => {
 
   return (
     <Stack gap={5} align="stretch" direction={{ base: 'column', md: 'column', lg: 'row' }}>
-      <Card layerStyle={colorMode} w={{ base: 450, lg: 1000 }} >
+      <Card layerStyle={colorMode} w={{ base: 450, md: 600, lg: 1000 }} >
         <CardHeader>
           <Flex gap="2">
             <Heading
@@ -124,7 +123,7 @@ const Transactions: React.FC = () => {
         </CardBody>
       </Card>
 
-      <Card layerStyle={colorMode} w={{ base: '100%', lg: 435 }} >
+      <Card layerStyle={colorMode} w={{ base: '100%', md: 600, lg: 435 }} >
         <CardHeader>
           <Flex>
             <Heading as="h1" size="lg">

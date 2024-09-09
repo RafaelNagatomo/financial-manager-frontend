@@ -8,7 +8,7 @@ import {
   Flex,
   Spacer,
   Heading,
-  HStack,
+  Stack,
   Wrap,
   useColorMode,
   useDisclosure,
@@ -38,8 +38,8 @@ const Goals: React.FC = () =>  {
   }, [fetchGoals, fetchTransactions]);
 
   return (
-    <HStack gap={5} align='stretch'>
-      <Card layerStyle={colorMode} w={1000}>
+    <Stack gap={5} align='stretch' direction={{ base: 'column', md: 'column', lg: 'row' }}>
+      <Card layerStyle={colorMode} w={{base: 400, md: 600, lg: 1000}} mr={2}>
         <CardHeader>
           <Flex gap='2'>
             <Heading
@@ -67,7 +67,7 @@ const Goals: React.FC = () =>  {
         </CardBody>
       </Card>
 
-      <Card layerStyle={colorMode} w={360}>
+      <Card layerStyle={colorMode} w={{base: 400, md: 600, lg: 360}}>
         <CardHeader>
           <Flex>
             <Heading
@@ -88,7 +88,7 @@ const Goals: React.FC = () =>  {
         isOpen={isGoalModalOpen}
         onClose={closeGoalModal}
       />
-    </HStack>
+    </Stack>
   )
 }
 
