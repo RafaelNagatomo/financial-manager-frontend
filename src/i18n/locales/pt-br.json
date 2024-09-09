@@ -157,6 +157,11 @@
     "errorFetchingGoals:": "Erro ao buscar metas: ",
     "enterPassword": "Digite a senha",
     "register": "Cadastre-se",
-    "userRegisteredSuccessfully": "Usuário registrado com sucesso-se"
+    "userRegisteredSuccessfully": "Usuário registrado com sucesso",
+    "personalInfo": "Informações Pessoais",
+    "changePassword": "Alterar Senha",
+    "currentPassword": "Senha atual",
+    "newPassword": "Nova senha",
+    "confirmNewPassword": "Confirme a nova senha"
   }
 }

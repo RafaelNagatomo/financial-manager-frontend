@@ -143,6 +143,11 @@
     "errorFetchingGoals:": "Error fetching goals: ",
     "enterPassword": "Enter password",
     "register": "Register",
-    "userRegisteredSuccessfully": "User registered successfully"
+    "userRegisteredSuccessfully": "User registered successfully",
+    "personalInfo": "Personal Info",
+    "changePassword": "Change Password",
+    "currentPassword": "Current password",
+    "newPassword": "New password",
+    "confirmNewPassword": "confirm new password"
   }
 }

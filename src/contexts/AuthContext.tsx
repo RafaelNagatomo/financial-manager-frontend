@@ -2,6 +2,7 @@ import React, { useState, createContext, useContext, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import useCustomToast from '../hooks/useCustomToast';
 import axios from 'axios';
+import { getAuthHeaders } from '../utils/getAuthHeaders'
 
 export interface User {
   id: string,
@@ -14,9 +15,22 @@ export interface User {
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  login: (email: string, password: string) => Promise<void>;
+  login: (
+    email: string,
+    password: string
+  ) => Promise<void>;
   logout: () => void;
-  registerUser: (firstName: string, lastName: string, email: string, password: string) => Promise<void>;
+  registerUser: (
+    firstName: string,
+    lastName: string,
+    email: string,
+    password: string
+  ) => Promise<void>;
+  editUser: (
+    firstName?: string,
+    lastName?: string,
+    email?: string,
+  ) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -84,6 +98,30 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+ const editUser = async (firstName?: string, lastName?: string, email?: string) => {
+    const data = {
+      firstName,
+      lastName,
+      email
+    };
+    
+    try {
+      console.log(data)
+      await axios.put(`http://localhost:3001/auth/editUser/${user?.id}`, data, {
+        headers: getAuthHeaders(),
+      });
+      shortToast(t('usereditedSuccessfully'), 'success');
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const errorMessage = error.response?.data?.error || t('anUnknownErrorOccurred');
+        shortToast(t(`${errorMessage}`), 'error');
+      } else {
+        shortToast(t('anUnknownErrorOccurred'), 'error');
+      }
+      throw new Error(t('failedToEdit'));
+    }
+  };
+
   const logout = () => {
     localStorage.removeItem('token');
     setUser(null);
@@ -96,7 +134,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         loading,
         login,
         logout,
-        registerUser
+        registerUser,
+        editUser
       }}
     >
       {!loading && children}

@@ -40,7 +40,7 @@ const Login: React.FC<{onSwitch: () => void}> = ({ onSwitch }) => {
   const { handleSubmit, register, formState: { errors, isSubmitting } } = useForm<LoginFormInputs>();
   const navigate = useNavigate();
   const { login } = useAuth();
-  const [showPassword, setShowPassword] = useState(false)
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleLoginSubmit = async (data: LoginFormInputs) => {
     try {
