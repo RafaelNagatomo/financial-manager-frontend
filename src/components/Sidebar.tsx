@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import {
   Box,
   Flex,
@@ -27,8 +27,10 @@ const Sidebar: React.FC = () => {
   const { t } = useTranslation();
   const [activeItem, setActiveItem] = useState<string | null>(null);
   const { colorMode } = useColorMode()
-  const isSidebarVisible = useBreakpointValue({ base: false, md: false, lg: true });
+  const isSidebarVisible = useBreakpointValue({ base: false, md: false, lg: false, xl: true });
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const sidebarRef = useRef<HTMLDivElement>(null);
+  const MotionBox = motion(Box)
 
   const handleMenuItemClick = (label: string) => setActiveItem(label);
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
@@ -56,6 +58,18 @@ const Sidebar: React.FC = () => {
     },
   ];
 
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
+        setIsSidebarOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   return (
     <>
       {!isSidebarVisible && (
@@ -70,26 +84,34 @@ const Sidebar: React.FC = () => {
         />
       )}
 
-      {(isSidebarVisible || isSidebarOpen) && (
-        <Box
-          layerStyle={colorMode}
-          w="220px"
-          h="100vh"
-          p={4}
-          fontWeight='bold'
-          position="fixed"
-          zIndex="999"
-          mt={{ base: 20, md: 20 }}
-        >
-          <Logo />
-          <Menu
-            menuItems={menuItems}
-            activeItem={activeItem}
-            onMenuItemClick={handleMenuItemClick}
-          />
-          <LogoutButton />
-        </Box>
-      )}
+      <AnimatePresence>
+        {(isSidebarVisible || isSidebarOpen) && (
+          <MotionBox
+            initial={{ x: isSidebarVisible ? 0 : '-100%' }}
+            animate={{ x: isSidebarVisible || isSidebarOpen ? 0 : '-100%' }}
+            exit={{ x: '-100%' }}
+            transition={{ type: 'ease', duration: 0.3 }}
+            ref={sidebarRef}
+            layerStyle={colorMode}
+            w={{ base: '340px', md: '340px', lg : '340px', xl: '220px' }}
+            h="100vh"
+            p={4}
+            fontWeight='bold'
+            position="fixed"
+            zIndex="999"
+            mt={{ base: '68px', md: '68px', lg: 0 }}
+          >
+            <Logo />
+            <Menu
+              menuItems={menuItems}
+              activeItem={activeItem}
+              onMenuItemClick={handleMenuItemClick}
+              setIsSidebarOpen={setIsSidebarOpen}
+            />
+            <LogoutButton />
+          </MotionBox>
+        )}
+      </AnimatePresence>
     </>
   );
 };
@@ -117,18 +139,24 @@ const Menu: React.FC<{
   menuItems: { route: string; label: string; icon: any }[];
   activeItem: string | null;
   onMenuItemClick: (label: string) => void;
+  setIsSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }> = ({
   menuItems,
   activeItem,
-  onMenuItemClick
+  onMenuItemClick,
+  setIsSidebarOpen
 }) => {
+  const handleMenuClick = (label: string) => {
+    onMenuItemClick(label)
+    setIsSidebarOpen(false)
+  }
   return (
     <VStack spacing={4} align="stretch" >
       {menuItems.map((item, index) => (
         <Link
           to={item.route}
           key={index}
-          onClick={() => onMenuItemClick(item.label)}
+          onClick={() => handleMenuClick(item.label)}
         >
           <MenuItem
             item={item}
@@ -184,7 +212,7 @@ const MenuItem: React.FC<{
       }
       <Text
         ml={4}
-        fontSize="md"
+        fontSize={{ base: 'xl', md: 'xl', lg: 'xl', xl: 'md' }}
         color={isActive ? 'purple.500' : ''}
       >
         {item.label}
@@ -210,7 +238,7 @@ const LogoutButton: React.FC = () => {
   const { logout } = useAuth();
 
   return (
-    <Flex mt={500} width='100%'>
+    <Flex mt={{ base: 300, md: 400, lg: 400, xl: 500 }} width='100%'>
       <Link to="/auth" style={{ width: 200 }}>
         <LightMode>
           <Button

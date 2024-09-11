@@ -96,7 +96,7 @@ export const TransactionTable: React.FC = () => {
           <Tr>
             {!isMobile && (<Th>{t('type')}</Th>)}
             <Th>{t('title')}</Th>
-            <Th>{t('category')}</Th>
+            <Th p={{ base: 1 }}>{t('category')}</Th>
             {!isMobile && (<Th>{t('paid')}</Th>)}
             <Th>{t('value')}</Th>
             {!isMobile && (<Th>{t('expirationDate')}</Th>)}
@@ -134,7 +134,7 @@ export const TransactionTable: React.FC = () => {
                   </Td>
                 )}
                 <Td>{transaction.transaction_name}</Td>
-                <Td>{
+                <Td p={{ base: 1 }}>{
                   transaction.transaction_type === 'income'
                   ? t('income')
                   : transaction.category_name === 'goals'
@@ -159,7 +159,7 @@ export const TransactionTable: React.FC = () => {
                 )}
 
                 {isMobile ? (
-                  <Td display='flex' justifyContent='end' w={5}>
+                  <Td display='flex' justifyContent='end' p={{ base: 1 }}>
                     <Menu>
                       <MenuButton
                         as={IconButton}

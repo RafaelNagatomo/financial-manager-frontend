@@ -52,8 +52,12 @@ const Transactions: React.FC = () => {
   }, [fetchTransactions, fetchCategories]);
 
   return (
-    <Stack gap={5} align="stretch" direction={{ base: 'column', md: 'column', lg: 'row' }}>
-      <Card layerStyle={colorMode} w={{ base: 450, md: 600, lg: 1000 }} >
+    <Stack
+      gap={5}
+      align="stretch"
+      direction={{ base: 'column', md: 'column', lg: 'row' }}
+    >
+      <Card layerStyle={colorMode} w={{ base: 390, md: 800, lg: 1000 }} >
         <CardHeader>
           <Flex gap="2">
             <Heading
@@ -123,7 +127,7 @@ const Transactions: React.FC = () => {
         </CardBody>
       </Card>
 
-      <Card layerStyle={colorMode} w={{ base: '100%', md: 600, lg: 435 }} >
+      <Card layerStyle={colorMode} w={{ base: '100%', md: 800, lg: 435 }} >
         <CardHeader>
           <Flex>
             <Heading as="h1" size="lg">

@@ -292,7 +292,12 @@ const Dashboard: React.FC = () =>  {
 
   return (
     <Stack
-      w={{ base: '100%', md: '100%', lg: 'calc(100% - 100px)' }}
+      w={{
+        base: '100%',
+        md: '100%',
+        lg: 'calc(100% - 30px)',
+        xl: 'calc(100% - 100px)'
+      }}
       h='100%'
     >
       <Heading as="h1" size="lg">
@@ -300,9 +305,18 @@ const Dashboard: React.FC = () =>  {
       </Heading>
       <Grid
         h='100%'
-        w='100%'
-        templateRows={{ base: 'repeat(2, 1fr)', md: 'repeat(2, 1fr)', lg: 'repeat(4, 1fr)' }}
-        templateColumns={{ base: '1fr', md: '1fr', lg: 'repeat(3, 1fr)' }}
+        templateRows={{
+          base: 'repeat(2, 1fr)',
+          md: 'repeat(2, 1fr)',
+          lg: 'repeat(2, 1fr)',
+          xl: 'repeat(4, 1fr)'
+        }}
+        templateColumns={{
+          base: '1fr',
+          md: '1fr',
+          lg: '1fr',
+          xl: 'repeat(3, 1fr)'
+        }}
         borderRadius={8}
         gap={4}
       >
@@ -314,7 +328,10 @@ const Dashboard: React.FC = () =>  {
           layerStyle={colorMode}
           boxShadow='rgba(0, 0, 0, 0.39) 0px 3px 8px'
         >
-          <HStack  py='15px' px={{ base: '20px', md: '80px', lg: '80px' }}>
+          <HStack 
+            py='15px'
+            px={{ base: '20px', md: '80px', lg: '80px' }}
+          >
             <Stat>
               <Stack gap={2}>
                 <StatLabel fontSize='20px'>
@@ -347,7 +364,10 @@ const Dashboard: React.FC = () =>  {
           layerStyle={colorMode}
           boxShadow='rgba(0, 0, 0, 0.39) 0px 3px 8px'
         >
-          <HStack  py='15px' px={{ base: '20px', md: '80px', lg: '80px' }}>
+          <HStack 
+            py='15px'
+            px={{ base: '20px', md: '80px', lg: '80px' }}
+          >
             <Stat>
               <Stack gap={2}>
                 <StatLabel fontSize='20px'>
@@ -380,11 +400,14 @@ const Dashboard: React.FC = () =>  {
           w='auto'
           borderRadius={8}
           rowSpan={1}
-          colSpan={1}
+          colSpan={{ base: 1, md: 1, lg: 2, xl: 1 }}
           layerStyle={colorMode}
           boxShadow='rgba(0, 0, 0, 0.39) 0px 3px 8px'
         >
-          <HStack  py='15px' px={{ base: '20px', md: '80px', lg: '80px' }}>
+          <HStack
+            py='15px'
+            px={{ base: '20px', md: '80px', lg: '80px' }}
+            >
             <Stat>
               <Stack gap={2}>
                 <StatLabel fontSize='20px'>
@@ -417,7 +440,7 @@ const Dashboard: React.FC = () =>  {
           w={{ base: 400, md: 750, lg: 'auto'}}
           p='15px'
           borderRadius={8}
-          colSpan={{ base: 1, md: 1, lg: 2 }}
+          colSpan={{ base: 1, md: 1, lg: 2, xl: 2 }}
           layerStyle={colorMode}
           boxShadow='rgba(0, 0, 0, 0.39) 0px 3px 8px'
         >
@@ -558,7 +581,7 @@ const Dashboard: React.FC = () =>  {
           w='auto'
           borderRadius={8}
           rowSpan={3}
-          colSpan={1}
+          colSpan={{ base: 1, md: 1, lg: 2, xl: 1 }}
           layerStyle={colorMode}
           boxShadow='rgba(0, 0, 0, 0.39) 0px 3px 8px'
         >

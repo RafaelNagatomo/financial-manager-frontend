@@ -33,10 +33,10 @@ const Settings: React.FC = () =>  {
   };
 
   return (
-    <Box w={550}>
+    <Box w={{ base: 330, md: 440, lg: 550 }}>
       <CustomSelect
         w={200}
-        ml={100}
+        ml={{ base: 30, md: 100, lg: 100 }}
         label={t('language')}
         placeholder={t('selectLanguage')}
         options={languageOptions}
@@ -45,7 +45,7 @@ const Settings: React.FC = () =>  {
       />
       <CustomSelect
         w={200}
-        ml={100}
+        ml={{ base: 30, md: 100, lg: 100 }}
         label={t('currency')}
         placeholder={t('selectCurrency')}
         options={currencyOptions}
@@ -56,21 +56,21 @@ const Settings: React.FC = () =>  {
           <RadioGroup
             size='lg'
             colorScheme= 'purple'
-            ml={110}
+            ml={{ base: 35, md: 110, lg: 110 }}
             onChange={handleThemeChange}
           >
-            <Stack spacing={20} direction='row'>
+            <Stack spacing={{ base: 0, lg: 20}} direction='row'>
               <Radio
                 value='light'
-                style={{ border: '2px solid gray'
-              }}>
+                style={{ border: '2px solid gray' }}
+              >
                 {t('light')}
               </Radio>
               <Radio
                 ml={59}
                 value='dark'
-                style={{ border: '2px solid gray'
-              }}>
+                style={{ border: '2px solid gray' }}
+              >
                 {t('dark')}
               </Radio>
             </Stack>
@@ -78,15 +78,15 @@ const Settings: React.FC = () =>  {
         </LightMode>
       </HStack>
 
-      <HStack ml={160} gap={5}>
+      <HStack ml={{ base: 81, md: 160, lg: 160}} gap={5}>
       <Image
-        w='190px'
+        w={{ base: '100px', lg: '190px'}}
         src='/media/lightmode.png'
         alt='light-mode'
         borderRadius={6}
       />
       <Image
-        w='190px'
+        w={{ base: '100px', lg: '190px'}}
         src='/media/darkmode.png'
         alt='dark-mode'
         borderRadius={6}

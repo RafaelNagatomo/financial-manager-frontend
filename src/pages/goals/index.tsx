@@ -38,8 +38,15 @@ const Goals: React.FC = () =>  {
   }, [fetchGoals, fetchTransactions]);
 
   return (
-    <Stack gap={5} align='stretch' direction={{ base: 'column', md: 'column', lg: 'row' }}>
-      <Card layerStyle={colorMode} w={{base: 400, md: 600, lg: 1000}} mr={2}>
+    <Stack
+      gap={5}
+      align='stretch'
+      direction={{ base: 'column', md: 'column', lg: 'row' }}
+    >
+      <Card
+        layerStyle={colorMode}
+        w={{base: 400, md: 600, lg: 1000}}
+      >
         <CardHeader>
           <Flex gap='2'>
             <Heading

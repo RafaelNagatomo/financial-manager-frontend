@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaUserEdit } from "react-icons/fa";
 import { IoMdOptions, IoIosArrowForward } from "react-icons/io";
@@ -16,6 +17,7 @@ import {
   Icon,
   GridItem,
   VStack,
+  Stack,
   useColorMode,
   Tabs,
   TabPanels,
@@ -24,20 +26,26 @@ import {
 import Preferences from './Preferences';
 import PersonalInfo from './PersonalInfo';
 import ChangePassword from './ChangePassword';
-import React, { useState } from 'react';
 import { motion } from 'framer-motion'
 import { useAuth } from '../../contexts/AuthContext';
+
+const animationVariants = {
+  initial: { opacity: 0, scale: 0.5 },
+  animate: { opacity: 1, scale: 1 },
+  exit: { opacity: 0, scale: 0.5 },
+  transition: { type: 'easy', duration: 0.2 }
+}
 
 const MenuItem: React.FC<{
   item: { key: string; label: string; icon: any };
   isActive: boolean
 }> = ({ item, isActive }) => {
   const [isHovered, setIsHovered] = useState(false)
+  const isMobileOrTablet = window.innerWidth <= 992
 
   return (
     <Flex
       position="relative"
-      align="center"
       p={1}
       borderRadius="md"
       _hover={{ color: "purple.500" }}
@@ -60,24 +68,40 @@ const MenuItem: React.FC<{
             times: [0, 0.1, 0.25, 0.4, 0.55]
           }}
         >
-          <Icon
-            as={item.icon}
-            boxSize={6}
-            color={isActive ? 'purple.500' : ''}
-          />
+          {!isMobileOrTablet && (
+            <Icon
+              as={item.icon}
+              boxSize={6}
+              color={isActive ? 'purple.500' : ''}
+            />
+          )}
         </motion.div>
       }
       <Text
         ml={4}
         fontSize="md"
         color={isActive ? 'purple.500' : ''}
+        position="relative"
+        paddingBottom="5px"
       >
         {item.label}
+        {isMobileOrTablet && isActive && (
+          <Box
+            position="absolute"
+            left="0"
+            bottom="0"
+            height="2px"
+            width="100%"
+            backgroundColor="purple.500"
+          />
+        )}
       </Text>
       <Spacer />
-      <Box color={isActive ? 'purple.500' : ''}>
-        <IoIosArrowForward size={20}/>
-      </Box>
+      {!isMobileOrTablet && (
+        <Box color={isActive ? 'purple.500' : ''}>
+          <IoIosArrowForward size={20}/>
+        </Box>
+      )}
     </Flex>
   );
 }
@@ -87,6 +111,8 @@ const Settings: React.FC = () =>  {
   const { colorMode } = useColorMode()
   const { user } = useAuth();
   const [activeItem, setActiveItem] = useState<string | null>('preferences');
+  const MotionBox = motion(Box)
+
   const handleMenuItemClick = (key: string) => {
     setActiveItem(key)
   };
@@ -116,13 +142,17 @@ const Settings: React.FC = () =>  {
       <Heading as="h1" size="lg" mb={5}>
         {t('settings')}
       </Heading>
-      <Flex gap={4}>
+      <Flex
+        gap={4}
+        direction={{ base: 'column', md: 'column', lg: 'row' }}
+      >
         <Card
           layerStyle={colorMode}
           width="33.33%"
           maxHeight="500px"
           display="flex"
           flexDirection="column"
+          w={{ base: '400px', md: '100%', lg: '400px' }}
         >
           <CardHeader>
             <Heading
@@ -135,17 +165,18 @@ const Settings: React.FC = () =>  {
           </CardHeader>
 
           <CardBody>
-            <VStack gap={4} align='stretch'>
+            <VStack gap={4} align={{ base: 'center', md: 'center', lg: 'stretch'}}>
               <Grid
                 h='100px'
                 templateRows='repeat(2, 1fr)'
                 templateColumns='repeat(3, 1fr)'
                 gap={2}
-                mb={20}
+                mb={{ base: 5, md: 10, lg: 20 }}
+                alignItems={{ base: 'center' }}
               >
                 <GridItem rowSpan={2} colSpan={1}>
                   <Avatar
-                    size='xl'
+                    size={{ base: 'lg', lg: 'xl' }}
                     bg='purple.500'
                     src='https://bit.ly/broken-link'
                   />
@@ -170,7 +201,11 @@ const Settings: React.FC = () =>  {
               </Grid>
             </VStack>
 
-            <VStack spacing={4} align="stretch" >
+            <Stack
+              spacing={4}
+              align="stretch"
+              direction={{ base: 'row', md: 'row', lg: 'column' }}
+            >
               {menuItems.map((item, index) => (
                 <Box
                   key={index}
@@ -183,7 +218,7 @@ const Settings: React.FC = () =>  {
                   />
                 </Box>
               ))}
-            </VStack>
+            </Stack>
 
           </CardBody>
         </Card>
@@ -194,6 +229,7 @@ const Settings: React.FC = () =>  {
           display="flex"
           flexDirection="column"
           height={500}
+          w={{ base: '400px', md: '100%', lg: '650px' }}
         >
           <CardHeader>
             <Flex>
@@ -207,18 +243,45 @@ const Settings: React.FC = () =>  {
             onChange={(index) => setActiveItem(menuItems[index].key)}
             isLazy
           >
-            <CardBody>
-            <TabPanels>
-              <TabPanel>
-                <Preferences key='preferences' />
-              </TabPanel>
-              <TabPanel>
-                <PersonalInfo key='personalInfo' />
-              </TabPanel>
-              <TabPanel>
-                <ChangePassword key='changePassword' />
-              </TabPanel>
-            </TabPanels>
+             <CardBody>
+              <TabPanels>
+                <TabPanel>
+                  <MotionBox
+                    key="preferences"
+                    variants={animationVariants}
+                    initial='initial'
+                    animate='animate'
+                    exit='exit'
+                    transition='transition'
+                  >
+                    <Preferences />
+                  </MotionBox>
+                </TabPanel>
+                <TabPanel>
+                  <MotionBox
+                    key="personalInfo"
+                    variants={animationVariants}
+                    initial='initial'
+                    animate='animate'
+                    exit='exit'
+                    transition='transition'
+                  >
+                    <PersonalInfo />
+                  </MotionBox>
+                </TabPanel>
+                <TabPanel>
+                  <MotionBox
+                    key="changePassword"
+                    variants={animationVariants}
+                    initial='initial'
+                    animate='animate'
+                    exit='exit'
+                    transition='transition'
+                  >
+                    <ChangePassword />
+                  </MotionBox>
+                </TabPanel>
+              </TabPanels>
             </CardBody>
           </Tabs>
         </Card>

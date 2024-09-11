@@ -55,7 +55,7 @@ const Settings: React.FC = () =>  {
   };
 
   return (
-    <Stack gap={4} w={550}>
+    <Stack gap={4} w={{ base: 330, md: 440, lg: 550 }}>
       <form id="change-password-form" onSubmit={handleSubmit(handlePasswordChange)}>
         <FormControl isRequired my={5} isInvalid={!!errors.currentPassword}>
           <Text fontSize={16}>{t('currentPassword')}</Text>

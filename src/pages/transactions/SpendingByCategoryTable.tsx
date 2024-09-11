@@ -88,13 +88,12 @@ export const SpendingByCategoryTable: React.FC<SpendingByCategoryTableProps> = (
         layerStyle={colorMode === 'dark' ? 'darkTable' : 'lightTable'}
         variant="unstyled"
         borderRadius={8}
-        w='100%'
       >
         <Thead>
           <Tr>
             <Th>{t('title')}</Th>
             <Th>{t('maxAmount')}</Th>
-            <Th>{t('progress')}</Th>
+            <Th p={1}>{t('progress')}</Th>
           </Tr>
         </Thead>
         <Tbody>
@@ -122,7 +121,7 @@ export const SpendingByCategoryTable: React.FC<SpendingByCategoryTableProps> = (
                     <Td>{category.category_name === 'goals' ? t('goals') : category.category_name}</Td>
                     <Td>{formatAmount(category.max_amount, currency)}</Td>
                     {category.category_name !== 'goals' && (
-                      <Td>
+                      <Td p={1}>
                         <Tooltip
                           bg={exceededLimit ? 'red.600' : ''}
                           hasArrow
@@ -172,7 +171,7 @@ export const SpendingByCategoryTable: React.FC<SpendingByCategoryTableProps> = (
                       </Td>
                     )}
                     {isMobile ? (
-                      <Td display='flex' justifyContent='end' w={8}>
+                      <Td display='flex' justifyContent='end' p={3}>
                         {category.category_name !== 'goals' && (
                           <Menu>
                             <MenuButton

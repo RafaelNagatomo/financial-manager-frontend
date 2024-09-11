@@ -83,7 +83,7 @@ const Settings: React.FC = () => {
   }
 
   return (
-    <Stack w={550}>
+    <Stack w={{ base: 330, md: 440, lg: 550 }}>
       <form id='update-info-form' onSubmit={handleSubmit(onSubmit)}>
         {['firstName', 'lastName', 'email'].map((key) => (
           <Box key={key} mb={5}>
