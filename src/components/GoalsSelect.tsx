@@ -31,7 +31,7 @@ const GoalSelect: React.FC<GoalSelectProps> = (props) => {
       .catch((error) => {
         noticeToast(t('errorFetchingGoals') + `${error}`, 'error')
       });
-  }, []);
+  }, [noticeToast, t, user?.id]);
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedGoal(event.target.value);

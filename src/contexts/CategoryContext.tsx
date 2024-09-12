@@ -34,7 +34,7 @@ export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     });
     const categoriesResponse = response.data;
     setCategories(categoriesResponse);
-  }, []);
+  }, [user?.id]);
 
   const addCategory = async (category: Omit<Category, 'id'>) => {
     const data = {

@@ -31,7 +31,7 @@ const CategorySelect: React.FC<CategorySelectProps> = (props) => {
       .catch((error) => {
         noticeToast(t('errorFetchingCategories') + `${error}`, 'error')
       });
-  }, []);
+  }, [noticeToast, t, user?.id]);
 
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedCategory(event.target.value);

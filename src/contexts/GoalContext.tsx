@@ -65,7 +65,7 @@ export const GoalProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     } catch (error) {
       shortToast(t('Erro ao buscar metas ou categorias:') + `${error}`, 'error');
     }
-  }, []);
+  }, [shortToast, t, user?.id]);
 
   const addGoal = async (goal: Omit<Goal, 'id'>) => {
     try {
