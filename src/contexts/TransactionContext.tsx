@@ -4,7 +4,7 @@ import useCustomToast from '../hooks/useCustomToast';
 import { useCategories, Category } from '../contexts/CategoryContext'
 import { useAuth } from '../contexts/AuthContext'
 import { getAuthHeaders } from '../utils/getAuthHeaders'
-import axios from 'axios';
+import api from '../utils/api';
 
 export interface Transaction {
   id: string;
@@ -39,7 +39,7 @@ export const TransactionProvider: React.FC<{ children: ReactNode }> = ({ childre
 
   const fetchTransactions = useCallback(async () => {
     try {
-      const response = await axios.get('http://localhost:3001/transactions/',
+      const response = await api.get('/transactions/',
         {
         headers: getAuthHeaders(),
         params: { userId: user?.id }
@@ -48,7 +48,7 @@ export const TransactionProvider: React.FC<{ children: ReactNode }> = ({ childre
       const hasIncomeCategory = transactionsResponse.some((transaction: Transaction) => transaction.category_name === 'income');
     
       if (hasIncomeCategory) {
-        const categoriesResponse = await axios.get('http://localhost:3001/categories/', {
+        const categoriesResponse = await api.get('/categories/', {
           headers: getAuthHeaders(),
           params: { userId: user?.id }
         });
@@ -56,7 +56,7 @@ export const TransactionProvider: React.FC<{ children: ReactNode }> = ({ childre
     
         const transactionCategory = categories.find((cat: Category) => cat.category_name === 'income');
         if (transactionCategory) {
-          await axios.delete(`http://localhost:3001/categories/delete/${transactionCategory.id}`, {
+          await api.delete(`/categories/delete/${transactionCategory.id}`, {
             headers: getAuthHeaders(),
           });
         }
@@ -73,7 +73,7 @@ export const TransactionProvider: React.FC<{ children: ReactNode }> = ({ childre
       if (transaction.transaction_type === 'income') {
         const categoryExists = categories.some(cat => cat.category_name === 'income');
         if (!categoryExists) {
-          await axios.post('http://localhost:3001/categories/add', {
+          await api.post('/categories/add', {
             user_id: user?.id,
             category_name: 'income',
             max_amount: 0
@@ -88,7 +88,7 @@ export const TransactionProvider: React.FC<{ children: ReactNode }> = ({ childre
         user_id: user?.id,
         expiration_date: transaction.expiration_date ? new Date(transaction.expiration_date).toISOString() : null,
       };
-      const response = await axios.post('http://localhost:3001/transactions/add', data, {
+      const response = await api.post('/transactions/add', data, {
         headers: getAuthHeaders(),
       });
       
@@ -104,7 +104,7 @@ export const TransactionProvider: React.FC<{ children: ReactNode }> = ({ childre
 
   const deleteTransaction = async (transaction: Transaction) => {
     try {
-      await axios.delete(`http://localhost:3001/transactions/delete/${transaction.id}`, {
+      await api.delete(`/transactions/delete/${transaction.id}`, {
         headers: getAuthHeaders(),
       });
         setTransactions(transactions.filter(item => item.id !== transaction.id));
@@ -121,7 +121,7 @@ export const TransactionProvider: React.FC<{ children: ReactNode }> = ({ childre
       expiration_date: transaction.expiration_date ? new Date(transaction.expiration_date).toISOString() : null,
     };
     try {
-      const response = await axios.put(`http://localhost:3001/transactions/edit/${transaction.id}`, data, {
+      const response = await api.put(`/transactions/edit/${transaction.id}`, data, {
         headers: getAuthHeaders(),
       });
 

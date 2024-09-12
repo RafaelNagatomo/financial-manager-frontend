@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import useCustomToast from '../hooks/useCustomToast';
 import { useAuth } from '../contexts/AuthContext'
 import { getAuthHeaders } from '../utils/getAuthHeaders'
-import axios from 'axios';
+import api from '../utils/api';
 
 export interface Category {
   id: number;
@@ -28,7 +28,7 @@ export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const { user } = useAuth();
   
   const fetchCategories = useCallback(async () => {
-    const response = await axios.get('http://localhost:3001/categories/', {
+    const response = await api.get('/categories/', {
       headers: getAuthHeaders(),
       params: { userId: user?.id }
     });
@@ -43,7 +43,7 @@ export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     };
   
     try {  
-      const response = await axios.post('http://localhost:3001/categories/add', data, {
+      const response = await api.post('/categories/add', data, {
         headers: getAuthHeaders(),
       });
   
@@ -64,7 +64,7 @@ export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   const deleteCategory = async (category: Category, transactionCount: number) => {
     try {
-      const response = await axios.delete(`http://localhost:3001/categories/delete/${category.id}`, {
+      const response = await api.delete(`/categories/delete/${category.id}`, {
         headers: getAuthHeaders(),
       });
       if (response.status === 200) {
@@ -91,7 +91,7 @@ export const CategoryProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     };
 
     try {
-      const response = await axios.put(`http://localhost:3001/categories/edit/${category.id}`, data, {
+      const response = await api.put(`/categories/edit/${category.id}`, data, {
         headers: getAuthHeaders(),
       });
 

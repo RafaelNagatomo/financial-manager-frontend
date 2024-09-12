@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import useCustomToast from '../hooks/useCustomToast';
 import { getAuthHeaders } from '../utils/getAuthHeaders'
 import { useAuth } from '../contexts/AuthContext'
-import axios from 'axios';
+import api from '../utils/api';
 
 type Goal = {
     id: number;
@@ -21,7 +21,7 @@ const GoalSelect: React.FC<GoalSelectProps> = (props) => {
   const { user } = useAuth();
 
   useEffect(() => {
-    axios.get('http://localhost:3001/goals/', {
+    api.get('/goals/', {
       headers: getAuthHeaders(),
       params: { userId: user?.id }
     })

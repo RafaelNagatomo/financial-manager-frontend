@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import useCustomToast from '../hooks/useCustomToast';
 import axios from 'axios';
 import { getAuthHeaders } from '../utils/getAuthHeaders'
+import api from '../utils/api';
 
 export interface User {
   id: string,
@@ -50,7 +51,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const token = localStorage.getItem('token');
       if (token) {
         try {
-          const response = await axios.get<User>('http://localhost:3001/auth/profile', {
+          const response = await api.get<User>('/auth/profile', {
             headers: { Authorization: `Bearer ${token}` },
           });
           setUser(response.data);
@@ -67,11 +68,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = async (email: string, password: string) => {
     try {
-      const response = await axios.post<{ token: string }>('http://localhost:3001/auth/login', { email, password });
+      const response = await api.post<{ token: string }>('/auth/login', { email, password });
       const token = response.data.token;
       localStorage.setItem('token', token);
 
-      const userProfile = await axios.get<User>('http://localhost:3001/auth/profile', {
+      const userProfile = await api.get<User>('/auth/profile', {
         headers: { Authorization: `Bearer ${token}` },
       });
       setUser(userProfile.data);
@@ -88,7 +89,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
  const registerUser = async (firstName: string, lastName: string, email: string, password: string) => {
     try {
-      await axios.post('http://localhost:3001/auth/register', { firstName, lastName, email, password });
+      await api.post('/auth/register', { firstName, lastName, email, password });
       await login(email, password);
       shortToast(t('userRegisteredSuccessfully'), 'success');
     } catch (error) {
@@ -110,7 +111,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
     
     try {
-      await axios.put(`http://localhost:3001/auth/editUser/${user?.id}`, data, {
+      await api.put(`/auth/editUser/${user?.id}`, data, {
         headers: getAuthHeaders(),
       });
       shortToast(t('userEditedSuccessfully'), 'success');
@@ -132,7 +133,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
     
     try {
-      await axios.put(`http://localhost:3001/auth/changePassword/${user?.id}`, data, {
+      await api.put(`/auth/changePassword/${user?.id}`, data, {
         headers: getAuthHeaders(),
       });
       shortToast(t('passwordEditedSuccessfully'), 'success');

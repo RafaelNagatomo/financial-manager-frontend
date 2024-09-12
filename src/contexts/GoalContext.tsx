@@ -4,7 +4,7 @@ import useCustomToast from '../hooks/useCustomToast';
 import { useCategories, Category } from '../contexts/CategoryContext'
 import { useAuth } from '../contexts/AuthContext'
 import { getAuthHeaders } from '../utils/getAuthHeaders'
-import axios from 'axios';
+import api from '../utils/api';
 
 export interface Goal {
   id?: number;
@@ -35,14 +35,14 @@ export const GoalProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const fetchGoals = useCallback(async () => {
     try {
-      const response = await axios.get('http://localhost:3001/goals/', {
+      const response = await api.get('/goals/', {
         headers: getAuthHeaders(),
         params: { userId: user?.id }
       });
-      const goalsResponse = await response.data;
+      const goalsResponse = response.data;
 
       if (goalsResponse.length === 0) {
-        const categoriesResponse = await axios.get('http://localhost:3001/categories/', {
+        const categoriesResponse = await api.get('/categories/', {
           headers: getAuthHeaders(),
           params: { userId: user?.id }
         });
@@ -50,15 +50,16 @@ export const GoalProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     
         const goalCategory = categories.find((cat: Category) => cat.category_name === 'goals');
         if (goalCategory) {
-          await axios.delete(`http://localhost:3001/categories/delete/${goalCategory.id}`, {
+          await api.delete(`/categories/delete/${goalCategory.id}`, {
             headers: getAuthHeaders(),
           });
         }
       } else {
         const updatedGoals = goalsResponse.map((goal: Goal) => ({
           ...goal,
-          goal_image: goal.goal_image ? `http://localhost:3001/uploads/${goal.goal_image}` : '',
+          goal_image: goal.goal_image ? `${process.env.REACT_APP_API_URL}/uploads/${goal.goal_image}` : '',
         }));
+        console.log('************', process.env.REACT_APP_API_BASE_URL)
         setGoals(updatedGoals);
       }
     } catch (error) {
@@ -72,7 +73,7 @@ export const GoalProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         let categoryExists = categories.some(cat => cat.category_name === 'goals');
 
         if (!categoryExists) {
-          await axios.post('http://localhost:3001/categories/add', {
+          await api.post('/categories/add', {
               user_id: user?.id,
               category_name: 'goals',
               max_amount: null
@@ -91,7 +92,7 @@ export const GoalProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         formData.append('goal_date', goal.goal_date ? new Date(goal.goal_date).toISOString() : '');
         formData.append('goal_image', goal.goal_image || '');
 
-      const response = await axios.post('http://localhost:3001/goals/add', formData, {
+      const response = await api.post('/goals/add', formData, {
         headers: {
           ...getAuthHeaders(),
           'Content-Type': 'multipart/form-data',
@@ -112,7 +113,7 @@ export const GoalProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   const deleteGoal = async (goal: Goal) => {
     try {
-      const response = await axios.delete(`http://localhost:3001/goals/delete/${goal.id}`, {
+      const response = await api.delete(`/goals/delete/${goal.id}`, {
         headers: getAuthHeaders(),
       });
 
@@ -149,7 +150,7 @@ export const GoalProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     if (goal.goal_image) {formData.append('goal_image', goal.goal_image)}
 
       try {
-        const response = await axios.put(`http://localhost:3001/goals/edit/${goal.id}`, formData, {
+        const response = await api.put(`/goals/edit/${goal.id}`, formData, {
           headers: {
             ...getAuthHeaders(),
             'Content-Type': 'multipart/form-data',
