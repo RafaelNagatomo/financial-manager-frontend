@@ -66,7 +66,8 @@ export const TransactionProvider: React.FC<{ children: ReactNode }> = ({ childre
     } catch (error) {
       noticeToast(t('errorFetchingTransactions') + `${error}`, 'error');
     }
-  }, [noticeToast, t, user?.id]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const addTransaction = async (transaction: Omit<Transaction, 'id'>) => {
     try {
