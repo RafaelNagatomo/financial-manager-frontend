@@ -299,9 +299,9 @@ const Dashboard: React.FC = () =>  {
         xl: 'calc(100% - 100px)'
       }}
       h='100%'
-      alignItems={{ base: 'center' }}
+      alignItems={{ base: 'center', xl: 'stretch' }}
     >
-      <Heading as="h1" size="lg">
+      <Heading as="h1" size="lg" my={5}>
         {t('dashboard')}
       </Heading>
       <Grid

@@ -156,6 +156,7 @@
     "passwordsDoNotMatch": "Passwords do not match",
     "passwordRequired": "Password required",
     "confirmChangePassword": "Confirm change password",
-    "areYouSureChangePassword": "Are you sure you want to change password?"
+    "areYouSureChangePassword": "Are you sure you want to change password?",
+    "noDate": "No date"
   }
 }

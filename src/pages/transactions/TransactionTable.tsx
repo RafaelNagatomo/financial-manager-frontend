@@ -155,7 +155,7 @@ export const TransactionTable: React.FC = () => {
                 <Td p={{ base: 2 }}>{formatAmount(transaction.transaction_amount, currency)}</Td>
 
                 {!isMobile && (
-                  <Td>{moment(transaction.expiration_date).format('DD/MM/YYYY')}</Td>
+                  <Td>{transaction.expiration_date ? moment(transaction.expiration_date).format('DD/MM/YYYY') : t('noDate')}</Td>
                 )}
 
                 {isMobile ? (

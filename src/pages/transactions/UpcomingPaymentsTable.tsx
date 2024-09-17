@@ -85,7 +85,7 @@ export const UpcomingPaymentsTable: React.FC = () => {
               >
                 <Td>{transaction.transaction_name}</Td>
                 <Td>{formatAmount(transaction.transaction_amount, currency)}</Td>
-                <Td>{moment(transaction.expiration_date).format('DD/MM/YYYY')}</Td>
+                <Td>{transaction.expiration_date ? moment(transaction.expiration_date).format('DD/MM/YYYY') : t('noDate')}</Td>
               </MotionTr>
             </Tooltip>
           )) : (

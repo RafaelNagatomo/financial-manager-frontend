@@ -137,7 +137,7 @@
     "December": "Dezembro",
     "selectYear": "Selecione o ano",
     "paidNotpaid": "Pago/Não pago",
-    "resetColors": "Redefinir cor",
+    "resetColors": "Redefinir cores",
     "totalSpent": "Total gasto",
     "totalRemaining": "Total restante",
     "totalExceeded": "Total excedido",
@@ -172,6 +172,7 @@
     "passwordsDoNotMatch": "Senhas não correspondem",
     "passwordRequired": "Senha obrigatório",
     "confirmChangePassword": "Confirme a alteração de senha",
-    "areYouSureChangePassword": "Tem certeza de que deseja alterar a senha?"
+    "areYouSureChangePassword": "Tem certeza de que deseja alterar a senha?",
+    "noDate": "Sem data"
   }
 }
