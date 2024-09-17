@@ -103,9 +103,9 @@ const GoalsCards: React.FC = () => {
                 <MotionCard
                   layerStyle={colorMode === 'dark' ? 'darkCard' : 'lightCard'}
                   gap={5}
-                  w={{ base: 360, md: 560, lg: 470}}
+                  w={{ xs: 'auto', sm: 'auto', md: 560, lg: 470}}
                   p={5}
-                  variants={animationVariants}
+                  variants={{ base: '', sm: '', xl: animationVariants }}
                   initial='initial'
                   animate='animate'
                   exit='exit'

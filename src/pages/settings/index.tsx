@@ -152,7 +152,7 @@ const Settings: React.FC = () =>  {
           maxHeight="500px"
           display="flex"
           flexDirection="column"
-          w={{ base: '400px', md: '100%', lg: '400px' }}
+          w={{ xs: '355px', sm: '400px', md: '100%', lg: '400px' }}
         >
           <CardHeader>
             <Heading
@@ -164,7 +164,7 @@ const Settings: React.FC = () =>  {
             </Heading>
           </CardHeader>
 
-          <CardBody>
+          <CardBody p={{ xs: 0, xl: 10 }}>
             <VStack gap={4} align={{ base: 'center', md: 'center', lg: 'stretch'}}>
               <Grid
                 h='100px'
@@ -229,7 +229,7 @@ const Settings: React.FC = () =>  {
           display="flex"
           flexDirection="column"
           height={500}
-          w={{ base: '400px', md: '100%', lg: '650px' }}
+          w={{ xs: '355px', sm: '400px', md: '100%', lg: '650px' }}
         >
           <CardHeader>
             <Flex>
@@ -243,7 +243,7 @@ const Settings: React.FC = () =>  {
             onChange={(index) => setActiveItem(menuItems[index].key)}
             isLazy
           >
-             <CardBody>
+            <CardBody p={{ xs: 0, xl: 10 }}>
               <TabPanels>
                 <TabPanel>
                   <MotionBox

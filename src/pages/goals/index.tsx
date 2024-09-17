@@ -40,12 +40,12 @@ const Goals: React.FC = () =>  {
   return (
     <Stack
       gap={5}
-      align='stretch'
+      alignItems={{ base: 'center', xl: 'stretch' }}
       direction={{ base: 'column', md: 'column', lg: 'row' }}
     >
       <Card
         layerStyle={colorMode}
-        w={{base: 400, md: 600, lg: 1000}}
+        w={{ xs: 330, sm: 400, md: 600, lg: 1000 }}
       >
         <CardHeader>
           <Flex gap='2'>
@@ -67,14 +67,14 @@ const Goals: React.FC = () =>  {
           </Flex>
         </CardHeader>
 
-        <CardBody>
+        <CardBody px={{ xs: 1, xl: 5 }}>
           <Wrap spacing={5} >
             <GoalsCards />
           </Wrap>
         </CardBody>
       </Card>
 
-      <Card layerStyle={colorMode} w={{base: 400, md: 600, lg: 360}}>
+      <Card layerStyle={colorMode} w={{ xs: 330, sm: 400, md: 600, lg: 360 }}>
         <CardHeader>
           <Flex>
             <Heading
@@ -86,7 +86,7 @@ const Goals: React.FC = () =>  {
           </Flex>
         </CardHeader>
 
-        <CardBody>
+        <CardBody px={{ xs: 1, xl: 5 }}>
           <GoalsOverviewsTable />
         </CardBody>
       </Card>

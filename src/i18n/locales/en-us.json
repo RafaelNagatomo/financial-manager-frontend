@@ -67,6 +67,7 @@
     "failedToAddTransaction": "Failed to add transaction!",
     "selectCategory": "Select a category",
     "insertTitle": "Insert a title",
+    "edit": "Editar",
     "transactionEditedSuccessfully": "Transaction edited successfully!",
     "failedToEditTransaction": "Failed to edit transaction!",
     "categoryAddedSuccessfully": "Category added successfully!",

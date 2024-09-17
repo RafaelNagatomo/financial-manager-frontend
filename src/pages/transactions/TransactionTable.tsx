@@ -98,7 +98,7 @@ export const TransactionTable: React.FC = () => {
             <Th>{t('title')}</Th>
             <Th p={{ base: 1 }}>{t('category')}</Th>
             {!isMobile && (<Th>{t('paid')}</Th>)}
-            <Th>{t('value')}</Th>
+            <Th p={{ base: 2 }}>{t('value')}</Th>
             {!isMobile && (<Th>{t('expirationDate')}</Th>)}
             {!isMobile && (<Th>{t('actions')}</Th>)}
           </Tr>
@@ -152,7 +152,7 @@ export const TransactionTable: React.FC = () => {
                     </LightMode>
                   </Td>
                 )}
-                <Td>{formatAmount(transaction.transaction_amount, currency)}</Td>
+                <Td p={{ base: 2 }}>{formatAmount(transaction.transaction_amount, currency)}</Td>
 
                 {!isMobile && (
                   <Td>{moment(transaction.expiration_date).format('DD/MM/YYYY')}</Td>

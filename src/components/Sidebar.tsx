@@ -93,13 +93,13 @@ const Sidebar: React.FC = () => {
             transition={{ type: 'ease', duration: 0.3 }}
             ref={sidebarRef}
             layerStyle={colorMode}
-            w={{ base: '340px', md: '340px', lg : '340px', xl: '220px' }}
+            w={{ xs: '300px', md: '340px', lg: '340px', xl: '220px' }}
             h="100vh"
             p={4}
             fontWeight='bold'
             position="fixed"
             zIndex="999"
-            mt={{ base: '68px', md: '68px', lg: 0 }}
+            mt={{ base: '68px', md: '68px', lg: '68px',xl: 0 }}
           >
             <Logo />
             <Menu
@@ -238,7 +238,7 @@ const LogoutButton: React.FC = () => {
   const { logout } = useAuth();
 
   return (
-    <Flex mt={{ base: 300, md: 400, lg: 400, xl: 500 }} width='100%'>
+    <Flex mt={{ base: 200, sm: 300, md: 400, lg: 400, xl: 500 }} width='100%'>
       <Link to="/auth" style={{ width: 200 }}>
         <LightMode>
           <Button

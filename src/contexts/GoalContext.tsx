@@ -59,7 +59,6 @@ export const GoalProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           ...goal,
           goal_image: goal.goal_image ? `${process.env.REACT_APP_API_URL}/uploads/${goal.goal_image}` : '',
         }));
-        console.log('************', process.env.REACT_APP_API_BASE_URL)
         setGoals(updatedGoals);
       }
     } catch (error) {

@@ -56,8 +56,10 @@ const Transactions: React.FC = () => {
       gap={5}
       align="stretch"
       direction={{ base: 'column', md: 'column', lg: 'row' }}
+      w={{ base: '100%', xl: '90%' }}
+      alignItems={{ base: 'center', xl: 'stretch' }}
     >
-      <Card layerStyle={colorMode} w={{ base: 390, md: 800, lg: 1000 }} >
+      <Card layerStyle={colorMode} w={{ xs: '100%', sm: 390, md: 800, lg: 1000 }} >
         <CardHeader>
           <Flex gap="2">
             <Heading
@@ -102,7 +104,7 @@ const Transactions: React.FC = () => {
             </TabList>
 
             <TabPanels>
-              <TabPanel>
+              <TabPanel px={{ xs: 0, sm: 4 }}>
                 <SkeletonText
                   noOfLines={8}
                   spacing="3"
@@ -136,7 +138,7 @@ const Transactions: React.FC = () => {
           </Flex>
         </CardHeader>
 
-        <CardBody>
+        <CardBody px={{ xs: 1, sm: 4 }}>
           <UpcomingPaymentsTable />
         </CardBody>
       </Card>

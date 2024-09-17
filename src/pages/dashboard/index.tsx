@@ -293,12 +293,13 @@ const Dashboard: React.FC = () =>  {
   return (
     <Stack
       w={{
-        base: '100%',
+        base: '97%',
         md: '100%',
         lg: 'calc(100% - 30px)',
         xl: 'calc(100% - 100px)'
       }}
       h='100%'
+      alignItems={{ base: 'center' }}
     >
       <Heading as="h1" size="lg">
         {t('dashboard')}
@@ -321,7 +322,7 @@ const Dashboard: React.FC = () =>  {
         gap={4}
       >
         <GridItem
-          w='auto'
+          w={{ xs: '353px', sm: '425px', md: 750, lg: 'auto' }}
           borderRadius={8}
           rowSpan={1}
           colSpan={1}
@@ -357,7 +358,7 @@ const Dashboard: React.FC = () =>  {
         </GridItem>
 
         <GridItem
-          w='auto'
+          w={{ xs: '353px', sm: '425px', md: 750, lg: 'auto' }}
           borderRadius={8}
           rowSpan={1}
           colSpan={1}
@@ -397,7 +398,7 @@ const Dashboard: React.FC = () =>  {
         </GridItem>
 
         <GridItem
-          w='auto'
+          w={{ xs: '353px', sm: '425px', md: 750, lg: 'auto' }}
           borderRadius={8}
           rowSpan={1}
           colSpan={{ base: 1, md: 1, lg: 2, xl: 1 }}
@@ -437,7 +438,7 @@ const Dashboard: React.FC = () =>  {
         </GridItem>
 
         <GridItem
-          w={{ base: 400, md: 750, lg: 'auto'}}
+          w={{ xs: '353px', sm: '425px', md: 750, lg: 'auto' }}
           p='15px'
           borderRadius={8}
           colSpan={{ base: 1, md: 1, lg: 2, xl: 2 }}
@@ -578,7 +579,7 @@ const Dashboard: React.FC = () =>  {
         </GridItem>
           
         <GridItem
-          w='auto'
+          w={{ xs: '353px', sm: '425px', md: 750, lg: 'auto' }}
           borderRadius={8}
           rowSpan={3}
           colSpan={{ base: 1, md: 1, lg: 2, xl: 1 }}
@@ -604,7 +605,7 @@ const Dashboard: React.FC = () =>  {
         </GridItem>
         
         <GridItem
-          w='auto'
+          w={{ xs: '353px', sm: '425px', md: 750, lg: 'auto' }}
           borderRadius={8}
           rowSpan={{ base: 1, md: 2, lg: 2 }}
           colSpan={{ base: 1, md: 1, lg: 2 }}
