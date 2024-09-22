@@ -29,6 +29,7 @@ import moment from 'moment';
 import ConfirmDeleteModal from '../../components/ConfirmDeleteModal';
 import AddTransactionModal from '../../components/AddTransactionModal';
 import { useTransactions, Transaction } from '../../contexts/TransactionContext';
+import { useQueryClient } from '@tanstack/react-query';
 
 const MotionTr = motion(Tr)
 
@@ -53,6 +54,7 @@ export const TransactionTable: React.FC = () => {
   const [transactionsToPaidState, setTransactionsToPaidState] = useState(transactions);
   const isTransactionsEmpty = transactions.length === 0;
   const isMobile = window.innerWidth <= 768
+  const queryClient = useQueryClient();
 
   const handleDeleteTransaction = async () => {
     if (selectedTransaction) {
@@ -68,22 +70,30 @@ export const TransactionTable: React.FC = () => {
   };
 
   const handleTogglePaid = async (transactionId: string, paid: boolean) => {
-    const updatedTransactions = transactionsToPaidState.map((t) =>
-      t.id === transactionId ? { ...t, paid } : t
-    );
-    setTransactionsToPaidState(updatedTransactions);
-
+    queryClient.setQueryData<Transaction[]>(['transactions'], (oldTransactions) => {
+      return oldTransactions
+        ? oldTransactions.map(transaction =>
+            transaction.id === transactionId ? { ...transaction, paid } : transaction
+          )
+        : [];
+    });
+    const transactionToUpdate = queryClient.getQueryData<Transaction[]>(['transactions'])?.find(t => t.id === transactionId);
+  
     try {
-      const transactionToUpdate = updatedTransactions.find((t) => t.id === transactionId);
       if (transactionToUpdate) {
-        await editTransaction(transactionToUpdate);
+        await editTransaction({ ...transactionToUpdate, paid });
       }
-    } catch (error) {}
+    } catch (error) {
+      console.error('Erro ao atualizar o estado de "pago":', error);
+    }
   };
 
   useEffect(() => {
-    setTransactionsToPaidState(transactions);
-  }, [transactions]);
+    const cachedTransactions = queryClient.getQueryData<Transaction[]>(['transactions']);
+    if (cachedTransactions) {
+      setTransactionsToPaidState(cachedTransactions);
+    }
+  }, [queryClient]);
 
   return (
     <>

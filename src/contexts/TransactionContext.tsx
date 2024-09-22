@@ -1,9 +1,10 @@
 import { useState, useCallback, createContext, useContext, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import useCustomToast from '../hooks/useCustomToast';
-import { useCategories, Category } from '../contexts/CategoryContext'
-import { useAuth } from '../contexts/AuthContext'
-import { getAuthHeaders } from '../utils/getAuthHeaders'
+import { useCategories, Category } from '../contexts/CategoryContext';
+import { useAuth } from '../contexts/AuthContext';
+import { getAuthHeaders } from '../utils/getAuthHeaders';
+import { useQueryClient } from '@tanstack/react-query';
 import api from '../utils/api';
 
 export interface Transaction {
@@ -18,6 +19,7 @@ export interface Transaction {
   goal_id?: number
   goal_name?: string
   created_at?: string
+  category_exists?: Category
 }
 
 interface TransactionContextProps {
@@ -32,74 +34,91 @@ const TransactionContext = createContext<TransactionContextProps | undefined>(un
 
 export const TransactionProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const { t } = useTranslation();
-  const { shortToast, noticeToast } = useCustomToast();
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const { categories, fetchCategories } = useCategories();
+  const queryClient = useQueryClient();
   const { user } = useAuth();
+  const { shortToast, noticeToast } = useCustomToast();
+  const { categories, fetchCategories } = useCategories();
+  const [transactions, setTransactions] = useState<Transaction[]>(
+    queryClient.getQueryData<Transaction[]>(['transactions']) || []
+  );
+
+  const handleApiError = (error: any, message: string) => {
+    noticeToast(`${message} ${error}`, 'error');
+  };
 
   const fetchTransactions = useCallback(async () => {
+    const cachedTransactions = queryClient.getQueryData<Transaction[]>(['transactions']);
+    if (cachedTransactions) {
+      console.log('cachedTransactions: ', cachedTransactions)
+      setTransactions(cachedTransactions);
+      return cachedTransactions;
+    }
+    
     try {
-      const response = await api.get('/transactions/',
-        {
+      const response = await api.get('/transactions/', {
         headers: getAuthHeaders(),
-        params: { userId: user?.id }
+        params: { userId: user?.id },
       });
       const transactionsResponse = response.data;
-      const hasIncomeCategory = transactionsResponse.some((transaction: Transaction) => transaction.category_name === 'income');
-    
+
+      const hasIncomeCategory = transactionsResponse.some(
+        (transaction: Transaction) => transaction.category_name === 'income'
+      );
+
       if (hasIncomeCategory) {
         const categoriesResponse = await api.get('/categories/', {
           headers: getAuthHeaders(),
-          params: { userId: user?.id }
+          params: { userId: user?.id },
         });
-        const categories = categoriesResponse.data;
-    
-        const transactionCategory = categories.find((cat: Category) => cat.category_name === 'income');
-        if (transactionCategory) {
-          await api.delete(`/categories/delete/${transactionCategory.id}`, {
+
+        const incomeCategory = categoriesResponse.data.find(
+          (cat: Category) => cat.category_name === 'income'
+        );
+
+        if (incomeCategory) {
+          await api.delete(`/categories/delete/${incomeCategory.id}`, {
             headers: getAuthHeaders(),
           });
         }
       }
-    
+
+      queryClient.setQueryData<Transaction[]>(['transactions'], transactionsResponse);
       setTransactions(transactionsResponse);
+      return transactionsResponse
     } catch (error) {
-      noticeToast(t('errorFetchingTransactions') + `${error}`, 'error');
+      handleApiError(error, t('errorFetchingTransactions'));
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const addTransaction = async (transaction: Omit<Transaction, 'id'>) => {
     try {
-      if (transaction.transaction_type === 'income') {
-        const categoryExists = categories.some(cat => cat.category_name === 'income');
-        if (!categoryExists) {
-          await api.post('/categories/add', {
-            user_id: user?.id,
-            category_name: 'income',
-            max_amount: 0
-          }, {
-            headers: getAuthHeaders(),
-          });
-          await fetchCategories();
-        }
+      if (transaction.transaction_type === 'income' && !categories.some((cat) => cat.category_name === 'income')) {
+        await api.post(
+          '/categories/add',
+          { user_id: user?.id, category_name: 'income', max_amount: 0 },
+          { headers: getAuthHeaders() }
+        );
+        await fetchCategories();
       }
-      const data = {
+
+      const response = await api.post('/transactions/add', {
         ...transaction,
         user_id: user?.id,
         expiration_date: transaction.expiration_date ? new Date(transaction.expiration_date).toISOString() : null,
-      };
-      const response = await api.post('/transactions/add', data, {
+      }, {
         headers: getAuthHeaders(),
       });
-      
-      if (response.status === 201) {
-        shortToast(t('transactionAddedSuccessfully'), 'success');
-      } else {
-        shortToast(t('failedToAddTransaction'), 'error');
-      }
+
+      queryClient.setQueryData<Transaction[]>(['transactions'], (oldTransactions = []) => [
+        { ...response.data, categoryExists: response?.data?.category_name ? true : false },
+        ...oldTransactions,
+      ]);
+
+      fetchTransactions();
+      shortToast(t('transactionAddedSuccessfully'), 'success');
     } catch (error) {
-      shortToast(t('errorOccured') + `${error}`, 'error');
+      handleApiError(error, t('failedToAddTransaction'));
     }
   };
 
@@ -108,32 +127,44 @@ export const TransactionProvider: React.FC<{ children: ReactNode }> = ({ childre
       await api.delete(`/transactions/delete/${transaction.id}`, {
         headers: getAuthHeaders(),
       });
-        setTransactions(transactions.filter(item => item.id !== transaction.id));
-        shortToast(t('successfullyDeleted'), 'success');
+
+      queryClient.setQueryData<Transaction[]>(['transactions'], (oldTransactions = []) =>
+        oldTransactions.filter((item) => item.id !== transaction.id)
+      );
+
+      fetchTransactions();
+      shortToast(t('successfullyDeleted'), 'success');
     } catch (error) {
-      shortToast(t('failedToDelete') + `${error}`, 'error');
+      handleApiError(error, t('failedToDelete'));
     }
   };
 
   const editTransaction = async (transaction: Transaction) => {
-    const data = {
-      ...transaction,
-      user_id: user?.id,
-      expiration_date: transaction.expiration_date ? new Date(transaction.expiration_date).toISOString() : null,
-    };
     try {
-      const response = await api.put(`/transactions/edit/${transaction.id}`, data, {
+      const response = await api.put(`/transactions/edit/${transaction.id}`, {
+        ...transaction,
+        user_id: user?.id,
+        expiration_date: transaction.expiration_date ? new Date(transaction.expiration_date).toISOString() : null,
+      }, {
         headers: getAuthHeaders(),
       });
 
-      if (response.status === 200) {
-        fetchTransactions();
-        shortToast(t('transactionEditedSuccessfully'), 'success');
-      } else {
-        shortToast(t('failedToEditTransaction'), 'error');
-      }
+      queryClient.setQueryData<Transaction[]>(['transactions'], (oldTransactions = []) =>
+        oldTransactions.map(t => 
+          t.id === transaction.id
+            ? {
+                ...response.data,
+                categoryExists: response?.data?.category_name ?? t.categoryExists,
+                category_exists: response?.data?.category_name ?? t.category_exists
+              }
+            : t
+        )
+      );
+
+      fetchTransactions();
+      shortToast(t('transactionEditedSuccessfully'), 'success');
     } catch (error) {
-      shortToast(t('errorOccured') + `${error}`, 'error');
+      handleApiError(error, t('failedToEditTransaction'));
     }
   };
 
@@ -144,7 +175,7 @@ export const TransactionProvider: React.FC<{ children: ReactNode }> = ({ childre
         fetchTransactions,
         addTransaction,
         deleteTransaction,
-        editTransaction,
+        editTransaction
       }}
     >
       {children}

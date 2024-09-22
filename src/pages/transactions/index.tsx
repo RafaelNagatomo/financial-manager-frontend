@@ -32,7 +32,7 @@ const Transactions: React.FC = () => {
   const { colorMode } = useColorMode();
   const { transactions, fetchTransactions } = useTransactions();
   const { categories, fetchCategories } = useCategories();
-
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isCategoryTab, setIsCategoryTab] = useState<boolean>(false);
 
   const {
@@ -47,8 +47,12 @@ const Transactions: React.FC = () => {
   } = useDisclosure();
 
   useEffect(() => {
-    fetchTransactions();
-    fetchCategories();
+    const loadData = async () => {
+      setIsLoading(true);
+      await Promise.all([fetchTransactions(), fetchCategories()]);
+      setIsLoading(false);
+    };
+    loadData();
   }, [fetchTransactions, fetchCategories]);
 
   return (
@@ -109,7 +113,7 @@ const Transactions: React.FC = () => {
                   noOfLines={8}
                   spacing="3"
                   skeletonHeight="4"
-                  isLoaded={!!transactions}
+                  isLoaded={!isLoading}
                 >
                   <TransactionTable />
                 </SkeletonText>
@@ -119,7 +123,7 @@ const Transactions: React.FC = () => {
                   noOfLines={8}
                   spacing="3"
                   skeletonHeight="4"
-                  isLoaded={!!categories}
+                  isLoaded={!isLoading}
                 >
                   <SpendingByCategoryTable transactions={transactions} />
                 </SkeletonText>
