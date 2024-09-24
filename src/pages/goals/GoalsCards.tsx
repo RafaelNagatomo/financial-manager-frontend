@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaRegTrashAlt, FaRegEdit } from "react-icons/fa";
 import { FaCircleCheck } from "react-icons/fa6"
@@ -51,12 +51,12 @@ const GoalsCards: React.FC = () => {
   const { t } = useTranslation();
   const { currency } = useCurrency()
   const { colorMode } = useColorMode()
-  const { goals, deleteGoal, fetchGoals } = useGoals();
+  const { goals, deleteGoal } = useGoals();
   const [selectedGoal, setSelectedGoal] = useState<Goal | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
   const isGoalsEmpty = goals.length === 0;
-  const { transactions, fetchTransactions } = useTransactions();
+  const { transactions } = useTransactions();
 
   const handleDeleteGoal = async () => {
     if (selectedGoal) {
@@ -81,22 +81,17 @@ const GoalsCards: React.FC = () => {
       .filter(transaction => transaction.transaction_name === goalName).length;
   };
 
-  useEffect(() => {
-    fetchGoals();
-    fetchTransactions();
-  }, [fetchGoals, fetchTransactions]);
-
   return (
     <>
       {!isGoalsEmpty ? (
         <AnimatePresence>
-          {goals.map((goal, index) => {
-            const totalAmount = getGoalTotal((goal.goal_name ?? ''));
-            const transactionCount = getCategoryTransactionCount((goal.goal_name ?? ''));
-            const goalCompleted = totalAmount >= (goal.goal_amount ?? 0);
-            const imageUrl = goal.goal_image 
-            ? `${goal.goal_image}` 
-            : '/media/placeholder.png';
+          {goals?.map((goal, index) => {
+            const totalAmount = getGoalTotal((goal?.goal_name ?? ''));
+            const transactionCount = getCategoryTransactionCount((goal?.goal_name ?? ''));
+            const goalCompleted = totalAmount >= (goal?.goal_amount ?? 0);
+            const imageUrl = goal?.goal_image 
+              ? `${goal?.goal_image}` 
+              : '/media/placeholder.png';
 
             return (
               <WrapItem key={index}>

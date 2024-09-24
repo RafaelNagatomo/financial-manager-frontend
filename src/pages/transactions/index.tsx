@@ -31,7 +31,7 @@ const Transactions: React.FC = () => {
   const { t } = useTranslation();
   const { colorMode } = useColorMode();
   const { transactions, fetchTransactions } = useTransactions();
-  const { categories, fetchCategories } = useCategories();
+  const { fetchCategories } = useCategories();
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isCategoryTab, setIsCategoryTab] = useState<boolean>(false);
 

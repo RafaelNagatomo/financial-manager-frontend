@@ -4,6 +4,7 @@ import useCustomToast from '../hooks/useCustomToast';
 import { useCategories, Category } from '../contexts/CategoryContext'
 import { useAuth } from '../contexts/AuthContext'
 import { getAuthHeaders } from '../utils/getAuthHeaders'
+import { useQueryClient } from '@tanstack/react-query';
 import api from '../utils/api';
 
 export interface Goal {
@@ -18,7 +19,7 @@ export interface Goal {
 
 interface GoalContextProps {
   goals: Goal[];
-  fetchGoals: () => Promise<void>;
+  fetchGoals: () => Promise<Goal[]>;
   addGoal: (goal: Omit<Goal, 'id'>, goalImageFile?: File) => Promise<void>;
   deleteGoal: (goal: Goal) => Promise<void>;
   editGoal: (goal: Goal) => Promise<void>;
@@ -28,12 +29,22 @@ const GoalContext = createContext<GoalContextProps | undefined>(undefined);
 
 export const GoalProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const { t } = useTranslation();
+  const queryClient = useQueryClient();
   const { shortToast } = useCustomToast();
-  const [goals, setGoals] = useState<Goal[]>([]);
+  const [goals, setGoals] = useState<Goal[]>(
+    queryClient.getQueryData<Goal[]>(['goals']) || []
+  );
   const { categories, fetchCategories } = useCategories();
   const { user } = useAuth();
 
   const fetchGoals = useCallback(async () => {
+    const cachedGoals = queryClient.getQueryData<Goal[]>(['goals']);
+    if (cachedGoals) {
+      setGoals(cachedGoals);
+      console.log('fetchGoals', cachedGoals)
+      return cachedGoals;
+    }
+
     try {
       const response = await api.get('/goals/', {
         headers: getAuthHeaders(),
@@ -59,7 +70,10 @@ export const GoalProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
           ...goal,
           goal_image: goal.goal_image ? `${process.env.REACT_APP_API_URL}/uploads/${goal.goal_image}` : '',
         }));
+
+        queryClient.setQueryData<Goal[]>(['goals'], updatedGoals);
         setGoals(updatedGoals);
+        return updatedGoals;
       }
     } catch (error) {
       shortToast(t('Erro ao buscar metas ou categorias:') + `${error}`, 'error');
@@ -100,6 +114,11 @@ export const GoalProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       });
 
       if (response.status === 201) {
+        queryClient.setQueryData<Goal[]>(['goals'], (oldGoals = []) => [
+          ...oldGoals,
+          response.data,
+        ]);
+        console.log('final', response.data)
         fetchGoals();
         shortToast(t('goalAddedSuccessfully'), 'success');
       } else {
@@ -118,6 +137,10 @@ export const GoalProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       });
 
       if (response.status === 200) {
+        queryClient.setQueryData<Goal[]>(['goals'], (oldGoals = []) =>
+          oldGoals.filter(item => item.id !== goal.id)
+        );
+
         setGoals(goals.filter(item => item.id !== goal.id));
         shortToast(t('successfullyDeleted'), 'success');
         fetchGoals()
@@ -158,6 +181,16 @@ export const GoalProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         });
 
       if (response.status === 200) {
+        queryClient.setQueryData<Goal[]>(['goals'], (oldGoals = []) =>
+          oldGoals.map(item =>
+            item.id === goal.id
+              ? {
+                  ...response.data,
+                }
+              : item
+          )
+        );
+
         fetchGoals();
         shortToast(t('goalEditedSuccessfully'), 'success');
       } else {

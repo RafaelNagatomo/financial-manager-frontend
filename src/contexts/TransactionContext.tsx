@@ -49,7 +49,6 @@ export const TransactionProvider: React.FC<{ children: ReactNode }> = ({ childre
   const fetchTransactions = useCallback(async () => {
     const cachedTransactions = queryClient.getQueryData<Transaction[]>(['transactions']);
     if (cachedTransactions) {
-      console.log('cachedTransactions: ', cachedTransactions)
       setTransactions(cachedTransactions);
       return cachedTransactions;
     }
@@ -150,14 +149,14 @@ export const TransactionProvider: React.FC<{ children: ReactNode }> = ({ childre
       });
 
       queryClient.setQueryData<Transaction[]>(['transactions'], (oldTransactions = []) =>
-        oldTransactions.map(t => 
-          t.id === transaction.id
+        oldTransactions.map(item => 
+          item.id === transaction.id
             ? {
                 ...response.data,
-                categoryExists: response?.data?.category_name ?? t.categoryExists,
-                category_exists: response?.data?.category_name ?? t.category_exists
+                categoryExists: response?.data?.category_name ?? item.categoryExists,
+                category_exists: response?.data?.category_name ?? item.category_exists
               }
-            : t
+            : item
         )
       );
 

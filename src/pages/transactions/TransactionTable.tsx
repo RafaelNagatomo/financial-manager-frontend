@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaArrowTrendUp, FaArrowTrendDown } from "react-icons/fa6";
 import { FaRegTrashAlt, FaRegEdit, FaEllipsisV } from "react-icons/fa";
@@ -51,7 +51,6 @@ export const TransactionTable: React.FC = () => {
   const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
-  const [transactionsToPaidState, setTransactionsToPaidState] = useState(transactions);
   const isTransactionsEmpty = transactions.length === 0;
   const isMobile = window.innerWidth <= 768
   const queryClient = useQueryClient();
@@ -77,7 +76,8 @@ export const TransactionTable: React.FC = () => {
           )
         : [];
     });
-    const transactionToUpdate = queryClient.getQueryData<Transaction[]>(['transactions'])?.find(t => t.id === transactionId);
+    const transactionToUpdate = queryClient.getQueryData<Transaction[]>(['transactions'])
+      ?.find(t => t.id === transactionId);
   
     try {
       if (transactionToUpdate) {
@@ -87,13 +87,6 @@ export const TransactionTable: React.FC = () => {
       console.error('Erro ao atualizar o estado de "pago":', error);
     }
   };
-
-  useEffect(() => {
-    const cachedTransactions = queryClient.getQueryData<Transaction[]>(['transactions']);
-    if (cachedTransactions) {
-      setTransactionsToPaidState(cachedTransactions);
-    }
-  }, [queryClient]);
 
   return (
     <>
