@@ -37,7 +37,7 @@ interface AddCategoryModalProps {
     const { t } = useTranslation();
     const { control, handleSubmit, register, reset, watch } = useForm<Category>();
     const { fetchCategories, addCategory, editCategory } = useCategories();
-    const { fetchTransactions } = useTransactions();
+    const { refetchTransactions } = useTransactions();
     const { noticeToast } = useCustomToast();
     const watchedFields = watch();
     const isRequiredFieldsEmpty = !watchedFields.category_name || !watchedFields.max_amount;
@@ -51,7 +51,7 @@ interface AddCategoryModalProps {
             `${t('transactionsLinkedToTheCategoryWillBeCalled')} "${data.category_name}".`
           );
         }
-        fetchTransactions()
+        refetchTransactions()
       } else {
         await addCategory(data);
       }

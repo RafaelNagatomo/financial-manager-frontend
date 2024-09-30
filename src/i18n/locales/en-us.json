@@ -91,8 +91,11 @@
     "transactionLinkedToCategory_other":
       "There are {{ count }} transactions linked to category {{ _category }}\n\n$t(transactionLinkedToCategory_zero)",
     "modifiedCategoryName": "Modified category name",
+    "modifiedGoalName": "Modified goal name",
     "transactionsLinkedToTheCategoryWillBeCalled":
       "Transactions linked to the category will be called",
+    "transactionsLinkedToTheGoalWillBeCalled":
+      "Transactions linked to the goal, will be called",
     "amountExceeded": "Amount exceeded",
     "fillInAllMandatoryFields": "Fill in all mandatory fields",
     "categoryDeleted": "Category deleted",

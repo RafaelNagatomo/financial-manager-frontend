@@ -19,11 +19,12 @@ export interface Transaction {
   goal_id?: number
   goal_name?: string
   created_at?: string
-  category_exists?: Category
+  category_exists?: Category | null
 }
 
 interface TransactionContextProps {
   transactions: Transaction[];
+  refetchTransactions: () => Promise<void>;
   fetchTransactions: () => Promise<void>;
   addTransaction: (transaction: Omit<Transaction, 'id'>) => Promise<void>;
   deleteTransaction: (transaction: Transaction) => Promise<void>;
@@ -45,6 +46,24 @@ export const TransactionProvider: React.FC<{ children: ReactNode }> = ({ childre
   const handleApiError = (error: any, message: string) => {
     noticeToast(`${message} ${error}`, 'error');
   };
+
+  const refetchTransactions = useCallback(async () => {
+    try {
+      const response = await api.get('/transactions/', {
+        headers: getAuthHeaders(),
+        params: { userId: user?.id },
+      });
+      const transactionsResponse = response.data;
+
+      queryClient.setQueryData<Transaction[]>(['transactions'], transactionsResponse);
+
+      setTransactions(transactionsResponse);
+      return transactionsResponse
+    } catch (error) {
+      handleApiError(error, t('errorFetchingTransactions'));
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const fetchTransactions = useCallback(async () => {
     const cachedTransactions = queryClient.getQueryData<Transaction[]>(['transactions']);
@@ -171,6 +190,7 @@ export const TransactionProvider: React.FC<{ children: ReactNode }> = ({ childre
     <TransactionContext.Provider
       value={{
         transactions,
+        refetchTransactions,
         fetchTransactions,
         addTransaction,
         deleteTransaction,

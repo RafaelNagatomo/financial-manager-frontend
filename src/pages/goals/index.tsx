@@ -23,7 +23,7 @@ import AddGoalModal from '../../components/AddGoalModal';
 const Goals: React.FC = () =>  {
   const { t } = useTranslation()
   const { colorMode }  = useColorMode();
-  const { goals, fetchGoals } = useGoals();
+  const { fetchGoals } = useGoals();
   const { fetchTransactions } = useTransactions();
 
   const {
@@ -35,7 +35,7 @@ const Goals: React.FC = () =>  {
   useEffect(() => {
     fetchGoals();
     fetchTransactions();
-  }, [fetchGoals, fetchTransactions, goals]);
+  }, [fetchGoals, fetchTransactions]);
 
   return (
     <Stack

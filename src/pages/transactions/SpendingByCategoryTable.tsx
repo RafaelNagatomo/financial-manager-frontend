@@ -29,7 +29,7 @@ import { useCurrency } from '../../hooks/useCurrency';
 import ConfirmDeleteModal from '../../components/ConfirmDeleteModal';
 import AddCategoryModal from '../../components/AddCategoryModal';
 import { useCategories, Category } from '../../contexts/CategoryContext';
-import { Transaction } from '../../contexts/TransactionContext';
+import { Transaction, useTransactions } from '../../contexts/TransactionContext';
 import { AnimatePresence, motion } from 'framer-motion';
 
 const MotionTr = motion(Tr)
@@ -55,6 +55,7 @@ export const SpendingByCategoryTable: React.FC<SpendingByCategoryTableProps> = (
   const { currency } = useCurrency();
   const { colorMode } = useColorMode();
   const { categories, deleteCategory } = useCategories();
+  const { refetchTransactions } = useTransactions();
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
   const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
@@ -66,6 +67,7 @@ export const SpendingByCategoryTable: React.FC<SpendingByCategoryTableProps> = (
     if (selectedCategory) {
       await deleteCategory(selectedCategory, transactionCount);
       setIsDeleteModalOpen(false);
+      refetchTransactions();
     }
   };
 

@@ -41,7 +41,6 @@ export const GoalProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const cachedGoals = queryClient.getQueryData<Goal[]>(['goals']);
     if (cachedGoals) {
       setGoals(cachedGoals);
-      console.log('fetchGoals', cachedGoals)
       return cachedGoals;
     }
 
@@ -163,9 +162,6 @@ export const GoalProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
     if (goal.goal_amount !== undefined && goal.goal_amount !== null) {
       formData.append('goal_amount', goal.goal_amount.toString());
-    }
-    if (goal.amount_raised !== undefined && goal.amount_raised !== null) {
-      formData.append('amount_raised', goal.amount_raised.toString());
     }
     if (goal.goal_date) {
       formData.append('goal_date', new Date(goal.goal_date).toISOString());

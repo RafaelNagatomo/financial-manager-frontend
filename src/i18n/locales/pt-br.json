@@ -91,8 +91,11 @@
     "transactionLinkedToCategory_other":
       "Há {{ count }} transações vinculadas à categoria {{ _category }}\n\n$t(transactionLinkedToCategory_zero)",
     "modifiedCategoryName": "Nome da categoria modificada",
+    "modifiedGoalName": "Nome da meta modificada",
     "transactionsLinkedToTheCategoryWillBeCalled":
       "As transações vinculadas a essa categoria, passarão a se chamar",
+    "transactionsLinkedToTheGoalWillBeCalled":
+      "As transações vinculadas a essa meta, passarão a se chamar",
     "amountExceeded": "Valor excedido",
     "fillInAllMandatoryFields": "Preencha todos os campos obrigatórios",
     "categoryDeleted": "Categoria deletado",

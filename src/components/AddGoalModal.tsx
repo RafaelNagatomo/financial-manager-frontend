@@ -21,6 +21,7 @@ import { Controller, useForm } from 'react-hook-form';
 import useCustomToast from '../hooks/useCustomToast';
 import CustomButton from './CustomButton';
 import { useGoals, Goal } from '../contexts/GoalContext';
+import { useTransactions } from '../contexts/TransactionContext';
 import FileUpload from './FileUpload';
 
 interface AddGoalModalProps {
@@ -37,6 +38,7 @@ const AddGoalModal: React.FC<AddGoalModalProps> = ({
   const { t } = useTranslation();
   const { control, handleSubmit, register, reset, watch } = useForm<Goal>();
   const { fetchGoals, addGoal, editGoal } = useGoals();
+  const { refetchTransactions } = useTransactions();
   const { noticeToast } = useCustomToast();
   const watchedFields = watch();
   const isRequiredFieldsEmpty = !watchedFields.goal_name || !watchedFields.goal_amount;
@@ -46,14 +48,14 @@ const AddGoalModal: React.FC<AddGoalModalProps> = ({
       await editGoal({ ...goal, ...data });
       if (goal.goal_name !== data.goal_name) {
         noticeToast(
-          t('modifiedCategoryName'),
-          `${t('transactionsLinkedToTheCategoryWillBeCalled')} "${data.goal_name}".`
+          t('modifiedGoalName'),
+          `${t('transactionsLinkedToTheGoalWillBeCalled')} "${data.goal_name}".`
         );
       }
+      refetchTransactions()
     } else {
       await addGoal(data);
     }
-    
     reset();
     onClose();
     fetchGoals();

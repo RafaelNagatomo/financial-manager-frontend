@@ -76,7 +76,7 @@ const Register: React.FC<{onSwitch: () => void}> = ({ onSwitch }) =>  {
           py={10}
         />
         <CardHeader display="flex" alignItems="center">
-          <Heading as="h2" size={{ base: "2xl", md: "xl"}}>
+          <Heading as="h2" size={{ base: "xl", md: "xl"}}>
             {t('register')}
           </Heading>
         </CardHeader>

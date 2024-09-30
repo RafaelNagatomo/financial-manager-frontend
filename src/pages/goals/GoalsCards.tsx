@@ -201,17 +201,17 @@ const GoalsCards: React.FC = () => {
                           borderRadius={5}
                           hasStripe
                           colorScheme={goalCompleted ? 'green' : 'purple'}
-                          value={(goal.amount_raised ?? 0) * 100 / (goal.goal_amount ?? 0)}
+                          value={(totalAmount ?? 0) * 100 / (goal.goal_amount ?? 0)}
                         />
                       </LightMode>
                       <Text fontSize={12} style={{alignSelf: 'flex-end'}}>
-                        ({((goal.amount_raised ?? 0) * 100 / (goal.goal_amount ?? 0)).toFixed(1)}/100%)
+                        ({((totalAmount ?? 0) * 100 / (goal.goal_amount ?? 0)).toFixed(1)}/100%)
                       </Text>
                     </Stack>
                   </Tooltip>
                   <Flex gap={2} fontSize={14}>
                     <Text>{t('raised')}</Text>
-                    <Text>{formatAmount((goal.amount_raised ?? 0), currency)}</Text>
+                    <Text>{formatAmount((totalAmount ?? 0), currency)}</Text>
                     <Spacer />
                     <Text>{t('goalAmount')}</Text>
                     <Text>{formatAmount((goal.goal_amount ?? 0), currency)}</Text>
