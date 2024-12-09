@@ -2,6 +2,8 @@
 
 O **frontend** da aplicação **Financial Manager** é construído em React/TypeScript e fornece uma interface intuitiva e interativa para gerenciar finanças pessoais.
 
+Acessar: https://financial-manager-rn.netlify.app/auth
+
 ## 🖥️ Tecnologias Utilizadas
 
 - **React/TypeScript**: Framework para criar interfaces de usuário reativas e escaláveis.
